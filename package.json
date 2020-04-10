@@ -32,6 +32,7 @@
   "license": "MIT",
   "main": "index.js",
   "name": "@chess/pgn",
+  "repository": "mormubis/pgn",
   "scripts": {
     "build": "rollup -c",
     "build:ci": "npm build",
