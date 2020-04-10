@@ -1,0 +1,12 @@
+# npm
+/node_modules/
+
+# project
+/dist/
+
+# test
+/coverage/
+
+# statistics
+/.size-snapshot.json
+/stats.html

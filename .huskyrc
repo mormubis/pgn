@@ -1,0 +1,7 @@
+{
+  "hooks": {
+    "pre-commit": "lint-staged",
+    "pre-push": "npm run format:ci && npm run lint:ci && npm run test",
+    "prepare-commit-msg": "[[ `cat .git/COMMIT_EDITMSG` =~ ^[0-9]+.[0-9]+.[0-9]+$ ]] || gitmoji --hook ${HUSKY_GIT_PARAMS} < /dev/tty"
+  }
+}

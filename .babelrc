@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": [">1.5%"]
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-export-namespace-from",
+    "@babel/plugin-proposal-class-properties"
+  ]
+}
