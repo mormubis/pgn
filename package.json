@@ -1,7 +1,8 @@
 {
   "author": "Adrian de la Rosa <adrian@delarosab.me>",
-  "description": "",
-  "dependencies": {},
+  "dependencies": {
+    "nearley": "^2.19.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -31,20 +32,23 @@
   },
   "license": "MIT",
   "main": "index.js",
-  "name": "@chess/pgn",
+  "name": "@echecs/pgn",
   "repository": "mormubis/pgn",
   "scripts": {
     "build": "rollup -c",
     "build:ci": "npm build",
+    "compile": "nearleyc src/grammar.ne -o src/grammar.js",
     "coverage": "jest --coverage --no-cache --silent",
     "coverage:ci": "npm run coverage -- --maxWorkers 4",
     "format": "npm run format:ci -- --ignore-path .gitignore --write",
     "format:ci": "prettier -l \"**/*.+(js|json|md|yml)\"",
     "lint": "eslint \"**/*.js\" --fix",
     "lint:ci": "npm run lint",
+    "prestart": "npm run compile",
     "start": "rollup -c -w",
     "test": "jest",
     "test:ci": "npm test -- --maxWorkers 4 --no-cache --silent",
+    "test:grammar": "nearley-test -s DATABASE src/grammar.js < ./test.pgn",
     "test:watch": "jest --watch"
   },
   "version": "1.0.0"
