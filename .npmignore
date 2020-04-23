@@ -1,0 +1,20 @@
+# IDE
+/.idea/
+
+# project
+/.babelrc
+/.eslintignore
+/.eslintrc
+/.huskyrc
+/.lintstagedrc
+/.prettierrc
+/diagram.html
+/rollup.config.js
+
+# test
+/coverage/
+/test/
+
+# statistics
+/.size-snapshot.json
+/stats.html
