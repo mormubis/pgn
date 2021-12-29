@@ -3,17 +3,15 @@
 @builtin "whitespace.ne"
 
 # ----- pgn ----- #
-DATABASE -> GAME:+ {% id %}
-
-GAME -> TAGS __ MOVES __ result __ {%
-    (d) => ({ meta: d[0], moves: d[2], result: d[4] })
+GAME -> TAGS MOVES __ result __ {%
+    (d) => ({ meta: d[0], moves: d[1], result: d[3] })
 %}
 # ----- /pgn ---- #
 
 # ----- tags ----- #
-TAGS -> TAG:+ {% (d) => d[0].reduce((acc, item) => ({ ...acc, ...item }), {}) %}
+TAGS -> (TAG __):+ {% (d) => d[0].map(d0 => d0[0]).reduce((acc, item) => ({ ...acc, ...item }), {}) %}
 
-TAG -> "[" NAME __  VALUE "]" __ {% (d) => ({ [d[1]]: d[3] }) %}
+TAG -> "[" NAME __ VALUE "]" {% (d) => ({ [d[1]]: d[3] }) %}
 
 NAME -> string
 
@@ -22,14 +20,19 @@ VALUE -> dqstring {% id %}
 
 
 # ----- moves ----- #
-MOVES -> MOVE:* HALFMOVE:? {%
+MOVES -> (MOVE (_ MOVE):*):? HALFMOVE:? {%
     (d) => {
         const moves = [];
         const assign = (number, ...move) => {
             moves[number - 1] = move;
         };
 
-        d[0].map(dd0 => assign(...dd0));
+        if(d[0]) {
+            console.log('hello', d[0][0], d[0][1].map(d0 => d0[1]));
+            assign(d[0][0]);
+
+            d[0][1].map(d0 => d0[1]).map(d0 => assign(...d0));
+        }
 
         if (d[1]) {
             assign(...d[1]);
@@ -39,7 +42,7 @@ MOVES -> MOVE:* HALFMOVE:? {%
     }
 %}
 
-HALFMOVE -> NUMBER _ SAN (_ VARIATION):? _ {%
+HALFMOVE -> NUMBER _ SAN (_ VARIATION):? {%
     (d) => {
         const move = [d[0], {...d[2], ...(d[3] && { variation: d[3][1] }), }];
 
@@ -52,7 +55,7 @@ HALFMOVE -> NUMBER _ SAN (_ VARIATION):? _ {%
     }
 %}
 
-MOVE -> NUMBER _ SAN __ SAN (_ VARIATION):? _ {%
+MOVE -> NUMBER _ SAN __ SAN (_ VARIATION):? {%
     (d) => {
         const move = [d[0], d[2], d[4]];
 
@@ -101,7 +104,7 @@ MOVES_BLACK -> HALFMOVE_BLACK MOVES:? {%
     }
 %}
 
-HALFMOVE_BLACK -> NUMBER continuation _ SAN (_ VARIATION):? _ {%
+HALFMOVE_BLACK -> NUMBER continuation _ SAN (_ VARIATION):? {%
     (d) => {
         const move = [
             d[0],

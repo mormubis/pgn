@@ -1,6 +1,6 @@
 # PGN
 
-PGN is part of the project @echecs (chess). It parses a PGN File following the
+PGN is part of the project @echecs (chess in french). It parses a PGN File following the
 specification provided in:
 [Specification](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm)
 

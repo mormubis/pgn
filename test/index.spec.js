@@ -14,6 +14,7 @@ const comment = readFile('./grammar/comment.pgn');
 const multiple = readFile('./grammar/multiple-game.pgn');
 const promotion = readFile('./grammar/promotion.pgn');
 const variations = readFile('./grammar/variations.pgn');
+const long = readFile('./grammar/long.pgn');
 
 describe('PGN Parser', () => {
   it('basic', () => {
@@ -38,5 +39,10 @@ describe('PGN Parser', () => {
 
   it('variations', () => {
     expect(parse(variations)).toMatchSnapshot();
+  });
+
+  it.only('long', () => {
+    const response = parse(long);
+    console.log(response);
   });
 });

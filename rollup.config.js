@@ -1,6 +1,5 @@
 import path from 'path';
 
-import babel from 'rollup-plugin-babel';
 import cjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 import { sizeSnapshot } from 'rollup-plugin-size-snapshot';
@@ -18,19 +17,15 @@ const config = {
       file: './dist/cjs/pgn.js',
       format: 'cjs',
       name: 'pgn',
-      sourcemap: env !== 'production',
+      sourcemap: true,
     },
     {
       file: './dist/es/pgn.js',
       format: 'es',
-      sourcemap: env !== 'production',
+      sourcemap: true,
     },
   ],
   plugins: [
-    babel({
-      exclude: '**/node_modules/**',
-      runtimeHelpers: true,
-    }),
     copy({ targets: [{ dest: 'dist', src: 'src/grammar.js' }] }),
     cjs(),
     ...(isProduction ? [sizeSnapshot()] : []),
