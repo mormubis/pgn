@@ -7,7 +7,7 @@ specification provided in:
 ## Use
 
 We just need to provide with a PGN to the parser. It always return an array
-because PGN files could contain several games.
+because PGN files could contain several games. Some change
 
 ```js
 const parser = require('@echecs/pgn');
