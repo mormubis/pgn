@@ -1,5 +1,5 @@
 {
   "hooks": {
-    "pre-push": "npm run format:ci && npm run lint:ci && npm run test",
+    "pre-push": "npm run format:ci && npm run lint:ci && npm run test"
   }
 }
