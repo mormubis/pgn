@@ -4,6 +4,7 @@
 # project
 /dist/
 /src/grammar.js
+/test.pgn
 
 # test
 /coverage/

@@ -11,10 +11,7 @@ function parse(input) {
 }
 
 module.exports = function parseAll(string) {
-  const games = string
-    .replace(/\r/g, '')
-    .replace(/([012*])(\s\n)+(\[)/g, '$1\n\n=====\n\n$3')
-    .split('\n\n=====\n\n');
+  const games = string.replace(/[\r\uFEFF]/g, '');
 
-  return games.map(parse).filter(Boolean).flat();
+  return parse(games);
 };

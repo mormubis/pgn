@@ -11,9 +11,10 @@ const parse = require('../src/index');
 const basic = readFile('./grammar/basic.pgn');
 const checkmate = readFile('./grammar/checkmate.pgn');
 const comment = readFile('./grammar/comment.pgn');
+const comments = readFile('./grammar/comments.pgn');
 const multiple = readFile('./grammar/multiple-game.pgn');
 const promotion = readFile('./grammar/promotion.pgn');
-const variations = readFile('./grammar/variations.pgn');
+const variants = readFile('./grammar/variants.pgn');
 const long = readFile('./grammar/long.pgn');
 
 describe('PGN Parser', () => {
@@ -29,6 +30,10 @@ describe('PGN Parser', () => {
     expect(parse(comment)).toMatchSnapshot();
   });
 
+  it('comments', () => {
+    expect(parse(comments)).toMatchSnapshot();
+  });
+
   it('multiple', () => {
     expect(parse(multiple)).toMatchSnapshot();
   });
@@ -37,12 +42,11 @@ describe('PGN Parser', () => {
     expect(parse(promotion)).toMatchSnapshot();
   });
 
-  it('variations', () => {
-    expect(parse(variations)).toMatchSnapshot();
+  it('variants', () => {
+    expect(parse(variants)).toMatchSnapshot();
   });
 
-  it.only('long', () => {
-    const response = parse(long);
-    console.log(response);
+  it('long', () => {
+    expect(parse(long)).toMatchSnapshot();
   });
 });
