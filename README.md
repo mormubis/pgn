@@ -1,18 +1,29 @@
 # PGN
 
-PGN is part of the project @echecs (chess in french). It parses a PGN File following the
-specification provided in:
-[Specification](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm)
+**PGN** is part of the **ECHECS** project. **PGN** is a parser of the
+[PGN specification](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm).
 
-## Use
+## Installation
+
+```bash
+npm install --save-dev @echecs/pgn
+```
+
+```bash
+yarn add @echecs/pgn
+```
+
+## Usage
 
 We just need to provide with a PGN to the parser. It always return an array
-because PGN files could contain several games. Another commit
+because PGN files could contain several games.
 
 ```js
-const parser = require('@echecs/pgn');
+import parse from "@echecs/pgn";
 
-parser(string);
+const pgn = parse(
+
+parse(string);
 
 // [
 //   {

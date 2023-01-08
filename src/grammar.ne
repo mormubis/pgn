@@ -147,24 +147,32 @@ VARIANT_TEST -> VARIANT __ {% d => d[0] %}
 # ----- san ----- #
 
 SAN ->
-    piece:? DISAMBIGUATION:? capture:? file rank PROMOTION:? (_ SUFFIX):? (_ COMMENT):? {%
-        (d) => ({
-            ...(d[6] && d[6][1]),
-            ...(d[7] && { comment: d[7][1] }),
-            ...(d[2] && { capture: true }),
-            ...(d[1] && { from: d[1][0] }),
-            piece: d[0] ? d[0][0] : 'P',
-            ...(d[5] && { promotion: d[5] }),
-            to: `${d[3]}${d[4]}`,
-        })
+    piece:? DISAMBIGUATION:? capture:? file rank PROMOTION:? (_ SUFFIX):? (_ COMMENT):* {%
+        (d) => {
+            const comments = d[7].map(d7 => d7[1]).filter(Boolean);
+
+            return  ({
+               ...(d[6] && d[6][1]),
+               ...(comments.length > 0 && { comment: comments.reduce((acc, item) => `${acc} ${item}`, '') }),
+               ...(d[2] && { capture: true }),
+               ...(d[1] && { from: d[1][0] }),
+               piece: d[0] ? d[0][0] : 'P',
+               ...(d[5] && { promotion: d[5] }),
+               to: `${d[3]}${d[4]}`,
+            });
+        }
     %}
-    | castling (_ SUFFIX):* (_ COMMENT):? {%
-        (d) => ({
-            ...(d[1]),
-            ...(d[2] && { comment: d[2][1] }),
-            castling: d[0],
-            piece: 'K'
-        })
+    | castling (_ SUFFIX):* (_ COMMENT):* {%
+        (d) => {
+            const comments = d[2].map(d2 => d2[1]).filter(Boolean);
+
+            return ({
+               ...(d[1]),
+               ...(comments.length > 0 && { comment: comments.reduce((acc, item) => `${acc} ${item}`, '') }),
+               castling: d[0],
+               piece: 'K'
+            })
+        }
     %}
 
 DISAMBIGUATION ->

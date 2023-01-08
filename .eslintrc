@@ -3,10 +3,21 @@
     "browser": true,
     "node": true
   },
-  "extends": ["eslint:recommended", "standard", "prettier"],
-  "plugins": ["sort-keys-fix"],
+  "extends": [
+    "eslint:recommended",
+    "standard",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@typescript-eslint/strict",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.eslint.json"]
+  },
   "rules": {
-    "sort-keys": ["error", "asc", { "caseSensitive": true, "natural": false }],
-    "sort-keys-fix/sort-keys-fix": "warn"
+    "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
+    "@typescript-eslint/no-use-before-define": "warn",
+    "no-use-before-define": "off"
   }
 }

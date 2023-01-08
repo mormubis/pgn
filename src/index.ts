@@ -1,0 +1,55 @@
+import { Grammar, Parser } from 'nearley';
+
+import grammar from './grammar';
+
+type File = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
+type Piece = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
+type Rank = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
+
+type Square = `${File}${Rank}`;
+
+type HalfMove = [number, undefined, Move];
+type VariantMove = Move | HalfMove;
+type VariantMoves = VariantMove[];
+
+type Move = {
+  annotations?: string[];
+  capture?: boolean;
+  castling?: boolean;
+  check?: boolean;
+  checkmate?: boolean;
+  comment?: string;
+  from?: File | Rank;
+  piece: Piece;
+  promotion?: Piece;
+  to: Square;
+  variants?: VariantMoves[];
+};
+
+type Meta = {
+  Result: Result;
+  [key: string]: string;
+};
+
+type Moves = [number, Move] | [number, Move, Move];
+
+type PGN = {
+  meta: Meta;
+  moves: Moves;
+  result: Result;
+};
+
+function tokenize(input: string): PGN[] {
+  const parser = new Parser(Grammar.fromCompiled(grammar));
+
+  parser.feed(input);
+
+  return parser.results[0] as PGN[];
+}
+
+export default function parse(input: string): PGN[] {
+  const games = input.replace(/[\r\uFEFF]/g, '');
+
+  return tokenize(games);
+}
