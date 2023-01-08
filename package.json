@@ -23,7 +23,7 @@
   "name": "@echecs/pgn",
   "repository": "mormubis/pgn",
   "scripts": {
-    "build": "npm run grammar:compile && cp src/grammar.js dist/grammar.js && npm run compile",
+    "build": "npm run grammar:compile && npm run compile && cp src/grammar.js dist/grammar.js",
     "compile": "tsc",
     "format": "prettier --ignore-path .gitignore \"src/**/*.+(js|json|md|yml)\" --write",
     "grammar:compile": "nearleyc src/grammar.ne -o src/grammar.js",
