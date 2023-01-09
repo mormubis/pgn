@@ -19,7 +19,7 @@ yarn add @echecs/pgn
 
 **PGN** format:
 
-```json
+```
 {
     meta: Meta,
     moves: Moves,
@@ -29,7 +29,7 @@ yarn add @echecs/pgn
 
 **Meta** format:
 
-```json
+```
 {
     // Based on the PGN specification at least the following Tags should be available
     Event: "the name of the tournament or match event"
@@ -46,7 +46,7 @@ yarn add @echecs/pgn
 
 **Moves** is an _array_ of:
 
-```json
+```
 // move number, white move, black move
 [5, Move, Move]
 ```
@@ -55,7 +55,7 @@ Notice that half move are available for variations of if the last move of the ga
 
 **Move** format:
 
-```json
+```
 {
   annotations: ["!", "$126"], // (optional) all the annotations for the given move
   capture: false, // (optional) indicates if the move capture any piece
