@@ -1,14 +1,12 @@
-# npm
+# Output
+/dist/
+
+# Generated
+/src/grammar.js
+
+# Node
 /node_modules/
 
-# project
-/dist/
-/src/grammar.js
+# Tests
+coverage/
 /test.pgn
-
-# test
-/coverage/
-
-# statistics
-/.size-snapshot.json
-/stats.html

@@ -9,7 +9,6 @@ DATABASE -> GAME:+ {% id %}
 GAME -> TAGS MOVE_SECTION __ result __ {%
     (d) => ({ meta: d[0], moves: d[1], result: d[3] })
 %}
-GAME_TEST -> TAGS MOVE_SECTION __ {% d => ({ meta: d[0], moves: d[1] }) %}
 # ----- /pgn ---- #
 
 # ----- tags ----- #
@@ -24,28 +23,27 @@ VALUE -> dqstring {% id %}
 
 
 # ----- moves ----- #
-MOVE_SECTION -> (MOVE (_ MOVE):*):? (_ HM_WHITE):? {%
-    (d) => {
-        const moves = [];
+MOVE_SECTION ->
+    MOVE (_ MOVE):* (_ HM_WHITE):? {%
+        (d) => {
+            const moves = [d[0]];
 
-        if (d[0]) {
-            const d0 = d[0];
+            if (d[1].length > 0) {
+                const d1 = d[1];
 
-            moves.push(d0[0]);
-            if (d0[1].length > 0) {
-                const d01 = d0[1];
-
-                moves.push(...d01.map(d => d[1]));
+                moves.push(...d1.map(d => d[1]));
             }
-        }
 
-        if (d[1]) {
-            moves.push(d[1][1]);
-        }
+            if (d[2]) {
+                const d2 = d[2];
 
-        return moves;
-    }
-%}
+                moves.push(d2[1]);
+            }
+
+            return moves;
+        }
+    %}
+    | HM_WHITE {% d => [d[0]] %}
 
 MOVES -> (_ MOVE):* (_ HM_WHITE):? {%
     (d) => {
@@ -127,7 +125,7 @@ MOVE ->
         d => [d[0][0], d[0][1], d[2][2]]
     %}
 
-NUMBER -> unsigned_int ".":* {% (d) => d[0] %}
+NUMBER -> unsigned_int ".":? {% (d) => d[0] %}
 
 VARIANT ->
     "(" MOVES _ ")" {%
@@ -136,11 +134,6 @@ VARIANT ->
     | "(" HM_BLACK MOVES _ ")" {%
         (d) => [d[1], ...d[2]]
     %}
-
-HM_WHITE_TEST -> HM_WHITE __
-MOVES_TEST -> MOVES __ {% d => d[0] %}
-MOVE_TEST -> MOVE __
-VARIANT_TEST -> VARIANT __ {% d => d[0] %}
 
 # ----- /moves ----- #
 
@@ -208,8 +201,6 @@ NAG -> "$" ("25" [0-5] | "2" [0-4] [0-9] | "1" [0-9] [0-9] | [1-9] [0-9] | [0-9]
 
 COMMENT -> bstring | ";" [^\n]:*
 
-SAN_TEST -> SAN __ {% d => d[0] %}
-
 # ----- /san ----- #
 
 # types
@@ -226,7 +217,6 @@ annotation ->
     | "?!" {% id %}
     | "?" {% id %}
     | "??" {% id %}
-    | "N" {% id %}
     | "±" {% id %}
     | "∓" {% id %}
     | "∞" {% id %}

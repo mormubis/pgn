@@ -3,6 +3,7 @@
   "dependencies": {
     "nearley": "^2.20.1"
   },
+  "description": "FIDE PGN Parser",
   "devDependencies": {
     "@types/jest": "^29.2.5",
     "@types/nearley": "^2.11.2",
@@ -18,6 +19,12 @@
     "ts-jest": "^29.0.3",
     "typescript": "^4.9.4"
   },
+  "keywords": [
+    "chess",
+    "fide",
+    "parser",
+    "pgn"
+  ],
   "license": "MIT",
   "main": "dist/index.js",
   "name": "@echecs/pgn",
@@ -27,6 +34,7 @@
     "compile": "tsc",
     "format": "prettier --ignore-path .gitignore \"src/**/*.+(js|json|md|yml)\" --write",
     "grammar:compile": "nearleyc src/grammar.ne -o src/grammar.js",
+    "grammar:diagram": "nearley-railroad regex.ne -o diagram.html",
     "grammar:test": "nearley-test -s DATABASE src/grammar.js < ./test.pgn",
     "lint": "eslint \"**/*.ts\" --fix",
     "prepare": "npm run build",

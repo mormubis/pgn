@@ -19,12 +19,16 @@ We just need to provide with a PGN to the parser. It always return an array
 because PGN files could contain several games.
 
 ```js
-import parse from "@echecs/pgn";
+import { readFileSync } from 'fs';
+import parse from '@echecs/pgn';
 
-const pgn = parse(
+function readFile(path: string): string {
+  const filename = require.resolve(path);
 
-parse(string);
+  return readFileSync(filename, 'utf8');
+}
 
+const pgn = parse(readFile('./games/file.pgn'));
 // [
 //   {
 //     "meta": {

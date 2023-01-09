@@ -45,6 +45,10 @@ function tokenize(input: string): PGN[] {
 
   parser.feed(input);
 
+  if (parser.results.length > 1) {
+    throw new Error(`@echecs/parser: Ambiguous syntax. Found ${parser.results.length} results`);
+  }
+
   return parser.results[0] as PGN[];
 }
 
