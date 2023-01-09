@@ -15,8 +15,63 @@ yarn add @echecs/pgn
 
 ## Usage
 
-We just need to provide with a PGN to the parser. It always return an array
-because PGN files could contain several games.
+`parse(input: string): PGN[]`
+
+**PGN** format:
+
+```json
+{
+    meta: Meta,
+    moves: Moves,
+    result: 1-0 // 1-0 | 0-1 | 1/2-1/2 | ?
+}
+```
+
+**Meta** format:
+
+```json
+{
+    // Based on the PGN specification at least the following Tags should be available
+    Event: "the name of the tournament or match event"
+    Site: "the location of the event"
+    Date: "the starting date of the game"
+    Round: "the playing round ordinal of the game"
+    White: "the player of the white pieces"
+    Black: "the player of the black pieces"
+    Result: "the result of the game"
+    // plus any other additional tags with `key` string
+    [key]: "string"
+}
+```
+
+**Moves** is an _array_ of:
+
+```json
+// move number, white move, black move
+[5, Move, Move]
+```
+
+Notice that half move are available for variations of if the last move of the game was white.
+
+**Move** format:
+
+```json
+{
+  annotations: ["!", "$126"], // (optional) all the annotations for the given move
+  capture: false, // (optional) indicates if the move capture any piece
+  castling: true, // (optional) indicates if the move was castling
+  check: false, // (optional) indicates if the move checks the rival king
+  checkmate: false, // (optional) indicates if it is checkmate
+  comment: 'Some comment', // (optional) comment of the move
+  from: 'e', // (optional) Disambiguation of the move
+  piece: 'K', // (required) P (Pawn) | R (Rook) | N (Knight) | B (Bishop) | Q (Queen) | K (King)
+  promotion: Piece; // (optional) R (Rook) | N (Knight) | B (Bishop) | Q (Queen)
+  to: 'g1', // ending square of the piece
+  variants: [...] // moves following Moves format
+}
+```
+
+**Example**
 
 ```js
 import { readFileSync } from 'fs';
@@ -78,29 +133,7 @@ const pgn = parse(readFile('./games/file.pgn'));
 //           "to": "d4",
 //         },
 //       ],
-//       [
-//         4,
-//         {
-//           "capture": true,
-//           "piece": "N",
-//           "to": "d4",
-//         },
-//         {
-//           "piece": "P",
-//           "to": "e5",
-//         },
-//       ],
-//       [
-//         5,
-//         {
-//           "piece": "N",
-//           "to": "b5",
-//         },
-//         {
-//           "piece": "P",
-//           "to": "d5",
-//         },
-//       ],
+//       ...
 //       [
 //         6,
 //         {
@@ -127,153 +160,7 @@ const pgn = parse(readFile('./games/file.pgn'));
 //           "to": "g8",
 //         },
 //       ],
-//       [
-//         8,
-//         {
-//           "piece": "P",
-//           "to": "e3",
-//         },
-//         {
-//           "piece": "P",
-//           "to": "e4",
-//         },
-//       ],
-//       [
-//         9,
-//         {
-//           "piece": "P",
-//           "to": "h3",
-//         },
-//         {
-//           "piece": "R",
-//           "to": "e8",
-//         },
-//       ],
-//       [
-//         10,
-//         {
-//           "piece": "P",
-//           "to": "g4",
-//         },
-//         {
-//           "piece": "R",
-//           "to": "e5",
-//         },
-//       ],
-//       [
-//         11,
-//         {
-//           "piece": "B",
-//           "to": "c4",
-//         },
-//         {
-//           "from": "b",
-//           "piece": "N",
-//           "to": "d7",
-//         },
-//       ],
-//       [
-//         12,
-//         {
-//           "piece": "Q",
-//           "to": "b3",
-//         },
-//         {
-//           "piece": "N",
-//           "to": "e8",
-//         },
-//       ],
-//       [
-//         13,
-//         {
-//           "piece": "N",
-//           "to": "d2",
-//         },
-//         {
-//           "piece": "N",
-//           "to": "d6",
-//         },
-//       ],
-//       [
-//         14,
-//         {
-//           "piece": "B",
-//           "to": "e2",
-//         },
-//         {
-//           "piece": "Q",
-//           "to": "h4",
-//         },
-//       ],
-//       [
-//         15,
-//         {
-//           "piece": "N",
-//           "to": "c4",
-//         },
-//         {
-//           "capture": true,
-//           "piece": "N",
-//           "to": "c4",
-//         },
-//       ],
-//       [
-//         16,
-//         {
-//           "capture": true,
-//           "piece": "Q",
-//           "to": "c4",
-//         },
-//         {
-//           "piece": "P",
-//           "to": "b5",
-//         },
-//       ],
-//       [
-//         17,
-//         {
-//           "capture": true,
-//           "piece": "Q",
-//           "to": "b5",
-//         },
-//         {
-//           "piece": "R",
-//           "to": "b8",
-//         },
-//       ],
-//       [
-//         18,
-//         {
-//           "piece": "Q",
-//           "to": "a4",
-//         },
-//         {
-//           "piece": "N",
-//           "to": "f6",
-//         },
-//       ],
-//       [
-//         19,
-//         {
-//           "piece": "Q",
-//           "to": "c6",
-//         },
-//         {
-//           "piece": "N",
-//           "to": "d7",
-//         },
-//       ],
-//       [
-//         20,
-//         {
-//           "piece": "P",
-//           "to": "d6",
-//         },
-//         {
-//           "piece": "R",
-//           "to": "e6",
-//         },
-//       ],
+//       ...
 //       [
 //         21,
 //         {
@@ -311,67 +198,7 @@ const pgn = parse(readFile('./games/file.pgn'));
 //           "to": "d6",
 //         },
 //       ],
-//       [
-//         24,
-//         {
-//           "piece": "B",
-//           "to": "c4",
-//         },
-//         {
-//           "piece": "R",
-//           "to": "d8",
-//         },
-//       ],
-//       [
-//         25,
-//         {
-//           "capture": true,
-//           "piece": "Q",
-//           "to": "a7",
-//         },
-//         {
-//           "capture": true,
-//           "piece": "B",
-//           "to": "h2",
-//         },
-//       ],
-//       [
-//         26,
-//         {
-//           "capture": true,
-//           "piece": "B",
-//           "to": "e6",
-//         },
-//         {
-//           "capture": true,
-//           "from": "f",
-//           "piece": "P",
-//           "to": "e6",
-//         },
-//       ],
-//       [
-//         27,
-//         {
-//           "piece": "Q",
-//           "to": "a6",
-//         },
-//         {
-//           "piece": "B",
-//           "to": "f3",
-//         },
-//       ],
-//       [
-//         28,
-//         {
-//           "piece": "B",
-//           "to": "d2",
-//         },
-//         {
-//           "capture": true,
-//           "piece": "Q",
-//           "to": "h3",
-//         },
-//       ],
+//       ...
 //       [
 //         29,
 //         {
@@ -401,3 +228,9 @@ const pgn = parse(readFile('./games/file.pgn'));
 //   },
 // ];
 ```
+
+## Warning
+
+**PGN** does not guarantee PGN games are valid. It does only parse the content.
+As part of the **ECHECS** project, it is responsability of **@echecs/game** to
+verify the validity of the game.
