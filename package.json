@@ -36,7 +36,7 @@
     "grammar:compile": "nearleyc src/grammar.ne -o src/grammar.js",
     "grammar:diagram": "nearley-railroad regex.ne -o diagram.html",
     "grammar:test": "nearley-test -s DATABASE src/grammar.js < ./test.pgn",
-    "lint": "eslint \"**/*.ts\" --fix",
+    "lint": "eslint \"src/**/*.ts\" --fix",
     "prepare": "npm run build",
     "test": "jest",
     "test:coverage": "npm run test -- --coverage",
