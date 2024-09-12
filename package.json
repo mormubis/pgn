@@ -37,7 +37,7 @@
   "name": "@echecs/pgn",
   "repository": "mormubis/pgn",
   "scripts": {
-    "build": "pnpm run build:grammar && pnpm run build:entry",
+    "build": "pnpm run build:entry && pnpm run build:grammar",
     "build:grammar": "pnpm run grammar:compile && cp src/grammar.js dist/grammar.js",
     "build:entry": "tsc",
     "format": "pnpm run format:ci --write",
