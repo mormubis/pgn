@@ -13,7 +13,7 @@ type HalfMove = [number, undefined, Move];
 type VariantMove = Move | HalfMove;
 type VariantMoves = VariantMove[];
 
-type Move = {
+interface Move {
   annotations?: string[];
   capture?: boolean;
   castling?: boolean;
@@ -25,20 +25,20 @@ type Move = {
   promotion?: Piece;
   to: Square;
   variants?: VariantMoves[];
-};
+}
 
-type Meta = {
+interface Meta {
   Result: Result;
   [key: string]: string;
-};
+}
 
 type Moves = [number, Move] | [number, Move, Move];
 
-type PGN = {
+interface PGN {
   meta: Meta;
   moves: Moves;
   result: Result;
-};
+}
 
 function tokenize(input: string): PGN[] {
   const parser = new Parser(Grammar.fromCompiled(grammar));
@@ -46,7 +46,9 @@ function tokenize(input: string): PGN[] {
   parser.feed(input);
 
   if (parser.results.length > 1) {
-    throw new Error(`@echecs/parser: Ambiguous syntax. Found ${parser.results.length} results`);
+    throw new Error(
+      `@echecs/parser: Ambiguous syntax. Found ${parser.results.length} results`,
+    );
   }
 
   return parser.results[0] as PGN[];

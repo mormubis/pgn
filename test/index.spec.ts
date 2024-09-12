@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs';
+import { describe, expect, it } from 'vitest';
 
 import parse from '../src/index';
 
@@ -18,7 +19,17 @@ const variants = readFile('./grammar/variants.pgn');
 const long = readFile('./grammar/long.pgn');
 const single = readFile('./grammar/single.pgn');
 
-const tests = { basic, checkmate, comment, comments, multiple, promotion, variants, long, single };
+const tests = {
+  basic,
+  checkmate,
+  comment,
+  comments,
+  long,
+  multiple,
+  promotion,
+  single,
+  variants,
+};
 
 describe('PGN Parser', () => {
   Object.entries(tests).forEach(([label, input]) =>
