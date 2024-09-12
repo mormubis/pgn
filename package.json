@@ -38,7 +38,7 @@
   "repository": "mormubis/pgn",
   "scripts": {
     "build": "pnpm run build:grammar && pnpm run build:entry",
-    "build:ci": "mkdir dist && pnpm run build",
+    "build:ci": "([ ! -d dist ] && mkdir -p dist) && pnpm run build",
     "build:grammar": "pnpm run grammar:compile && cp src/grammar.js dist/grammar.js",
     "build:entry": "tsc",
     "format": "pnpm run format:ci --write",
@@ -50,7 +50,7 @@
     "lint:ci": "pnpm run lint:style --max-warnings 0 && pnpm run lint:types",
     "lint:style": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "lint:types": "tsc",
-    "prepare": "pnpm run build:ci",
+    "prepare": "pnpm run build",
     "test": "vitest run",
     "test:coverage": "pnpm run test --coverage",
     "test:watch": "pnpm run test --watch"
