@@ -7,13 +7,12 @@ on:
 
 jobs:
   build:
-    name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: node
       - name: Cache NPM Modules
@@ -21,14 +20,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/pnpm-lock.yaml') }}
       - name: Install dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
-        run: npm ci
+        run: pnpm install
       - name: Verify
-        run: npm run test
+        run: pnpm run test
       - name: Release to NPM
-        uses: JS-DevTools/npm-publish@v1
-        with:
-          access: public
-          token: ${{ secrets.NPM_TOKEN }}
+        run: pnpm publish --access public
