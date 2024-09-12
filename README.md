@@ -9,10 +9,6 @@
 npm install --save-dev @echecs/pgn
 ```
 
-```bash
-yarn add @echecs/pgn
-```
-
 ## Usage
 
 `parse(input: string): PGN[]`
@@ -51,7 +47,8 @@ yarn add @echecs/pgn
 [5, Move, Move]
 ```
 
-Notice that half move are available for variations of if the last move of the game was white.
+Notice that half move are available for variations of if the last move of the
+game was white.
 
 **Move** format:
 

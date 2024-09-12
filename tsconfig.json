@@ -1,16 +1,29 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "declaration": true,
+    /* Base Options: */
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "outDir": "dist/",
-    "removeComments": true,
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "allowJs": true,
     "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+
+    /* Strictness */
     "strict": true,
-    "target": "ESNext"
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+
+    /* If transpiling with TypeScript: */
+    "module": "NodeNext",
+    "outDir": "dist",
+    "sourceMap": true,
+
+    /* AND if you're building for a library: */
+    "declaration": true,
+
+    /* If your code doesn't run in the DOM: */
+    "lib": ["ESNext"]
   },
-  "files": ["src/index.ts"]
+  "include": ["src/**.ts", "test/**.ts"]
 }
