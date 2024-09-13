@@ -17,6 +17,7 @@ jobs:
         with:
           node-version: node
           registry-url: 'https://registry.npmjs.org'
+          scope: '@echecs'
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
