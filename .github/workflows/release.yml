@@ -33,3 +33,5 @@ jobs:
         run: pnpm run test
       - name: Release to NPM
         run: pnpm publish --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
