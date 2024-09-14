@@ -48,7 +48,7 @@
     "lint": "pnpm run lint:style && pnpm run lint:types",
     "lint:ci": "pnpm run lint:style --max-warnings 0 && pnpm run lint:types",
     "lint:style": "eslint \"src/**/*.{ts,tsx}\" --fix",
-    "lint:types": "tsc --noEmit --project tsconfig.build.json",
+    "lint:types": "tsc --noEmit --project tsconfig.json",
     "prepare": "pnpm run build",
     "test": "vitest run",
     "test:coverage": "pnpm run test --coverage",

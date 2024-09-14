@@ -76,13 +76,4 @@ export default typescript.config(
       },
     },
   },
-  /**
-   * Testing Library
-   */
-  // {
-  //   files: ['**/*.{test,spec}.*'],
-  //   ...rtl.configs.recommended,
-  //   ...rtl.configs.dom,
-  //   ...rtl.configs.react,
-  // }
 );

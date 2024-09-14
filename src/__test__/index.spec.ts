@@ -1,7 +1,8 @@
 import { readFileSync } from 'fs';
 import { describe, expect, it } from 'vitest';
 
-import parse from '../src/index';
+// @ts-expect-error - Required file extension ?
+import parse from '../index';
 
 function readFile(path: string): string {
   const filename = require.resolve(path);
