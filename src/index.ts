@@ -58,6 +58,11 @@ function tokenize(input: string): PGN[] {
   return parser.results[0] as PGN[];
 }
 
+/**
+ * Parse a PGN string into an array of games
+ *
+ * @param input
+ */
 export default function parse(input: string): PGN[] {
   const games = input.replace(/[\r\uFEFF]/g, '');
 
