@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    /* If transpiling with TypeScript: */
+    "outDir": "dist/",
+    "rootDir": "src/"
+  },
+  "include": ["src/index.ts"],
+  "extends": "./tsconfig.json"
+}

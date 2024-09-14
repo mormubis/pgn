@@ -38,11 +38,11 @@
   "repository": "mormubis/pgn",
   "scripts": {
     "build": "pnpm run build:grammar && pnpm run build:entry",
-    "build:grammar": "pnpm run grammar:compile && ([ -d \"dist\" ] || mkdir -p \"dist\") && cp src/grammar.js dist/grammar.js",
-    "build:entry": "tsc",
+    "build:grammar": "pnpm run grammar:compile",
+    "build:entry": "tsc --project tsconfig.build.json",
     "format": "pnpm run format:ci --write",
     "format:ci": "prettier -l \"**/*.+(css|js|json|jsx|md|mjs|mts|ts|tsx|yml|yaml)\"",
-    "grammar:compile": "nearleyc src/grammar.ne -o src/grammar.js",
+    "grammar:compile": "nearleyc src/grammar.ne -o src/grammar.cjs",
     "grammar:diagram": "nearley-railroad src/grammar.ne -o diagram.html",
     "grammar:test": "nearley-test -s DATABASE src/grammar.js < ./test.pgn",
     "lint": "pnpm run lint:style && pnpm run lint:types",
@@ -54,6 +54,7 @@
     "test:coverage": "pnpm run test --coverage",
     "test:watch": "pnpm run test --watch"
   },
+  "type": "module",
   "types": "dist/index.d.ts",
   "version": "2.1.5"
 }
