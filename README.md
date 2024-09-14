@@ -25,7 +25,7 @@ Here’s the structure of the `PGN` object:
 
 #### PGN Object
 
-```json
+```typescript
 {
     "meta": Meta,
     "moves": Moves,
@@ -37,7 +37,7 @@ Here’s the structure of the `PGN` object:
 
 The `meta` object contains metadata about the chess game.
 
-```json
+```typescript
 {
     "Event": "name of the tournament or match event",
     "Site": "location of the event",
@@ -56,12 +56,8 @@ The `meta` object contains metadata about the chess game.
 `Moves` is an array representing the sequence of moves in the game. Each element
 is an array containing the move number, the white move, and the black move.
 
-```json
-[
-  moveNumber,
-  Move,
-  Move
-]
+```typescript
+[moveNumber, Move, Move];
 ```
 
 Note: Half moves are included for variations or in cases where the last move was
@@ -71,7 +67,7 @@ made by white.
 
 Each move is represented by the following structure:
 
-```json
+```typescript
 {
   "annotations": ["!", "$126"], // optional, annotations for the move
   "capture": false, // optional, indicates if any piece was captured
@@ -91,7 +87,7 @@ Each move is represented by the following structure:
 
 Here's a sample usage of the `PGN` parser:
 
-```js
+```typescript
 import { readFileSync } from 'fs';
 import parse from '@echecs/pgn';
 
