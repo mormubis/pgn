@@ -1,7 +1,8 @@
 # PGN
 
-**PGN** is part of the **ECHECS** project. **PGN** is a parser of the
-[PGN specification](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm).
+`PGN` is a parser that is part of the **ECHECS** project, designed to interpret
+the
+[PGN (Portable Game Notation) specification](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm).
 
 ## Installation
 
@@ -11,223 +12,133 @@ npm install --save-dev @echecs/pgn
 
 ## Usage
 
-`parse(input: string): PGN[]`
+The `parse` function takes a PGN formatted string as input and returns an array
+of parsed PGN objects.
 
-**PGN** format:
-
+```typescript
+parse(input: string): PGN[]
 ```
+
+### PGN Object Format
+
+Here’s the structure of the `PGN` object:
+
+#### PGN Object
+
+```json
 {
-    meta: Meta,
-    moves: Moves,
-    result: 1-0 // 1-0 | 0-1 | 1/2-1/2 | ?
+    "meta": Meta,
+    "moves": Moves,
+    "result": "1-0" // possible values: "1-0", "0-1", "1/2-1/2", "?"
 }
 ```
 
-**Meta** format:
+#### Meta Object
 
-```
+The `meta` object contains metadata about the chess game.
+
+```json
 {
-    // Based on the PGN specification at least the following Tags should be available
-    Event: "the name of the tournament or match event"
-    Site: "the location of the event"
-    Date: "the starting date of the game"
-    Round: "the playing round ordinal of the game"
-    White: "the player of the white pieces"
-    Black: "the player of the black pieces"
-    Result: "the result of the game"
-    // plus any other additional tags with `key` string
+    "Event": "name of the tournament or match event",
+    "Site": "location of the event",
+    "Date": "starting date of the game",
+    "Round": "playing round ordinal of the game",
+    "White": "player of the white pieces",
+    "Black": "player of the black pieces",
+    "Result": "result of the game",
+    // Any other additional tags
     [key]: "string"
 }
 ```
 
-**Moves** is an _array_ of:
+#### Moves Array
 
+`Moves` is an array representing the sequence of moves in the game. Each element
+is an array containing the move number, the white move, and the black move.
+
+```json
+[
+  moveNumber,
+  Move,
+  Move
+]
 ```
-// move number, white move, black move
-[5, Move, Move]
-```
 
-Notice that half move are available for variations of if the last move of the
-game was white.
+Note: Half moves are included for variations or in cases where the last move was
+made by white.
 
-**Move** format:
+#### Move Object
 
-```
+Each move is represented by the following structure:
+
+```json
 {
-  annotations: ["!", "$126"], // (optional) all the annotations for the given move
-  capture: false, // (optional) indicates if the move capture any piece
-  castling: true, // (optional) indicates if the move was castling
-  check: false, // (optional) indicates if the move checks the rival king
-  checkmate: false, // (optional) indicates if it is checkmate
-  comment: 'Some comment', // (optional) comment of the move
-  from: 'e', // (optional) Disambiguation of the move
-  piece: 'K', // (required) P (Pawn) | R (Rook) | N (Knight) | B (Bishop) | Q (Queen) | K (King)
-  promotion: Piece; // (optional) R (Rook) | N (Knight) | B (Bishop) | Q (Queen)
-  to: 'g1', // ending square of the piece
-  variants: [...] // moves following Moves format
+  "annotations": ["!", "$126"], // optional, annotations for the move
+  "capture": false, // optional, indicates if any piece was captured
+  "castling": true, // optional, indicates if the move was castling
+  "check": false, // optional, indicates if the move put the rival king in check
+  "checkmate": false, // optional, indicates if it is a checkmate
+  "comment": "Some comment", // optional, comment about the move
+  "from": "e", // optional, disambiguation of the move
+  "piece": "K", // required, type of piece (P, R, N, B, Q, K)
+  "promotion": "Piece", // optional, promotion piece (R, N, B, Q)
+  "to": "g1", // required, ending square of the move
+  "variants": [...] // optional, array of moves for variations following Moves format
 }
 ```
 
-**Example**
+### Example
+
+Here's a sample usage of the `PGN` parser:
 
 ```js
 import { readFileSync } from 'fs';
 import parse from '@echecs/pgn';
 
-function readFile(path: string): string {
+function readFile(path) {
   const filename = require.resolve(path);
-
   return readFileSync(filename, 'utf8');
 }
 
 const pgn = parse(readFile('./games/file.pgn'));
-// [
-//   {
-//     "meta": {
-//       "Black": "Cordts, Ingo",
-//       "BlackElo": "2222",
-//       "Date": "2000.10.29",
-//       "ECO": "A56",
-//       "Result": "0-1",
-//       "Round": "?",
-//       "Site": "?",
-//       "White": "Carlsen, Magnus",
-//       "WhiteElo": "0",
-//     },
-//     "moves": [
-//       [
-//         1,
-//         {
-//           "piece": "P",
-//           "to": "d4",
-//         },
-//         {
-//           "piece": "N",
-//           "to": "f6",
-//         },
-//       ],
-//       [
-//         2,
-//         {
-//           "piece": "P",
-//           "to": "c4",
-//         },
-//         {
-//           "piece": "P",
-//           "to": "c5",
-//         },
-//       ],
-//       [
-//         3,
-//         {
-//           "piece": "N",
-//           "to": "f3",
-//         },
-//         {
-//           "capture": true,
-//           "from": "c",
-//           "piece": "P",
-//           "to": "d4",
-//         },
-//       ],
-//       ...
-//       [
-//         6,
-//         {
-//           "capture": true,
-//           "from": "c",
-//           "piece": "P",
-//           "to": "d5",
-//         },
-//         {
-//           "piece": "B",
-//           "to": "c5",
-//         },
-//       ],
-//       [
-//         7,
-//         {
-//           "from": "5",
-//           "piece": "N",
-//           "to": "c3",
-//         },
-//         {
-//           "castling": true,
-//           "piece": "K",
-//           "to": "g8",
-//         },
-//       ],
-//       ...
-//       [
-//         21,
-//         {
-//           "capture": true,
-//           "piece": "N",
-//           "to": "e4",
-//         },
-//         {
-//           "piece": "B",
-//           "to": "b7",
-//         },
-//       ],
-//       [
-//         22,
-//         {
-//           "capture": true,
-//           "piece": "Q",
-//           "to": "d7",
-//         },
-//         {
-//           "capture": true,
-//           "piece": "B",
-//           "to": "e4",
-//         },
-//       ],
-//       [
-//         23,
-//         {
-//           "piece": "R",
-//           "to": "h2",
-//         },
-//         {
-//           "capture": true,
-//           "piece": "B",
-//           "to": "d6",
-//         },
-//       ],
-//       ...
-//       [
-//         29,
-//         {
-//           "capture": true,
-//           "check": true,
-//           "piece": "Q",
-//           "to": "e6",
-//         },
-//         {
-//           "piece": "K",
-//           "to": "h8",
-//         },
-//       ],
-//       [
-//         30,
-//         {
-//           "piece": "Q",
-//           "to": "e7",
-//         },
-//         {
-//           "piece": "B",
-//           "to": "c7",
-//         },
-//       ],
-//     ],
-//     "result": 0,
-//   },
-// ];
+
+// Output example of parsed `PGN`
+console.log(pgn);
+/*
+[
+   {
+     "meta": {
+       "Event": "Some Tournament",
+       "Site": "Some Location",
+       "Date": "2023.10.04",
+       "Round": "1",
+       "White": "Player1",
+       "Black": "Player2",
+       "Result": "1-0",
+       // additional tags...
+     },
+     "moves": [
+       [
+         1,
+         { "piece": "P", "to": "e4" },
+         { "piece": "P", "to": "e5" }
+       ],
+       [
+         2,
+         { "piece": "N", "to": "f3" },
+         { "piece": "N", "to": "c6" }
+       ],
+       // more moves...
+     ],
+     "result": "1-0"
+   }
+];
+*/
 ```
 
-## Warning
+## Important Notes
 
-**PGN** does not guarantee PGN games are valid. It does only parse the content.
-As part of the **ECHECS** project, it is responsability of **@echecs/game** to
-verify the validity of the game.
+- `PGN` is a parser and does not verify the validity of the PGN games. It only
+  parses the provided content.
+- For game validation, use **@echecs/game** as it is responsible for verifying
+  game correctness as part of the **ECHECS** project.
