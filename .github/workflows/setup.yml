@@ -1,8 +1,6 @@
-name: Deploy
+name: Setup
 
-on:
-  workflow_call:
-    inputs:
+on: [workflow_call]
 
 jobs:
   setup:
