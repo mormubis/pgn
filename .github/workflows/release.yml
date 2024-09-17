@@ -12,19 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: latest
       - name: Setup
-        uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-          node-version: 'node'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@echecs'
-      - name: Install dependencies
-        run: pnpm install
+        uses: ./.github/workflows/setup.yml
       - name: Format
         run: pnpm run format:ci
   lint:
@@ -33,19 +22,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: latest
       - name: Setup
-        uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-          node-version: 'node'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@echecs'
-      - name: Install dependencies
-        run: pnpm install
+        uses: ./.github/workflows/setup.yml
       - name: Lint
         run: pnpm run lint
   verify:
@@ -54,19 +32,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: latest
       - name: Setup
-        uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-          node-version: 'node'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@echecs'
-      - name: Install dependencies
-        run: pnpm install
+        uses: ./.github/workflows/setup.yml
       - name: Test
         run: pnpm run test
   release:
@@ -79,19 +46,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: latest
       - name: Setup
-        uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-          node-version: 'node'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@echecs'
-      - name: Install dependencies
-        run: pnpm install
+        uses: ./.github/workflows/setup.yml
       - name: Release to NPM
         run: pnpm publish --access public --provenance
         env:
