@@ -26,5 +26,5 @@
     /* If your code doesn't run in the DOM: */
     "lib": ["ESNext"]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*"]
 }
