@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Setup
-        uses: ./.github/workflows/setup.yml@main
+        uses: ./.github/workflows/setup.yml
       - name: Format
         run: pnpm run format:ci
   lint:
@@ -23,7 +23,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Setup
-        uses: ./.github/workflows/setup.yml@main
+        uses: ./.github/workflows/setup.yml
       - name: Lint
         run: pnpm run lint
   verify:
@@ -33,7 +33,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Setup
-        uses: ./.github/workflows/setup.yml@main
+        uses: ./.github/workflows/setup.yml
       - name: Test
         run: pnpm run test
   release:
@@ -47,7 +47,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Setup
-        uses: ./.github/workflows/setup.yml@main
+        uses: ./.github/workflows/setup.yml
       - name: Release to NPM
         run: pnpm publish --access public --provenance
         env:
