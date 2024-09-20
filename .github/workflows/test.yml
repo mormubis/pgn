@@ -16,6 +16,8 @@ jobs:
     name: 🧪 Test
     runs-on: ubuntu-latest
     steps:
+      - run: echo ${{ github.workflow }}-${{ github.ref }}
+
       - name: ⬇️ Checkout code
         uses: actions/checkout@v4
 
