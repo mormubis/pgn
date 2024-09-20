@@ -5,11 +5,11 @@
   },
   "description": "FIDE PGN Parser",
   "devDependencies": {
-    "@eslint/js": "^9.10.0",
+    "@eslint/js": "^9.11.0",
     "@types/nearley": "^2.11.5",
     "@typescript-eslint/parser": "^8.6.0",
     "@vitest/coverage-v8": "^2.1.1",
-    "eslint": "^9.10.0",
+    "eslint": "^9.11.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import-x": "^4.2.1",
