@@ -15,7 +15,8 @@ jobs:
       - name: ⬇️ Checkout code
         uses: actions/checkout@v4
 
-      - uses: EndBug/version-check@v2
+      - id: check
+        uses: EndBug/version-check@v2
         with:
           diff-search: true
 
