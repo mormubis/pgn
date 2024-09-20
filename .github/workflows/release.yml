@@ -8,20 +8,26 @@ on:
 jobs:
   check:
     name: ✅ Check version
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
     runs-on: ubuntu-latest
     steps:
       - uses: EndBug/version-check@v2
         with:
           diff-search: true
+
   format:
     name: 👔 Format
     uses: ./.github/workflows/format.yml
+
   lint:
     name: 🔬 Lint
     uses: ./.github/workflows/lint.yml
+
   test:
     name: 🧪 Test
     uses: ./.github/workflows/test.yml
+
   release:
     name: Release
     permissions:

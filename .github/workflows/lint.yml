@@ -16,8 +16,6 @@ jobs:
     name: ⬣ Lint
     runs-on: ubuntu-latest
     steps:
-      - run: echo lint-${{ github.head_ref || github.ref }}
-
       - name: ⬇️ Checkout code
         uses: actions/checkout@v4
 

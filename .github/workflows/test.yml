@@ -16,8 +16,6 @@ jobs:
     name: 🧪 Test
     runs-on: ubuntu-latest
     steps:
-      - run: echo test-${{ github.head_ref || github.ref }}
-
       - name: ⬇️ Checkout code
         uses: actions/checkout@v4
 

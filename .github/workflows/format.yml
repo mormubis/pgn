@@ -16,8 +16,6 @@ jobs:
     name: 👔 Format
     runs-on: ubuntu-latest
     steps:
-      - run: echo format-${{ github.head_ref || github.ref }}
-
       - name: ⬇️ Checkout code
         uses: actions/checkout@v4
 
