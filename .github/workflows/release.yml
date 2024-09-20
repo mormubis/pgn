@@ -39,6 +39,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@echecs'
 
+      - name: 📥 Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Release to NPM
         run: pnpm publish --access public --provenance
         env:
