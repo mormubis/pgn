@@ -6,6 +6,13 @@ on:
       - main
 
 jobs:
+  check:
+    name: ✅ Check version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: EndBug/version-check@v2
+        with:
+          diff-search: true
   format:
     name: 👔 Format
     uses: ./.github/workflows/format.yml
@@ -21,7 +28,8 @@ jobs:
       id-token: write
       contents: read
     runs-on: ubuntu-latest
-    needs: [format, lint, test]
+    needs: [check, format, lint, test]
+    if: needs.check.outputs.changed == 'true'
     steps:
       - name: ⬇️ Checkout code
         uses: actions/checkout@v4
