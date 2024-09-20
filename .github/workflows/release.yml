@@ -12,10 +12,12 @@ jobs:
       changed: ${{ steps.check.outputs.changed }}
     runs-on: ubuntu-latest
     steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
       - uses: EndBug/version-check@v2
         with:
           diff-search: true
-          token: ${{ secrets.GITHUB_TOKEN }}
 
   format:
     name: 👔 Format
