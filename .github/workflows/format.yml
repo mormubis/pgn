@@ -1,27 +1,19 @@
-name: Release
+name: 👔 Format
 
 on:
   push:
     branches:
       - main
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  format:
+  default:
     name: 👔 Format
-    uses: ./.github/workflows/format.yml
-  lint:
-    name: 🔬 Lint
-    uses: ./.github/workflows/lint.yml
-  test:
-    name: 🧪 Test
-    uses: ./.github/workflows/test.yml
-  release:
-    name: Release
-    permissions:
-      id-token: write
-      contents: read
     runs-on: ubuntu-latest
-    needs: [format, lint, test]
     steps:
       - name: ⬇️ Checkout code
         uses: actions/checkout@v4
@@ -39,7 +31,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@echecs'
 
-      - name: Release to NPM
-        run: pnpm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: 📥 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 👔 Format
+        run: pnpm run format:ci
