@@ -1,4 +1,4 @@
-name: Release
+name: 🚀 Release
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
     uses: ./.github/workflows/test.yml
 
   release:
-    name: Release
+    name: 🚀 Release
     permissions:
       id-token: write
       contents: read
