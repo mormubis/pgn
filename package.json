@@ -3,7 +3,7 @@
   "dependencies": {
     "nearley": "^2.20.1"
   },
-  "description": "FIDE PGN Parser",
+  "description": "PGN is a parser that is part of the ECHECS project, designed to interpret the PGN (Portable Game Notation) specification.",
   "devDependencies": {
     "@eslint/js": "^9.11.1",
     "@types/nearley": "^2.11.5",
