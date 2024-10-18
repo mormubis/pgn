@@ -37,6 +37,7 @@
   "name": "@echecs/pgn",
   "repository": "mormubis/pgn",
   "scripts": {
+    "bench": "vitest bench --run",
     "build": "pnpm run build:grammar && pnpm run build:entry",
     "build:grammar": "pnpm run grammar:compile",
     "build:entry": "tsc --project tsconfig.build.json",
@@ -50,7 +51,7 @@
     "lint:style": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "lint:types": "tsc --noEmit --project tsconfig.json",
     "prepare": "pnpm run build",
-    "test": "vitest run",
+    "test": "vitest --reporter=tap run",
     "test:coverage": "pnpm run test --coverage",
     "test:watch": "pnpm run test --watch"
   },
