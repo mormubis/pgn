@@ -6,7 +6,7 @@
 DATABASE -> GAME:+ {% id %}
 
 # TAGS contains whitespace at the end
-GAME -> TAGS MOVE_SECTION __ result __ {%
+GAME -> TAGS MOVES __ result __ {%
     (d) => ({ meta: d[0], moves: d[1], result: d[3] })
 %}
 # ----- /pgn ---- #
@@ -23,7 +23,7 @@ VALUE -> dqstring {% id %}
 
 
 # ----- moves ----- #
-MOVE_SECTION ->
+MOVES ->
     MOVE (_ MOVE):* (_ HM_WHITE):? {%
         (d) => {
             const moves = [d[0]];
@@ -45,24 +45,16 @@ MOVE_SECTION ->
     %}
     | HM_WHITE {% d => [d[0]] %}
 
-MOVES -> (_ MOVE):* (_ HM_WHITE):? {%
+MOVES_BLACK -> HM_BLACK MOVES:* {%
     (d) => {
-        const moves = [];
-
-        if (d[0]) {
-            d[0].map(d0 => d0[1]).map(d01 => moves.push(d01));
-        }
-
-        if (d[1]) {
-            moves.push(d[1][1]);
-        }
+        const moves = [d[0], ...[d1]];
 
         return moves;
     }
 %}
 
 # Half Move White #
-HM_WHITE -> NUMBER _ SAN (_ VARIANT):* {%
+HM_WHITE -> NUMBER _ SAN (_ RAV):* {%
     (d) => {
         const move = [d[0], {...d[2], ...(d[3].length > 0 && { variants: d[3].map(d3 => d3[1]) }), }];
 
@@ -75,7 +67,7 @@ HM_WHITE -> NUMBER _ SAN (_ VARIANT):* {%
     }
 %}
 
-HM_BLACK -> _ NUMBER continuation _ SAN (_ VARIANT):* {%
+HM_BLACK -> _ NUMBER continuation _ SAN (_ RAV_BLACK):* {%
     (d) => {
         const move = [d[1], undefined, {...d[4], ...(d[5].length > 0 && { variants: d[5].map(d5 => d5[1]) }) }];
 
@@ -89,9 +81,9 @@ HM_BLACK -> _ NUMBER continuation _ SAN (_ VARIANT):* {%
 %}
 
 MOVE ->
-    NUMBER _ SAN __ SAN (_ VARIANT):* {%
+    NUMBER _ SAN (_ RAV):* __ SAN (_ RAV_BLACK):* {%
         (d) => {
-            const move = [d[0], d[2], d[4]];
+            const move = [d[0], d[2], d[5]];
 
             if (move[1].castling) {
                 move[1].to = move[1].castling === 'K' ? 'g1' : 'c1';
@@ -103,58 +95,92 @@ MOVE ->
                 move[2].castling = true;
             }
 
-            if (d[5]) {
-                const variants = d[5].map(d5 => d5[1]);
+            if (d[3].length > 0) {
+                const variants = d[3].map(d3 => d3[1]);
 
-                const white = variants.filter(variant => variant[0][1]);
-                const black = variants.filter(variant => !variant[0][1]);
+                move[1].variants = variants;
+            }
 
-                if (white.length > 0) {
-                    move[1].variants = white;
-                }
+            if (d[6].length > 0) {
+                const variants = d[6].map(d6 => d6[1]);
 
-                if (black.length > 0) {
-                    move[2].variants = black;
-                }
+                move[2].variants = variants;
             }
 
             return move;
         }
     %}
-    | HM_WHITE __ HM_BLACK {%
-        d => [d[0][0], d[0][1], d[2][2]]
+    | NUMBER _ SAN (_ RAV):+ __ HM_BLACK {%
+        (d) => {
+            const move = [d[0], d[2], d[5]];
+
+            if (move[1].castling) {
+                move[1].to = move[1].castling === 'K' ? 'g1' : 'c1';
+                move[1].castling = true;
+            }
+
+            if (move[2].castling) {
+                move[2].to = move[2].castling === 'K' ? 'g8' : 'c8';
+                move[2].castling = true;
+            }
+
+            if (d[3].length > 0) {
+                const variants = d[3].map(d3 => d3[1]);
+
+                move[1].variants = variants;
+            }
+
+            return move;
+        }
     %}
 
 NUMBER -> unsigned_int ".":? {% (d) => d[0] %}
 
-VARIANT ->
-    "(" MOVES _ ")" {%
-        (d) => d[1]
-    %}
-    | "(" HM_BLACK MOVES _ ")" {%
-        (d) => [d[1], ...d[2]]
-    %}
+RAV -> "(" MOVES ")" {%
+    (d) => d[1]
+%}
+
+RAV_BLACK -> "(" HM_BLACK _ MOVES:? ")" {%
+    (d) => d[1]
+%}
 
 # ----- /moves ----- #
 
 # ----- san ----- #
 
 SAN ->
-    piece:? DISAMBIGUATION:? capture:? file rank PROMOTION:? (_ SUFFIX):? (_ COMMENT):* {%
+    # Non-pawn
+    piece DISAMBIGUATION:? capture:? SQUARE (_ SUFFIX):? (_ COMMENT):* {%
         (d) => {
-            const comments = d[7].map(d7 => d7[1]).filter(Boolean);
+            const comments = d[5].map(d5 => d5[1]).filter(Boolean);
 
             return  ({
-               ...(d[6] && d[6][1]),
+               ...(d[4] && d[4][1]),
                ...(comments.length > 0 && { comment: comments.reduce((acc, item) => `${acc} ${item}`, '') }),
                ...(d[2] && { capture: true }),
                ...(d[1] && { from: d[1][0] }),
-               piece: d[0] ? d[0][0] : 'P',
-               ...(d[5] && { promotion: d[5] }),
-               to: `${d[3]}${d[4]}`,
+               piece: d[0],
+               to: d[3],
             });
         }
     %}
+    # Pawn (the only one that can promote)
+    | DISAMBIGUATION:? capture:? SQUARE PROMOTION:? (_ SUFFIX):? (_ COMMENT):* {%
+        (d) => {
+            const comments = d[5].map(d5 => d5[1]).filter(Boolean);
+
+            return  ({
+               ...(d[4] && d[4][1]),
+               ...(comments.length > 0 && { comment: comments.reduce((acc, item) => `${acc} ${item}`, '') }),
+               ...(d[1] && { capture: true }),
+               ...(d[0] && { from: d[0][0] }),
+               piece: 'P',
+               ...(d[3] && { promotion: d[3] }),
+               to: d[2],
+            });
+        }
+    %}
+    # Special case castling
     | castling (_ SUFFIX):* (_ COMMENT):* {%
         (d) => {
             const comments = d[2].map(d2 => d2[1]).filter(Boolean);
@@ -171,7 +197,8 @@ SAN ->
 DISAMBIGUATION ->
     file {% id %}
     | rank {% id %}
-    | file rank {% (d) => `${d[0]}${d[1]}` %}
+
+SQUARE -> file rank {% (d) => `${d[0]}${d[1]}` %}
 
 PROMOTION -> "=" [QBNR] {% (d) => d[1] %}
 
@@ -224,13 +251,13 @@ annotation ->
     | "⨀" {% id %}
     | "⩱" {% id %}
     | "⩲" {% id %}
-check -> "+" {% () => 'check' %}
-checkmate -> "#" {% () => 'checkmate' %}
 bstring -> "{" [^}]:* "}" {% (d) => d[1].join('') %}
 capture -> "x"
 castling ->
     "O-O" {% () => 'K' %}
     | "O-O-O" {% () => 'Q' %}
+check -> "+" {% () => 'check' %}
+checkmate -> "#" {% () => 'checkmate' %}
 continuation -> "..."
 file -> [a-h]
 piece -> [KQBNR]

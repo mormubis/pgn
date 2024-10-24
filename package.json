@@ -6,6 +6,7 @@
   "description": "PGN is a parser that is part of the ECHECS project, designed to interpret the PGN (Portable Game Notation) specification.",
   "devDependencies": {
     "@eslint/js": "^9.11.1",
+    "@mliebelt/pgn-parser": "^1.4.15",
     "@types/nearley": "^2.11.5",
     "@typescript-eslint/parser": "^8.9.0",
     "@vitest/coverage-v8": "^2.1.1",
@@ -45,13 +46,13 @@
     "format:ci": "prettier -l \"**/*.+(css|js|json|jsx|md|mjs|mts|ts|tsx|yml|yaml)\"",
     "grammar:compile": "nearleyc src/grammar.ne -o src/grammar.cjs",
     "grammar:diagram": "nearley-railroad src/grammar.ne -o diagram.html",
-    "grammar:test": "nearley-test -s DATABASE src/grammar.js < ./test.pgn",
+    "grammar:test": "nearley-test src/grammar.cjs",
     "lint": "pnpm run lint:style && pnpm run lint:types",
     "lint:ci": "pnpm run lint:style --max-warnings 0 && pnpm run lint:types",
     "lint:style": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "lint:types": "tsc --noEmit --project tsconfig.json",
     "prepare": "pnpm run build",
-    "test": "vitest --reporter=tap run",
+    "test": "vitest run",
     "test:coverage": "pnpm run test --coverage",
     "test:watch": "pnpm run test --watch"
   },

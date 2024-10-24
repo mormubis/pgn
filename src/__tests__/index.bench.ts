@@ -1,3 +1,4 @@
+import { parseGames } from '@mliebelt/pgn-parser';
 import { readFileSync } from 'fs';
 import { bench, describe } from 'vitest';
 
@@ -40,9 +41,13 @@ const tests = {
 };
 
 describe('PGN Parser', () => {
-  Object.entries(tests).forEach(([label, input]) =>
+  Object.entries(tests).forEach(([label, input]) => {
     bench(label, () => {
       parse(input);
-    }),
-  );
+    });
+
+    // bench(`${label} - @mliebelt/pgn-parser`, () => {
+    //   parseGames(input);
+    // });
+  });
 });

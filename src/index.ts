@@ -9,9 +9,10 @@ type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
 
 type Square = `${File}${Rank}`;
 
-type HalfMove = [number, undefined, Move];
-type VariantMove = Move | HalfMove;
-type VariantMoves = VariantMove[];
+interface Meta {
+  Result: Result;
+  [key: string]: string;
+}
 
 interface Move {
   annotations?: string[];
@@ -24,12 +25,7 @@ interface Move {
   piece: Piece;
   promotion?: Piece;
   to: Square;
-  variants?: VariantMoves[];
-}
-
-interface Meta {
-  Result: Result;
-  [key: string]: string;
+  variants?: Variation;
 }
 
 type Moves = [number, Move] | [number, Move, Move];
@@ -39,6 +35,8 @@ interface PGN {
   moves: Moves;
   result: Result;
 }
+
+type Variation = Moves[] | [[number, undefined, Move], ...Moves][];
 
 // It's a CJS module and cannot compile with that
 // eslint-disable-next-line import-x/no-named-as-default-member
