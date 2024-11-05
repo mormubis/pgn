@@ -2,8 +2,7 @@
 /dist/
 
 # Generated
-/src/grammar.cjs
-/src/grammar.js
+/src/grammar.*
 
 # Node
 /node_modules/

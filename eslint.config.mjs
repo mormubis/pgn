@@ -76,4 +76,27 @@ export default typescript.config(
       },
     },
   },
+  /**
+   * Grammar file
+   */
+  {
+    files: ['**/grammar.ts'],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      '@typescript-eslint/ban-ts-comment': 'off',
+    },
+    settings: {
+      'import-x/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: ['./tsconfig.json'],
+        },
+      },
+    },
+  },
 );
