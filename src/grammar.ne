@@ -45,12 +45,12 @@ MOVES ->
     %}
     | HM {% d => [d[0]] %}
 
-MOVES_BLACK -> HM_BLACK _ MOVES:? {%
+MOVES_BLACK -> HM_BLACK (_ MOVES):? {%
     (d) => {
         const moves = [d[0]];
 
-        if (d[2]) {
-            moves.push(...d[2]);
+        if (d[1]) {
+            moves.push(...d[1][1]);
         }
 
         return moves;
