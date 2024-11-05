@@ -14,7 +14,7 @@ GAME -> TAGS MOVES __ result __ {%
 # ----- tags ----- #
 TAGS -> (TAG __):+ {% (d) => d[0].map(d0 => d0[0]).reduce((acc, item) => ({ ...acc, ...item }), {}) %}
 
-TAG -> "[" NAME __ VALUE "]" {% (d) => ({ [d[1]]: d[3] }) %}
+TAG -> lsb NAME __ VALUE rsb {% (d) => ({ [d[1]]: d[3] }) %}
 
 NAME -> string
 
@@ -138,13 +138,13 @@ MOVE ->
         }
     %}
 
-NUMBER -> unsigned_int ".":? {% (d) => d[0] %}
+NUMBER -> unsigned_int dot:? {% (d) => d[0] %}
 
-RAV -> "(" MOVES ")" {%
+RAV -> lp MOVES rp {%
     (d) => d[1]
 %}
 
-RAV_BLACK -> "(" MOVES_BLACK ")" {%
+RAV_BLACK -> lp MOVES_BLACK rp {%
     (d) => d[1]
 %}
 
@@ -188,7 +188,7 @@ DISAMBIGUATION ->
 
 SQUARE -> file rank {% (d) => `${d[0]}${d[1]}` %}
 
-PROMOTION -> "=" [QBNR] {% (d) => d[1] %}
+PROMOTION -> equal [QBNR] {% (d) => d[1] %}
 
 SUFFIX ->
     (check | checkmate) annotation:? (_ NAG):* {%
@@ -211,13 +211,14 @@ SUFFIX ->
     %}
 
 # Numeric Annotation Glyph
-NAG -> "$" ("25" [0-5] | "2" [0-4] [0-9] | "1" [0-9] [0-9] | [1-9] [0-9] | [0-9]) {%
+NAG -> dollar ("25" [0-5] | "2" [0-4] [0-9] | "1" [0-9] [0-9] | [1-9] [0-9] | [0-9]) {%
     (d) => d[1]
 %}
 
-COMMENT -> bstring | ";" [^\n]:*
+COMMENT -> bstring | end [^\n]:*
 
 # ----- /san ----- #
+
 
 # types
 annotation ->
@@ -256,3 +257,11 @@ result ->
     | "1/2-1/2" {% () => 0.5 %}
     | "*" {% () => '?' %}
 string -> [^\s]:+ {% (d) => d[0].join('') %}
+lsb -> "["
+rsb -> "]"
+dot -> "."
+lp -> "("
+rp -> ")"
+equal -> "="
+dollar -> "$"
+end -> ";"
