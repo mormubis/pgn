@@ -6,7 +6,7 @@
 DATABASE -> GAME:+ {% id %}
 
 # TAGS contains whitespace at the end
-GAME -> TAGS MOVE_SECTION __ result __ {%
+GAME -> TAGS MOVES __ result __ {%
     (d) => ({ meta: d[0], moves: d[1], result: d[3] })
 %}
 # ----- /pgn ---- #
@@ -23,8 +23,8 @@ VALUE -> dqstring {% id %}
 
 
 # ----- moves ----- #
-MOVE_SECTION ->
-    MOVE (_ MOVE):* (_ HM_WHITE):? {%
+MOVES ->
+    MOVE (_ MOVE):* (_ HM):? {%
         (d) => {
             const moves = [d[0]];
 
@@ -43,9 +43,9 @@ MOVE_SECTION ->
             return moves;
         }
     %}
-    | HM_WHITE {% d => [d[0]] %}
+    | HM {% d => [d[0]] %}
 
-MOVES -> (_ MOVE):* (_ HM_WHITE):? {%
+SOMETHING -> (_ MOVE):* (_ HM):? {%
     (d) => {
         const moves = [];
 
@@ -61,8 +61,21 @@ MOVES -> (_ MOVE):* (_ HM_WHITE):? {%
     }
 %}
 
+
+MOVES_BLACK -> HM_BLACK MOVES:? {%
+    (d) => {
+        const moves = [d[0]];
+
+        if (d[1]) {
+            moves.push(...d[1]);
+        }
+
+        return moves;
+    }
+%}
+
 # Half Move White #
-HM_WHITE -> NUMBER _ SAN (_ VARIANT):* {%
+HM -> NUMBER _ SAN (_ VARIANT):* {%
     (d) => {
         const move = [d[0], {...d[2], ...(d[3].length > 0 && { variants: d[3].map(d3 => d3[1]) }), }];
 
@@ -121,17 +134,17 @@ MOVE ->
             return move;
         }
     %}
-    | HM_WHITE __ HM_BLACK {%
+    | HM __ HM_BLACK {%
         d => [d[0][0], d[0][1], d[2][2]]
     %}
 
 NUMBER -> unsigned_int ".":? {% (d) => d[0] %}
 
 VARIANT ->
-    "(" MOVES _ ")" {%
+    "(" SOMETHING _ ")" {%
         (d) => d[1]
     %}
-    | "(" HM_BLACK MOVES _ ")" {%
+    | "(" HM_BLACK SOMETHING _ ")" {%
         (d) => [d[1], ...d[2]]
     %}
 
