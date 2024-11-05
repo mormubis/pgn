@@ -239,13 +239,13 @@ annotation ->
     | "⨀" {% id %}
     | "⩱" {% id %}
     | "⩲" {% id %}
-check -> "+" {% () => 'check' %}
-checkmate -> "#" {% () => 'checkmate' %}
 bstring -> "{" [^}]:* "}" {% (d) => d[1].join('') %}
 capture -> "x"
 castling ->
     "O-O" {% () => 'K' %}
     | "O-O-O" {% () => 'Q' %}
+check -> "+" {% () => 'check' %}
+checkmate -> "#" {% () => 'checkmate' %}
 continuation -> "..."
 file -> [a-h]
 piece -> [KQBNR]
