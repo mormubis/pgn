@@ -42,7 +42,7 @@
     "build:grammar": "pnpm run grammar:compile",
     "build:entry": "tsc --project tsconfig.build.json",
     "format": "pnpm run format:ci --write",
-    "format:ci": "prettier -l \"**/*.+(css|js|json|jsx|md|mjs|mts|ts|tsx|yml|yaml)\"",
+    "format:ci": "prettier --ignore-unknown --list-different \"**/*\"",
     "grammar:compile": "nearleyc src/grammar.ne -o src/grammar.cjs",
     "grammar:diagram": "nearley-railroad src/grammar.ne -o diagram.html",
     "grammar:test": "pnpm grammar:compile && nearley-test -s DATABASE src/grammar.cjs < ./test.pgn",
