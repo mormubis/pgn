@@ -153,18 +153,18 @@ RAV_BLACK -> "(" MOVES_BLACK ")" {%
 # ----- san ----- #
 
 SAN ->
-    piece:? DISAMBIGUATION:? capture:? file rank PROMOTION:? (_ SUFFIX):? (_ COMMENT):* {%
+    piece:? DISAMBIGUATION:? capture:? SQUARE PROMOTION:? (_ SUFFIX):? (_ COMMENT):* {%
         (d) => {
-            const comments = d[7].map(d7 => d7[1]).filter(Boolean);
+            const comments = d[6].map(d6 => d6[1]).filter(Boolean);
 
             return  ({
-               ...(d[6] && d[6][1]),
+               ...(d[5] && d[5][1]),
                ...(comments.length > 0 && { comment: comments.reduce((acc, item) => `${acc} ${item}`, '') }),
                ...(d[2] && { capture: true }),
                ...(d[1] && { from: d[1][0] }),
                piece: d[0] ? d[0][0] : 'P',
-               ...(d[5] && { promotion: d[5] }),
-               to: `${d[3]}${d[4]}`,
+               ...(d[4] && { promotion: d[4] }),
+               to: d[3],
             });
         }
     %}
