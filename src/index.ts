@@ -1,6 +1,6 @@
 import nearley from 'nearley';
 
-import grammar from './grammar.cjs';
+import grammar from './grammar.js';
 
 type File = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
 type Piece = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';

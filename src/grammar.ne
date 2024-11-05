@@ -1,3 +1,11 @@
+@{%
+/* eslint-disable @typescript-eslint/no-empty-object-type,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars,sort-keys */
+%}
+
+@preprocessor typescript
+
+
+
 @builtin "number.ne"
 @builtin "string.ne"
 @builtin "whitespace.ne"

@@ -24,7 +24,10 @@
     "declaration": true,
 
     /* If your code doesn't run in the DOM: */
-    "lib": ["ESNext"]
+    "lib": ["ESNext"],
+
+    /* Grammar outputs a lot of implicit any errors: */
+    "noImplicitAny": false
   },
   "include": ["src/**/*"]
 }
