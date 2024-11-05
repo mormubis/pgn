@@ -171,6 +171,9 @@ SAN ->
 DISAMBIGUATION ->
     file {% id %}
     | rank {% id %}
+    | SQUARE {% id %}
+
+SQUARE -> file rank {% (d) => `${d[0]}${d[1]}` %}
 
 PROMOTION -> "=" [QBNR] {% (d) => d[1] %}
 
