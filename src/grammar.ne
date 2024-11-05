@@ -1,20 +1,22 @@
-@{%
-/* eslint-disable @typescript-eslint/no-empty-object-type,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars,sort-keys */
-%}
-
-@preprocessor typescript
-
-
-
 @builtin "number.ne"
 @builtin "string.ne"
 @builtin "whitespace.ne"
 
 # ----- pgn ----- #
-DATABASE -> GAME:+ {% id %}
+DATABASE -> GAME (__ GAME):* _ {%
+    (d) => {
+        const games = [d[0]];
+
+        if (d[1]) {
+            games.push(...d[1].map(d1 => d1[1]));
+        }
+
+        return games;
+    }
+%}
 
 # TAGS contains whitespace at the end
-GAME -> TAGS MOVES __ result __ {%
+GAME -> TAGS MOVES __ result {%
     (d) => ({ meta: d[0], moves: d[1], result: d[3] })
 %}
 # ----- /pgn ---- #
