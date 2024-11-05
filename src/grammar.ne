@@ -45,29 +45,12 @@ MOVES ->
     %}
     | HM {% d => [d[0]] %}
 
-SOMETHING -> (_ MOVE):* (_ HM):? {%
-    (d) => {
-        const moves = [];
-
-        if (d[0]) {
-            d[0].map(d0 => d0[1]).map(d01 => moves.push(d01));
-        }
-
-        if (d[1]) {
-            moves.push(d[1][1]);
-        }
-
-        return moves;
-    }
-%}
-
-
-MOVES_BLACK -> HM_BLACK MOVES:? {%
+MOVES_BLACK -> HM_BLACK _ MOVES:? {%
     (d) => {
         const moves = [d[0]];
 
-        if (d[1]) {
-            moves.push(...d[1]);
+        if (d[2]) {
+            moves.push(...d[2]);
         }
 
         return moves;
@@ -75,7 +58,7 @@ MOVES_BLACK -> HM_BLACK MOVES:? {%
 %}
 
 # Half Move White #
-HM -> NUMBER _ SAN (_ VARIANT):* {%
+HM -> NUMBER _ SAN (_ RAV):* {%
     (d) => {
         const move = [d[0], {...d[2], ...(d[3].length > 0 && { variants: d[3].map(d3 => d3[1]) }), }];
 
@@ -88,7 +71,7 @@ HM -> NUMBER _ SAN (_ VARIANT):* {%
     }
 %}
 
-HM_BLACK -> _ NUMBER continuation _ SAN (_ VARIANT):* {%
+HM_BLACK -> _ NUMBER continuation _ SAN (_ RAV_BLACK):* {%
     (d) => {
         const move = [d[1], undefined, {...d[4], ...(d[5].length > 0 && { variants: d[5].map(d5 => d5[1]) }) }];
 
@@ -102,9 +85,9 @@ HM_BLACK -> _ NUMBER continuation _ SAN (_ VARIANT):* {%
 %}
 
 MOVE ->
-    NUMBER _ SAN __ SAN (_ VARIANT):* {%
+    NUMBER _ SAN (_ RAV):* __ SAN (_ RAV_BLACK):* {%
         (d) => {
-            const move = [d[0], d[2], d[4]];
+            const move = [d[0], d[2], d[5]];
 
             if (move[1].castling) {
                 move[1].to = move[1].castling === 'K' ? 'g1' : 'c1';
@@ -116,37 +99,54 @@ MOVE ->
                 move[2].castling = true;
             }
 
-            if (d[5]) {
-                const variants = d[5].map(d5 => d5[1]);
+            if (d[3].length > 0) {
+                const variants = d[3].map(d3 => d3[1]);
 
-                const white = variants.filter(variant => variant[0][1]);
-                const black = variants.filter(variant => !variant[0][1]);
+                move[1].variants = variants;
+            }
 
-                if (white.length > 0) {
-                    move[1].variants = white;
-                }
+            if (d[6].length > 0) {
+                const variants = d[6].map(d6 => d6[1]);
 
-                if (black.length > 0) {
-                    move[2].variants = black;
-                }
+                move[2].variants = variants;
             }
 
             return move;
         }
     %}
-    | HM __ HM_BLACK {%
-        d => [d[0][0], d[0][1], d[2][2]]
+    | NUMBER _ SAN (_ RAV):+ __ HM_BLACK {%
+        (d) => {
+            const move = [d[0], d[2], d[5]];
+
+            if (move[1].castling) {
+                move[1].to = move[1].castling === 'K' ? 'g1' : 'c1';
+                move[1].castling = true;
+            }
+
+            if (move[2].castling) {
+                move[2].to = move[2].castling === 'K' ? 'g8' : 'c8';
+                move[2].castling = true;
+            }
+
+            if (d[3].length > 0) {
+                const variants = d[3].map(d3 => d3[1]);
+
+                move[1].variants = variants;
+            }
+
+            return move;
+        }
     %}
 
 NUMBER -> unsigned_int ".":? {% (d) => d[0] %}
 
-VARIANT ->
-    "(" SOMETHING _ ")" {%
-        (d) => d[1]
-    %}
-    | "(" HM_BLACK SOMETHING _ ")" {%
-        (d) => [d[1], ...d[2]]
-    %}
+RAV -> "(" MOVES ")" {%
+    (d) => d[1]
+%}
+
+RAV_BLACK -> "(" MOVES_BLACK ")" {%
+    (d) => d[1]
+%}
 
 # ----- /moves ----- #
 
