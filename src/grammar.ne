@@ -1,279 +1,226 @@
-@builtin "number.ne"
-@builtin "string.ne"
-@builtin "whitespace.ne"
+@{%
+  const moo = require("moo");
 
-# ----- pgn ----- #
-DATABASE -> GAME (__ GAME):* _ {%
-    (d) => {
-        const games = [d[0]];
+  const lexer = moo.states({
+    main: {
+      __: { lineBreaks: true, match: /[ \t\n\v\f]+/ },
+      comment_line: { match: /;.*$/, value: (s) => s.slice(1).trim() },
+      comment_multiline: {
+        lineBreaks: true,
+        match: /{[^}]*}/,
+        value: (s) => s.slice(1, -1).trim(),
+      },
+      escape: /^%.*$/,
 
-        if (d[1]) {
-            games.push(...d[1].map(d1 => d1[1]));
-        }
+      // --- TAG ---
+      lbracket: { match: '[', push: 'tag' },
+      rbracket: { match: ']', pop: 1 },
 
-        return games;
-    }
+      // --- MOVE ---
+      number: /\d+[.]*/,
+      piece: { match: /[KQBNR]/, push: 'san' },
+      castling: ['O-O', 'O-O-O'],
+      capture: 'x',
+      promotion: { match: /=[NBRQ]/, value: (s) => s.slice(1) },
+      check: '+',
+      checkmate: '#',
+
+      // --- SQUARE ---
+      // These three must go in order to avoid conflicts
+      square: /[a-h][1-8]/,
+      file: /[a-h]/,
+      rank: /[1-8]/,
+
+      // --- NAG ---
+      nag_import: ['!', '?', '!!', '??', '!?', '?!'],
+      nag_export: {
+        match: /\$25[0-5]|\$2[0-4][0-9]|\$1[0-9][0-9]|\$[1-9][0-9]|\$[0-9]/,
+        value: (s) => s.slice(1),
+      },
+
+      // --- RAV ---
+      lparen: '(',
+      rparen: ')',
+
+      // --- RESULT ---
+      result: ['1-0', '0-1', '1/2-1/2', '*'],
+    },
+    tag: {
+      __: { lineBreaks: true, match: /[ \t\n\v\f]+/ },
+      identifier: /[a-zA-Z0-9_]+/,
+      rbracket: { match: ']', pop: 1 },
+      value: {
+        match: /"[^\\"\n]*"/,
+        value: (s) => s.slice(1, -1).trim(),
+      },
+    },
+    san: {
+      capture: 'x',
+      // --- SQUARE ---
+      // These three must go in order to avoid conflicts
+      square: { match: /[a-h][1-8]/, pop: 1 },
+      file: /[a-h]/,
+      rank: /[1-8]/,
+    },
+  });
+
+  lexer.reset('1. d4 Nf6 2. c4 c5 3. Nf3 cxd4 4. Nxd4 e5 5. Nb5 d5 6. cxd5 Bc5 7. N5c3 O-O 8. e3 e4 9. h3 Re8 10. g4 Re5 11. Bc4 Nbd7 12. Qb3 Ne8 13. Nd2 Nd6 14. Be2 Qh4 15. Nc4 Nxc4 16. Qxc4 b5 17. Qxb5 Rb8 18. Qa4 Nf6 19. Qc6 Nd7 20. d6 Re6 21. Nxe4 Bb7 22. Qxd7 Bxe4 23. Rh2 Bxd6 24. Bc4 Rd8 25. Qxa7 Bxh2 26. Bxe6 fxe6 27. Qa6 Bf3 28. Bd2 Qxh3 29. Qxe6+ Kh8 30. Qe7 Bc7')
+  let token;
+  while (token = lexer.next()) {
+    console.log(token)
+  }
 %}
+
+@lexer lexer
+
+#
+# --- DATABASE ----------------------------------------------------------------
+#
+
+DATABASE -> GAME (%__ DATABASE):? %__:? {%
+  (d) => {
+    const games = [d[0]];
+
+    if (d[1]) {
+      games.concat(d[1][1]);
+    }
+
+    return games;
+  }
+%}
+
+#
+# --- PGN ---------------------------------------------------------------------
+#
 
 # TAGS contains whitespace at the end
-GAME -> TAGS MOVES __ result {%
-    (d) => ({ meta: d[0], moves: d[1], result: d[3] })
+GAME -> TAGS %__ MOVES %__ %result {%
+  (d) => ({ meta: d[0], moves: d[1], result: d[3] })
 %}
-# ----- /pgn ---- #
 
-# ----- tags ----- #
-TAGS -> (TAG __):+ {% (d) => d[0].map(d0 => d0[0]).reduce((acc, item) => ({ ...acc, ...item }), {}) %}
+#
+# --- TAGS --------------------------------------------------------------------
+#
 
-TAG -> lsb NAME __ VALUE rsb {% (d) => ({ [d[1]]: d[3] }) %}
-
-NAME -> string
-
-VALUE -> dqstring {% id %}
-# ----- /tags ----- #
+TAGS -> TAG (%__ TAGS):? {%
+  (d) => {
+    let tags = [d[0]];
 
 
-# ----- moves ----- #
+    if (d[1]) {
+        tags = [...tags, ...d[1][1]];
+    }
+
+    return tags;
+  }
+%}
+
+TAG -> "[" %identifier %__ %value "]" {% (d) => ({ [d[1]]: String(d[3]) }) %}
+
+#
+# --- MOVES -------------------------------------------------------------------
+#
+
 MOVES ->
-    MOVE (_ MOVE):* (_ HM):? {%
+    MOVE (%__ MOVES):? {%
         (d) => {
-            const moves = [d[0]];
+            let moves = [d[0]];
 
-            if (d[1].length > 0) {
-                const d1 = d[1];
-
-                moves.push(...d1.map(d => d[1]));
-            }
-
-            if (d[2]) {
-                const d2 = d[2];
-
-                moves.push(d2[1]);
+            if (d[1]) {
+                moves = [...moves, ...d[1][1]];
             }
 
             return moves;
         }
     %}
-    | HM {% d => [d[0]] %}
+    | RAV (%__ MOVES):? {%
+        (d) => {
+            const moves = [d[0]];
 
-MOVES_BLACK -> HM_BLACK (_ MOVES):? {%
-    (d) => {
-        const moves = [d[0]];
+            if (d[1]) {
+                moves.concat(d[1][1]);
+            }
 
-        if (d[1]) {
-            moves.push(...d[1][1]);
+            return moves;
         }
+    %}
 
-        return moves;
+#
+# --- Move --------------------------------------------------------------------
+#
+
+MOVE -> %number:? %__:? SAN (%__:? NAG):* (%__:? COMMENT):* {%
+    (d) => {
+        const annotations = d[3].map(d3 => d3[1]);
+        const comments = d[4].map(d4 => d4[1]).filter(Boolean);
+
+        return {
+            ...(annotations.length > 0 && { annotations }),
+            ...(comments.length > 0 && { comment: comments.join(' ').replace(/\n/g, '') }),
+            ...d[2],
+        };
     }
 %}
 
-# Half Move White #
-HM -> NUMBER _ SAN (_ RAV):* {%
-    (d) => {
-        const move = [d[0], {...d[2], ...(d[3].length > 0 && { variants: d[3].map(d3 => d3[1]) }), }];
+#
+# --- RAV ---------------------------------------------------------------------
+#
 
-        if (move[1].castling) {
-            move[1].to = move[1].castling === 'K' ? 'g1' : 'c1';
-            move[1].castling = true;
+RAV -> "(" MOVES ")" {%
+    (d) => d[1]
+%}
+
+#
+# --- SAN ---------------------------------------------------------------------
+#
+
+SAN -> NOTATION ("+" | "#"):? {%
+    (d) => {
+        const check = d[1] && (d[1][0].value === '+' ? 'check' : 'checkmate');
+
+        const move = d[0];
+
+        if (move.castling) {
+            // Where is coming from (depending on the color)
         }
 
-        return move;
+        return {
+            ...(check && { [check]: true }),
+            ...d[0],
+        };
     }
 %}
 
-HM_BLACK -> _ NUMBER continuation _ SAN (_ RAV_BLACK):* {%
-    (d) => {
-        const move = [d[1], undefined, {...d[4], ...(d[5].length > 0 && { variants: d[5].map(d5 => d5[1]) }) }];
-
-        if (move[2].castling) {
-            move[2].to = move[2].castling === 'K' ? 'g8' : 'c8';
-            move[2].castling = true;
-        }
-
-        return move;
-    }
-%}
-
-MOVE ->
-    NUMBER _ SAN (_ RAV):* __ SAN (_ RAV_BLACK):* {%
+NOTATION ->
+    %piece (%file | %rank | %square):? %capture:? %square {%
         (d) => {
-            const move = [d[0], d[2], d[5]];
-
-            if (move[1].castling) {
-                move[1].to = move[1].castling === 'K' ? 'g1' : 'c1';
-                move[1].castling = true;
-            }
-
-            if (move[2].castling) {
-                move[2].to = move[2].castling === 'K' ? 'g8' : 'c8';
-                move[2].castling = true;
-            }
-
-            if (d[3].length > 0) {
-                const variants = d[3].map(d3 => d3[1]);
-
-                move[1].variants = variants;
-            }
-
-            if (d[6].length > 0) {
-                const variants = d[6].map(d6 => d6[1]);
-
-                move[2].variants = variants;
-            }
-
-            return move;
+            return {
+                ...(d[2] && { capture: true }),
+                ...(d[1] && { from: String(d[1][0]) }),
+                piece: String(d[0]),
+                to: String(d[3]),
+            };
         }
     %}
-    | NUMBER _ SAN (_ RAV):+ __ HM_BLACK {%
+    | %file:? %capture:? %square {%
         (d) => {
-            const move = [d[0], d[2], d[5]];
-
-            if (move[1].castling) {
-                move[1].to = move[1].castling === 'K' ? 'g1' : 'c1';
-                move[1].castling = true;
-            }
-
-            if (move[2].castling) {
-                move[2].to = move[2].castling === 'K' ? 'g8' : 'c8';
-                move[2].castling = true;
-            }
-
-            if (d[3].length > 0) {
-                const variants = d[3].map(d3 => d3[1]);
-
-                move[1].variants = variants;
-            }
-
-            return move;
+            return {
+                ...(d[1] && { capture: true }),
+                ...(d[0] && { from: String(d[0]) }),
+                piece: 'P',
+                to: String(d[2]),
+            };
         }
     %}
-
-NUMBER -> unsigned_int dot:? {% (d) => d[0] %}
-
-RAV -> lp MOVES rp {%
-    (d) => d[1]
-%}
-
-RAV_BLACK -> lp MOVES_BLACK rp {%
-    (d) => d[1]
-%}
-
-# ----- /moves ----- #
-
-# ----- san ----- #
-
-SAN ->
-    piece:? DISAMBIGUATION:? capture:? SQUARE PROMOTION:? (_ SUFFIX):? (_ COMMENT):* {%
+    | %castling {%
         (d) => {
-            const comments = d[6].map(d6 => d6[1]).filter(Boolean);
-
-            return  ({
-               ...(d[5] && d[5][1]),
-               ...(comments.length > 0 && { comment: comments.reduce((acc, item) => `${acc} ${item}`, '') }),
-               ...(d[2] && { capture: true }),
-               ...(d[1] && { from: d[1][0] }),
-               piece: d[0] ? d[0][0] : 'P',
-               ...(d[4] && { promotion: d[4] }),
-               to: d[3],
-            });
-        }
-    %}
-    | castling (_ SUFFIX):* (_ COMMENT):* {%
-        (d) => {
-            const comments = d[2].map(d2 => d2[1]).filter(Boolean);
-
-            return ({
-               ...(d[1]),
-               ...(comments.length > 0 && { comment: comments.reduce((acc, item) => `${acc} ${item}`, '') }),
-               castling: d[0],
-               piece: 'K'
-            })
+            return {
+                castling: true,
+                piece: 'K',
+            };
         }
     %}
 
-DISAMBIGUATION ->
-    file {% id %}
-    | rank {% id %}
-    | SQUARE {% id %}
+NAG -> %nag_import | %nag_export {% id %}
 
-SQUARE -> file rank {% (d) => `${d[0]}${d[1]}` %}
-
-PROMOTION -> equal [QBNR] {% (d) => d[1] %}
-
-SUFFIX ->
-    (check | checkmate) annotation:? (_ NAG):* {%
-        (d) => ({
-            ...(d[0] && { [d[0]]: true }),
-            ...((d[1] || d[2].length > 0) && { annotations: [...(d[1] ? [d[1]] : []), ...d[2].map(d2 => d2[1])] }),
-        })
-    %}
-    | (check | checkmate):? annotation (_ NAG):* {%
-        (d) => ({
-            ...(d[0] && { [d[0]]: true }),
-            ...((d[1] || d[2].length > 0) && { annotations: [...(d[1] ? [d[1]] : []), ...d[2].map(d2 => d2[1])] }),
-        })
-    %}
-    | (check | checkmate):? annotation:? (_ NAG):+ {%
-        (d) => ({
-            ...(d[0] && { [d[0]]: true }),
-            ...((d[1] || d[2].length > 0) && { annotations: [...(d[1] ? [d[1]] : []), ...d[2].map(d2 => d2[1])] }),
-        })
-    %}
-
-# Numeric Annotation Glyph
-NAG -> dollar ("25" [0-5] | "2" [0-4] [0-9] | "1" [0-9] [0-9] | [1-9] [0-9] | [0-9]) {%
-    (d) => d[1]
-%}
-
-COMMENT -> bstring | end [^\n]:*
-
-# ----- /san ----- #
-
-
-# types
-annotation ->
-    "!!" {% id %}
-    | "!" {% id %}
-    | "!?" {% id %}
-    | "?!" {% id %}
-    | "?" {% id %}
-    | "??" {% id %}
-    | "+-" {% id %}
-    | "-+" {% id %}
-    | "=" {% id %}
-    | "?!" {% id %}
-    | "?" {% id %}
-    | "??" {% id %}
-    | "±" {% id %}
-    | "∓" {% id %}
-    | "∞" {% id %}
-    | "⨀" {% id %}
-    | "⩱" {% id %}
-    | "⩲" {% id %}
-bstring -> "{" [^}]:* "}" {% (d) => d[1].join('') %}
-capture -> "x"
-castling ->
-    "O-O" {% () => 'K' %}
-    | "O-O-O" {% () => 'Q' %}
-check -> "+" {% () => 'check' %}
-checkmate -> "#" {% () => 'checkmate' %}
-continuation -> "..."
-file -> [a-h]
-piece -> [KQBNR]
-rank -> [1-8]
-result ->
-    "1-0" {% () => 1 %}
-    | "0-1" {% () => 0 %}
-    | "1/2-1/2" {% () => 0.5 %}
-    | "*" {% () => '?' %}
-string -> [^\s]:+ {% (d) => d[0].join('') %}
-lsb -> "["
-rsb -> "]"
-dot -> "."
-lp -> "("
-rp -> ")"
-equal -> "="
-dollar -> "$"
-end -> ";"
-
-#testing
+COMMENT -> %comment_line | %comment_multiline

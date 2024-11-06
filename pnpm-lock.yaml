@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      moo:
+        specifier: ^0.5.2
+        version: 0.5.2
       nearley:
         specifier: ^2.20.1
         version: 2.20.1
@@ -15,6 +18,9 @@ importers:
       '@eslint/js':
         specifier: ^9.11.1
         version: 9.21.0
+      '@types/moo':
+        specifier: ^0.5.9
+        version: 0.5.9
       '@types/nearley':
         specifier: ^2.11.5
         version: 2.11.5
@@ -438,6 +444,9 @@ packages:
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  '@types/moo@0.5.9':
+    resolution: {integrity: sha512-ZsFVecFi66jGQ6L41TonEaBhsIVeVftTz6iQKWTctzacHhzYHWvv9S0IyAJi4BhN7vb9qCQ3+kpStP2vbZqmDg==}
 
   '@types/nearley@2.11.5':
     resolution: {integrity: sha512-dM7TrN0bVxGGXTYGx4YhGear8ysLO5SOuouAWM9oltjQ3m9oYa13qi8Z1DJp5zxVMPukvQdsrnZmgzpeuTSEQA==}
@@ -1765,6 +1774,8 @@ snapshots:
   '@types/estree@1.0.6': {}
 
   '@types/json-schema@7.0.15': {}
+
+  '@types/moo@0.5.9': {}
 
   '@types/nearley@2.11.5': {}
 

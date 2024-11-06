@@ -42,7 +42,12 @@ type Variation = Moves[] | [[number, undefined, Move], ...Moves][];
 // eslint-disable-next-line import-x/no-named-as-default-member
 const { Grammar, Parser } = nearley;
 
-function tokenize(input: string): PGN[] {
+/**
+ * Parse a PGN string into an array of games
+ *
+ * @param input
+ */
+export default function parse(input: string): PGN[] {
   const parser = new Parser(Grammar.fromCompiled(grammar));
 
   parser.feed(input);
@@ -54,15 +59,4 @@ function tokenize(input: string): PGN[] {
   }
 
   return parser.results[0] as PGN[];
-}
-
-/**
- * Parse a PGN string into an array of games
- *
- * @param input
- */
-export default function parse(input: string): PGN[] {
-  const games = input.replace(/[\r\uFEFF]/g, '');
-
-  return tokenize(games);
 }
