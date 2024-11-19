@@ -38,7 +38,7 @@ importers:
         version: 4.4.2(eslint@9.14.0)(typescript@5.6.3)
       husky:
         specifier: ^9.1.6
-        version: 9.1.6
+        version: 9.1.7
       install:
         specifier: ^0.13.0
         version: 0.13.0
@@ -882,8 +882,8 @@ packages:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
     engines: {node: '>=16.17.0'}
 
-  husky@9.1.6:
-    resolution: {integrity: sha512-sqbjZKK7kf44hfdE94EoX8MZNk0n7HeW37O4YrVGCF4wzgQjp+akPAkfUK5LZ6KuR/6sqeAVuXHji+RzQgOn5A==}
+  husky@9.1.7:
+    resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -2225,7 +2225,7 @@ snapshots:
 
   human-signals@5.0.0: {}
 
-  husky@9.1.6: {}
+  husky@9.1.7: {}
 
   ignore@5.3.2: {}
 
