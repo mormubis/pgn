@@ -7,6 +7,7 @@
   "description": "PGN is a parser that is part of the ECHECS project, designed to interpret the PGN (Portable Game Notation) specification.",
   "devDependencies": {
     "@eslint/js": "^9.11.1",
+    "@mliebelt/pgn-parser": "^1.4.15",
     "@types/moo": "^0.5.9",
     "@types/nearley": "^2.11.5",
     "@typescript-eslint/parser": "^8.9.0",

@@ -3,12 +3,16 @@
 
   const lexer = moo.states({
     main: {
-      __: { lineBreaks: true, match: /[ \t\n\v\f]+/ },
+      __: { lineBreaks: true, match: /\s+/ },
       comment_line: { match: /;.*$/, value: (s) => s.slice(1).trim() },
       comment_multiline: {
         lineBreaks: true,
         match: /{[^}]*}/,
-        value: (s) => s.slice(1, -1).trim(),
+        value: (s) =>
+          s
+            .slice(1, -1)
+            .replace(/[\n\t]/g, ' ')
+            .trim(),
       },
       escape: /^%.*$/,
 
@@ -16,8 +20,11 @@
       lbracket: { match: '[', push: 'tag' },
       rbracket: { match: ']', pop: 1 },
 
+      // --- RESULT ---
+      result: ['1-0', '0-1', '1/2-1/2', '*'],
+
       // --- MOVE ---
-      number: /\d+[.]*/,
+      number: { match: /\d+[.]*/, value: (s) => Number(s.replace(/[.]/g, '')) },
       piece: { match: /[KQBNR]/, push: 'san' },
       castling: ['O-O', 'O-O-O'],
       capture: 'x',
@@ -32,7 +39,7 @@
       rank: /[1-8]/,
 
       // --- NAG ---
-      nag_import: ['!', '?', '!!', '??', '!?', '?!'],
+      nag_import: ['!', '?', '!!', '??', '!?', '?!', '□', '=', '∞', '⩲', '⩱', '±', '∓', '+ −', '− +', '⨀', '○', '⟳', '↑', '→', '⯹', '⇆', '⨁'],
       nag_export: {
         match: /\$25[0-5]|\$2[0-4][0-9]|\$1[0-9][0-9]|\$[1-9][0-9]|\$[0-9]/,
         value: (s) => s.slice(1),
@@ -41,16 +48,13 @@
       // --- RAV ---
       lparen: '(',
       rparen: ')',
-
-      // --- RESULT ---
-      result: ['1-0', '0-1', '1/2-1/2', '*'],
     },
     tag: {
-      __: { lineBreaks: true, match: /[ \t\n\v\f]+/ },
+      __: { lineBreaks: true, match: /\s+/ },
       identifier: /[a-zA-Z0-9_]+/,
       rbracket: { match: ']', pop: 1 },
       value: {
-        match: /"[^\\"\n]*"/,
+        match: /"[^"]*?"/,
         value: (s) => s.slice(1, -1).trim(),
       },
     },
@@ -63,12 +67,6 @@
       rank: /[1-8]/,
     },
   });
-
-  lexer.reset('1. d4 Nf6 2. c4 c5 3. Nf3 cxd4 4. Nxd4 e5 5. Nb5 d5 6. cxd5 Bc5 7. N5c3 O-O 8. e3 e4 9. h3 Re8 10. g4 Re5 11. Bc4 Nbd7 12. Qb3 Ne8 13. Nd2 Nd6 14. Be2 Qh4 15. Nc4 Nxc4 16. Qxc4 b5 17. Qxb5 Rb8 18. Qa4 Nf6 19. Qc6 Nd7 20. d6 Re6 21. Nxe4 Bb7 22. Qxd7 Bxe4 23. Rh2 Bxd6 24. Bc4 Rd8 25. Qxa7 Bxh2 26. Bxe6 fxe6 27. Qa6 Bf3 28. Bd2 Qxh3 29. Qxe6+ Kh8 30. Qe7 Bc7')
-  let token;
-  while (token = lexer.next()) {
-    console.log(token)
-  }
 %}
 
 @lexer lexer
@@ -77,17 +75,20 @@
 # --- DATABASE ----------------------------------------------------------------
 #
 
-DATABASE -> GAME (%__ DATABASE):? %__:? {%
-  (d) => {
-    const games = [d[0]];
+DATABASE -> GAME (%__ DATABASE):? {%
+    (d) => {
+      const games = [d[0]];
 
-    if (d[1]) {
-      games.concat(d[1][1]);
+      if (d[1]) {
+        games.push(...d[1][1]);
+      }
+
+      return games;
     }
-
-    return games;
-  }
-%}
+  %}
+  | %__:* {%
+    () => []
+   %}
 
 #
 # --- PGN ---------------------------------------------------------------------
@@ -95,7 +96,42 @@ DATABASE -> GAME (%__ DATABASE):? %__:? {%
 
 # TAGS contains whitespace at the end
 GAME -> TAGS %__ MOVES %__ %result {%
-  (d) => ({ meta: d[0], moves: d[1], result: d[3] })
+  (d) => {
+    function pair(moves, start = 0) {
+      return moves.reduce((acc, move, i) => {
+        const color = (start + i) % 2 === 0 ? 'white' : 'black';
+        const index = Math.floor((start + i) / 2);
+
+        if (acc[index] === undefined) {
+          acc[index] = [index + 1];
+        }
+
+        if (move.number !== undefined && move.number.value !== index + 1) {
+          console.warn(`Warning: Move number mismatch - ${move.number.value} at line ${move.number.line} col ${move.number.col}`);
+        }
+        delete move.number;
+
+        if (move.castling) {
+          move.to = color === 'white' ? move.long ? 'c1' : 'g1' : move.long ? 'c8' : 'g8';
+
+          // Delete the temporary castling property
+          delete move.long;
+        }
+
+        if (move.variants) {
+          move.variants = move.variants.map((variant) => pair(variant, start + i).filter(Boolean));
+        }
+
+        acc[index].push(move);
+
+        return acc;
+      }, []);
+    }
+
+    //return ({ meta: d[0], moves, result: String(d[4]) });
+    const result = String(d[4]);
+    return ({ meta: d[0], moves: pair(d[2]), result: result === '1-0' ? 1 : result === '0-1' ? 0 : result === '1/2-1/2' ? 0.5 : result });
+  }
 %}
 
 #
@@ -104,70 +140,63 @@ GAME -> TAGS %__ MOVES %__ %result {%
 
 TAGS -> TAG (%__ TAGS):? {%
   (d) => {
-    let tags = [d[0]];
-
+    let tags = d[0];
 
     if (d[1]) {
-        tags = [...tags, ...d[1][1]];
+      tags = { ...tags, ...d[1][1] };
     }
 
     return tags;
   }
 %}
 
-TAG -> "[" %identifier %__ %value "]" {% (d) => ({ [d[1]]: String(d[3]) }) %}
+TAG -> "[" %identifier %__ %value "]" {%
+  (d) => ({ [d[1]]: String(d[3]) })
+%}
 
 #
 # --- MOVES -------------------------------------------------------------------
 #
 
-MOVES ->
-    MOVE (%__ MOVES):? {%
-        (d) => {
-            let moves = [d[0]];
+MOVES -> MOVE (%__:? RAV):* (%__ MOVES):? {%
+  (d) => {
+    let moves = [d[0]];
 
-            if (d[1]) {
-                moves = [...moves, ...d[1][1]];
-            }
+    if (d[1].length > 0) {
+      moves[0].variants = d[1].map(d1 => d1[1]);
+    }
 
-            return moves;
-        }
-    %}
-    | RAV (%__ MOVES):? {%
-        (d) => {
-            const moves = [d[0]];
+    if (d[2]) {
+      moves.push(...d[2][1]);
+    }
 
-            if (d[1]) {
-                moves.concat(d[1][1]);
-            }
-
-            return moves;
-        }
-    %}
-
+    return moves;
+  }
+%}
 #
 # --- Move --------------------------------------------------------------------
 #
 
 MOVE -> %number:? %__:? SAN (%__:? NAG):* (%__:? COMMENT):* {%
-    (d) => {
-        const annotations = d[3].map(d3 => d3[1]);
-        const comments = d[4].map(d4 => d4[1]).filter(Boolean);
+  (d) => {
+    const annotations = d[3].map(d3 => d3[1]);
+    const comments = d[4].map(d4 => d4[1]).filter(Boolean);
 
-        return {
-            ...(annotations.length > 0 && { annotations }),
-            ...(comments.length > 0 && { comment: comments.join(' ').replace(/\n/g, '') }),
-            ...d[2],
-        };
-    }
+    return {
+      number: d[0] ?? undefined,
+      ...(annotations.length > 0 && { annotations }),
+      ...(comments.length > 0 && { comment: comments.join(' ').replace(/\n/g, '') }),
+      ...d[2],
+    };
+  }
 %}
 
 #
 # --- RAV ---------------------------------------------------------------------
 #
 
-RAV -> "(" MOVES ")" {%
-    (d) => d[1]
+RAV -> "(" %__:? MOVES %__:? ")" {%
+  (d) => d[2]
 %}
 
 #
@@ -175,52 +204,55 @@ RAV -> "(" MOVES ")" {%
 #
 
 SAN -> NOTATION ("+" | "#"):? {%
-    (d) => {
-        const check = d[1] && (d[1][0].value === '+' ? 'check' : 'checkmate');
+  (d) => {
+    const check = d[1] && (d[1][0].value === '+' ? 'check' : 'checkmate');
 
-        const move = d[0];
+    const move = d[0];
 
-        if (move.castling) {
-            // Where is coming from (depending on the color)
-        }
-
-        return {
-            ...(check && { [check]: true }),
-            ...d[0],
-        };
+    if (move.castling) {
+      move.long = move.castling === 'O-O-O';
     }
+
+    return {
+      ...(check && { [check]: true }),
+      ...d[0],
+    };
+  }
 %}
 
 NOTATION ->
-    %piece (%file | %rank | %square):? %capture:? %square {%
-        (d) => {
-            return {
-                ...(d[2] && { capture: true }),
-                ...(d[1] && { from: String(d[1][0]) }),
-                piece: String(d[0]),
-                to: String(d[3]),
-            };
-        }
-    %}
-    | %file:? %capture:? %square {%
-        (d) => {
-            return {
-                ...(d[1] && { capture: true }),
-                ...(d[0] && { from: String(d[0]) }),
-                piece: 'P',
-                to: String(d[2]),
-            };
-        }
-    %}
-    | %castling {%
-        (d) => {
-            return {
-                castling: true,
-                piece: 'K',
-            };
-        }
-    %}
+  %piece (%file | %rank | %square):? %capture:? %square {%
+    (d) => {
+      return {
+        ...(d[2] && { capture: true }),
+        ...(d[1] && { from: String(d[1][0]) }),
+        piece: String(d[0]),
+        to: String(d[3]),
+      };
+    }
+  %}
+  | %file:? %capture:? %square %promotion:? {%
+    (d) => {
+      return {
+        ...(d[1] && { capture: true }),
+        ...(d[0] && { from: String(d[0]) }),
+        ...(d[3] && { promotion: String(d[3]) }),
+        piece: 'P',
+        to: String(d[2]),
+      };
+    }
+  %}
+  | %castling {%
+    (d) => {
+      return {
+        castling: true,
+        piece: 'K',
+      };
+    }
+  %}
 
-NAG -> %nag_import | %nag_export {% id %}
+NAG ->
+  %nag_import {% (d) => d[0].value %}
+  | %nag_export {% id %}
 
 COMMENT -> %comment_line | %comment_multiline
