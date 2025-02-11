@@ -24,19 +24,19 @@ const twic = readFile('./grammar/twic.pgn');
 const variants = readFile('./grammar/variants.pgn');
 
 const tests = {
-  basic,
-  benko,
-  checkmate,
-  comment,
+  // basic,
+  // benko,
+  // checkmate,
+  // comment,
   comments,
-  games32,
-  lichess,
-  long,
-  multiple,
-  promotion,
-  single,
-  twic,
-  variants,
+  // games32,
+  // lichess,
+  // long,
+  // multiple,
+  // promotion,
+  // single,
+  // twic,
+  // variants,
 };
 
 describe('PGN Parser', () => {

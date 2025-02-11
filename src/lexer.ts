@@ -8,13 +8,20 @@ const lexer = moo.states({
     comment_multiline: {
       lineBreaks: true,
       match: /{[^}]*}/,
-      value: (s) => s.slice(1, -1).trim(),
+      value: (s) =>
+        s
+          .slice(1, -1)
+          .replace(/[\n\t]/g, '')
+          .trim(),
     },
     escape: /^%.*$/,
 
     // --- TAG ---
     lbracket: { match: '[', push: 'tag' },
     rbracket: { match: ']', pop: 1 },
+
+    // --- RESULT ---
+    result: ['1-0', '0-1', '1/2-1/2', '*'],
 
     // --- MOVE ---
     number: /\d+[.]*/,
@@ -41,9 +48,6 @@ const lexer = moo.states({
     // --- RAV ---
     lparen: '(',
     rparen: ')',
-
-    // --- RESULT ---
-    result: ['1-0', '0-1', '1/2-1/2', '*'],
   },
   tag: {
     __: { lineBreaks: true, match: /[ \t\n\v\f]+/ },

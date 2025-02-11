@@ -18,6 +18,9 @@ importers:
       '@eslint/js':
         specifier: ^9.11.1
         version: 9.21.0
+      '@mliebelt/pgn-parser':
+        specifier: ^1.4.15
+        version: 1.4.15
       '@types/moo':
         specifier: ^0.5.9
         version: 0.5.9
@@ -320,6 +323,13 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@mliebelt/pgn-parser@1.4.15':
+    resolution: {integrity: sha512-ONX3Tm9RFwUyE3h1n6TBCdQzxwjDQJumJlzEA2WlC+CvI5oVSJT+SOhe8RyQ5oLEebm3k6ZeH9zzrdTHf5miLg==}
+    hasBin: true
+
+  '@mliebelt/pgn-types@1.0.4':
+    resolution: {integrity: sha512-l1VUSp8pmdsr6HNTaZIQdmd70XqmtCp5jd0fOi4KpR/mq+NBbE1A178a6+rRy001A0/Li1rUxpssDzcYBR87GQ==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1694,6 +1704,12 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@mliebelt/pgn-parser@1.4.15':
+    dependencies:
+      '@mliebelt/pgn-types': 1.0.4
+
+  '@mliebelt/pgn-types@1.0.4': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:

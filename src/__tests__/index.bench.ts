@@ -1,7 +1,8 @@
+import { parse } from '@mliebelt/pgn-parser';
 import { readFileSync } from 'fs';
 import { bench, describe } from 'vitest';
 
-import parse from '../index.js';
+// import parse from '../index.js';
 
 function readFile(path: string): string {
   const filename = require.resolve(path);
@@ -31,7 +32,7 @@ const tests = {
   comments,
   games32,
   lichess,
-  long,
+  // long,
   multiple,
   promotion,
   single,
@@ -42,7 +43,7 @@ const tests = {
 describe('PGN Parser', () => {
   Object.entries(tests).forEach(([label, input]) => {
     bench(label, () => {
-      parse(input);
+      parse(input, { startRule: 'game' });
     });
   });
 });

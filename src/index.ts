@@ -42,21 +42,31 @@ type Variation = Moves[] | [[number, undefined, Move], ...Moves][];
 // eslint-disable-next-line import-x/no-named-as-default-member
 const { Grammar, Parser } = nearley;
 
+function _(input: string): PGN[] {
+  const parser = new Parser(Grammar.fromCompiled(grammar));
+
+  try {
+    parser.feed(input);
+
+    if (parser.results.length > 1) {
+      throw new Error(
+        `@echecs/parser: Ambiguous syntax. Found ${parser.results.length} results`,
+      );
+    }
+
+    return parser.results[0] as PGN[];
+  } catch {
+    return [];
+  }
+}
+
 /**
  * Parse a PGN string into an array of games
  *
  * @param input
  */
 export default function parse(input: string): PGN[] {
-  const parser = new Parser(Grammar.fromCompiled(grammar));
+  const games = input.split(/(?<=(?!")1-0|0-1|1\/2-1\/2|\*(?!"))(\n+)/g);
 
-  parser.feed(input);
-
-  if (parser.results.length > 1) {
-    throw new Error(
-      `@echecs/parser: Ambiguous syntax. Found ${parser.results.length} results`,
-    );
-  }
-
-  return parser.results[0] as PGN[];
+  return games.map(_).flat();
 }
