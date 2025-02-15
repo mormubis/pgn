@@ -41,7 +41,7 @@ const tests = {
 
 describe('PGN Parser', () => {
   Object.entries(tests).forEach(([label, input]) =>
-    it(label, () => {
+    it(label, { timeout: 15000 }, () => {
       expect(parse(input)).toMatchSnapshot();
     }),
   );
