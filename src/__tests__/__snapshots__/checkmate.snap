@@ -1,0 +1,266 @@
+[
+  {
+    "meta": {
+      "Black": "Blomqvist, Erik",
+      "BlackElo": "0",
+      "Date": "2001.??.??",
+      "ECO": "C78",
+      "Event": "Nordic-chT",
+      "Result": "1-0",
+      "Round": "?",
+      "Site": "?",
+      "White": "Carlsen, Magnus",
+      "WhiteElo": "0",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+      ],
+      [
+        2,
+        {
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "piece": "N",
+          "to": "c6",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "B",
+          "to": "b5",
+        },
+        {
+          "piece": "P",
+          "to": "a6",
+        },
+      ],
+      [
+        4,
+        {
+          "piece": "B",
+          "to": "a4",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        5,
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g1",
+        },
+        {
+          "piece": "P",
+          "to": "b5",
+        },
+      ],
+      [
+        6,
+        {
+          "piece": "B",
+          "to": "b3",
+        },
+        {
+          "piece": "P",
+          "to": "d6",
+        },
+      ],
+      [
+        7,
+        {
+          "piece": "R",
+          "to": "e1",
+        },
+        {
+          "piece": "N",
+          "to": "a5",
+        },
+      ],
+      [
+        8,
+        {
+          "piece": "P",
+          "to": "d4",
+        },
+        {
+          "capture": true,
+          "from": "e",
+          "piece": "P",
+          "to": "d4",
+        },
+      ],
+      [
+        9,
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+        {
+          "capture": true,
+          "from": "d",
+          "piece": "P",
+          "to": "e5",
+        },
+      ],
+      [
+        10,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "e5",
+        },
+        {
+          "piece": "B",
+          "to": "e7",
+        },
+      ],
+      [
+        11,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "f7",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "b3",
+        },
+      ],
+      [
+        12,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "d8",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "a1",
+        },
+      ],
+      [
+        13,
+        {
+          "piece": "N",
+          "to": "c6",
+        },
+        {
+          "piece": "N",
+          "to": "d5",
+        },
+      ],
+      [
+        14,
+        {
+          "check": true,
+          "piece": "Q",
+          "to": "h5",
+        },
+        {
+          "piece": "P",
+          "to": "g6",
+        },
+      ],
+      [
+        15,
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "d5",
+        },
+        {
+          "piece": "K",
+          "to": "f8",
+        },
+      ],
+      [
+        16,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "e7",
+        },
+        {
+          "piece": "R",
+          "to": "b8",
+        },
+      ],
+      [
+        17,
+        {
+          "check": true,
+          "piece": "Q",
+          "to": "d8",
+        },
+        {
+          "piece": "K",
+          "to": "g7",
+        },
+      ],
+      [
+        18,
+        {
+          "capture": true,
+          "check": true,
+          "piece": "Q",
+          "to": "d4",
+        },
+        {
+          "piece": "K",
+          "to": "f7",
+        },
+      ],
+      [
+        19,
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "h8",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "c2",
+        },
+      ],
+      [
+        20,
+        {
+          "check": true,
+          "piece": "Q",
+          "to": "g8",
+        },
+        {
+          "piece": "K",
+          "to": "f6",
+        },
+      ],
+      [
+        21,
+        {
+          "checkmate": true,
+          "piece": "Q",
+          "to": "f8",
+        },
+      ],
+    ],
+    "result": 1,
+  },
+]

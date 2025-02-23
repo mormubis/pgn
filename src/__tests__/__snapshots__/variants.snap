@@ -1,0 +1,126 @@
+[
+  {
+    "meta": {
+      "Black": "?",
+      "Date": "????.??.??",
+      "Event": "?",
+      "Result": "*",
+      "Round": "?",
+      "Site": "?",
+      "White": "?",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+      ],
+      [
+        2,
+        {
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "piece": "N",
+          "to": "c6",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "B",
+          "to": "c4",
+        },
+        {
+          "piece": "B",
+          "to": "c5",
+        },
+      ],
+      [
+        4,
+        {
+          "piece": "P",
+          "to": "b4",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "b4",
+        },
+      ],
+      [
+        5,
+        {
+          "piece": "P",
+          "to": "c3",
+        },
+        {
+          "piece": "B",
+          "to": "a5",
+          "variants": [
+            [
+              [
+                5,
+                undefined,
+                {
+                  "annotations": [
+                    "±",
+                  ],
+                  "piece": "B",
+                  "to": "e7",
+                },
+              ],
+              [
+                6,
+                {
+                  "piece": "P",
+                  "to": "d4",
+                },
+              ],
+            ],
+          ],
+        },
+      ],
+      [
+        6,
+        {
+          "piece": "Q",
+          "to": "b3",
+          "variants": [
+            [
+              [
+                6,
+                {
+                  "piece": "P",
+                  "to": "d4",
+                },
+                {
+                  "capture": true,
+                  "from": "e",
+                  "piece": "P",
+                  "to": "d4",
+                },
+              ],
+              [
+                7,
+                {
+                  "castling": true,
+                  "piece": "K",
+                  "to": "g1",
+                },
+              ],
+            ],
+          ],
+        },
+      ],
+    ],
+    "result": "?",
+  },
+]

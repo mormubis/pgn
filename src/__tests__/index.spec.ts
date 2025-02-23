@@ -41,8 +41,10 @@ const tests = {
 
 describe('PGN Parser', () => {
   Object.entries(tests).forEach(([label, input]) =>
-    it(label, { timeout: 15000 }, () => {
-      expect(parse(input)).toMatchSnapshot();
+    it(label, { timeout: 15000 }, async () => {
+      await expect(parse(input)).toMatchFileSnapshot(
+        `./__snapshots__/${label}.snap`,
+      );
     }),
   );
 });

@@ -1,0 +1,371 @@
+[
+  {
+    "meta": {
+      "Black": "Cordts, Ingo",
+      "BlackElo": "2222",
+      "Date": "2000.10.29",
+      "ECO": "A56",
+      "Result": "0-1",
+      "Round": "?",
+      "Site": "?",
+      "White": "Carlsen, Magnus",
+      "WhiteElo": "0",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "d4",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        2,
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+        {
+          "piece": "P",
+          "to": "c5",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "capture": true,
+          "from": "c",
+          "piece": "P",
+          "to": "d4",
+        },
+      ],
+      [
+        4,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "d4",
+        },
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+      ],
+      [
+        5,
+        {
+          "piece": "N",
+          "to": "b5",
+        },
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+      ],
+      [
+        6,
+        {
+          "capture": true,
+          "from": "c",
+          "piece": "P",
+          "to": "d5",
+        },
+        {
+          "piece": "B",
+          "to": "c5",
+        },
+      ],
+      [
+        7,
+        {
+          "from": "5",
+          "piece": "N",
+          "to": "c3",
+        },
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g8",
+        },
+      ],
+      [
+        8,
+        {
+          "piece": "P",
+          "to": "e3",
+        },
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+      ],
+      [
+        9,
+        {
+          "piece": "P",
+          "to": "h3",
+        },
+        {
+          "piece": "R",
+          "to": "e8",
+        },
+      ],
+      [
+        10,
+        {
+          "piece": "P",
+          "to": "g4",
+        },
+        {
+          "piece": "R",
+          "to": "e5",
+        },
+      ],
+      [
+        11,
+        {
+          "piece": "B",
+          "to": "c4",
+        },
+        {
+          "from": "b",
+          "piece": "N",
+          "to": "d7",
+        },
+      ],
+      [
+        12,
+        {
+          "piece": "Q",
+          "to": "b3",
+        },
+        {
+          "piece": "N",
+          "to": "e8",
+        },
+      ],
+      [
+        13,
+        {
+          "piece": "N",
+          "to": "d2",
+        },
+        {
+          "piece": "N",
+          "to": "d6",
+        },
+      ],
+      [
+        14,
+        {
+          "piece": "B",
+          "to": "e2",
+        },
+        {
+          "piece": "Q",
+          "to": "h4",
+        },
+      ],
+      [
+        15,
+        {
+          "piece": "N",
+          "to": "c4",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "c4",
+        },
+      ],
+      [
+        16,
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "c4",
+        },
+        {
+          "piece": "P",
+          "to": "b5",
+        },
+      ],
+      [
+        17,
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "b5",
+        },
+        {
+          "piece": "R",
+          "to": "b8",
+        },
+      ],
+      [
+        18,
+        {
+          "piece": "Q",
+          "to": "a4",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        19,
+        {
+          "piece": "Q",
+          "to": "c6",
+        },
+        {
+          "piece": "N",
+          "to": "d7",
+        },
+      ],
+      [
+        20,
+        {
+          "piece": "P",
+          "to": "d6",
+        },
+        {
+          "piece": "R",
+          "to": "e6",
+        },
+      ],
+      [
+        21,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "e4",
+        },
+        {
+          "piece": "B",
+          "to": "b7",
+        },
+      ],
+      [
+        22,
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "d7",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "e4",
+        },
+      ],
+      [
+        23,
+        {
+          "piece": "R",
+          "to": "h2",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "d6",
+        },
+      ],
+      [
+        24,
+        {
+          "piece": "B",
+          "to": "c4",
+        },
+        {
+          "piece": "R",
+          "to": "d8",
+        },
+      ],
+      [
+        25,
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "a7",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "h2",
+        },
+      ],
+      [
+        26,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "e6",
+        },
+        {
+          "capture": true,
+          "from": "f",
+          "piece": "P",
+          "to": "e6",
+        },
+      ],
+      [
+        27,
+        {
+          "piece": "Q",
+          "to": "a6",
+        },
+        {
+          "piece": "B",
+          "to": "f3",
+        },
+      ],
+      [
+        28,
+        {
+          "piece": "B",
+          "to": "d2",
+        },
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "h3",
+        },
+      ],
+      [
+        29,
+        {
+          "capture": true,
+          "check": true,
+          "piece": "Q",
+          "to": "e6",
+        },
+        {
+          "piece": "K",
+          "to": "h8",
+        },
+      ],
+      [
+        30,
+        {
+          "piece": "Q",
+          "to": "e7",
+        },
+        {
+          "piece": "B",
+          "to": "c7",
+        },
+      ],
+    ],
+    "result": 0,
+  },
+]

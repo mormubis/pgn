@@ -1,0 +1,522 @@
+[
+  {
+    "meta": {
+      "Black": "Spassky, Boris V.",
+      "Date": "1992.11.04",
+      "Event": "F/S Return Match",
+      "Result": "1/2-1/2",
+      "Round": "29",
+      "Site": "Belgrade, Serbia JUG",
+      "White": "Fischer, Robert J.",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+      ],
+      [
+        2,
+        {
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "piece": "N",
+          "to": "c6",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "B",
+          "to": "b5",
+        },
+        {
+          "comment": " This opening is called the Ruy Lopez.",
+          "piece": "P",
+          "to": "a6",
+        },
+      ],
+      [
+        4,
+        {
+          "piece": "B",
+          "to": "a4",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        5,
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g1",
+        },
+        {
+          "piece": "B",
+          "to": "e7",
+        },
+      ],
+      [
+        6,
+        {
+          "piece": "R",
+          "to": "e1",
+        },
+        {
+          "piece": "P",
+          "to": "b5",
+        },
+      ],
+      [
+        7,
+        {
+          "piece": "B",
+          "to": "b3",
+        },
+        {
+          "piece": "P",
+          "to": "d6",
+        },
+      ],
+      [
+        8,
+        {
+          "piece": "P",
+          "to": "c3",
+        },
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g8",
+        },
+      ],
+      [
+        9,
+        {
+          "piece": "P",
+          "to": "h3",
+        },
+        {
+          "piece": "N",
+          "to": "b8",
+        },
+      ],
+      [
+        10,
+        {
+          "piece": "P",
+          "to": "d4",
+        },
+        {
+          "from": "b",
+          "piece": "N",
+          "to": "d7",
+        },
+      ],
+      [
+        11,
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+        {
+          "piece": "P",
+          "to": "c6",
+        },
+      ],
+      [
+        12,
+        {
+          "capture": true,
+          "from": "c",
+          "piece": "P",
+          "to": "b5",
+        },
+        {
+          "capture": true,
+          "from": "a",
+          "piece": "P",
+          "to": "b5",
+        },
+      ],
+      [
+        13,
+        {
+          "piece": "N",
+          "to": "c3",
+        },
+        {
+          "piece": "B",
+          "to": "b7",
+        },
+      ],
+      [
+        14,
+        {
+          "piece": "B",
+          "to": "g5",
+        },
+        {
+          "piece": "P",
+          "to": "b4",
+        },
+      ],
+      [
+        15,
+        {
+          "piece": "N",
+          "to": "b1",
+        },
+        {
+          "piece": "P",
+          "to": "h6",
+        },
+      ],
+      [
+        16,
+        {
+          "piece": "B",
+          "to": "h4",
+        },
+        {
+          "piece": "P",
+          "to": "c5",
+        },
+      ],
+      [
+        17,
+        {
+          "capture": true,
+          "from": "d",
+          "piece": "P",
+          "to": "e5",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "e4",
+        },
+      ],
+      [
+        18,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "e7",
+        },
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "e7",
+        },
+      ],
+      [
+        19,
+        {
+          "capture": true,
+          "from": "e",
+          "piece": "P",
+          "to": "d6",
+        },
+        {
+          "piece": "Q",
+          "to": "f6",
+        },
+      ],
+      [
+        20,
+        {
+          "from": "b",
+          "piece": "N",
+          "to": "d2",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "d6",
+        },
+      ],
+      [
+        21,
+        {
+          "piece": "N",
+          "to": "c4",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "c4",
+        },
+      ],
+      [
+        22,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "c4",
+        },
+        {
+          "piece": "N",
+          "to": "b6",
+        },
+      ],
+      [
+        23,
+        {
+          "piece": "N",
+          "to": "e5",
+        },
+        {
+          "from": "a",
+          "piece": "R",
+          "to": "e8",
+        },
+      ],
+      [
+        24,
+        {
+          "capture": true,
+          "check": true,
+          "piece": "B",
+          "to": "f7",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "f7",
+        },
+      ],
+      [
+        25,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "f7",
+        },
+        {
+          "capture": true,
+          "check": true,
+          "piece": "R",
+          "to": "e1",
+        },
+      ],
+      [
+        26,
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "e1",
+        },
+        {
+          "capture": true,
+          "piece": "K",
+          "to": "f7",
+        },
+      ],
+      [
+        27,
+        {
+          "piece": "Q",
+          "to": "e3",
+        },
+        {
+          "piece": "Q",
+          "to": "g5",
+        },
+      ],
+      [
+        28,
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "g5",
+        },
+        {
+          "capture": true,
+          "from": "h",
+          "piece": "P",
+          "to": "g5",
+        },
+      ],
+      [
+        29,
+        {
+          "piece": "P",
+          "to": "b3",
+        },
+        {
+          "piece": "K",
+          "to": "e6",
+        },
+      ],
+      [
+        30,
+        {
+          "piece": "P",
+          "to": "a3",
+        },
+        {
+          "piece": "K",
+          "to": "d6",
+        },
+      ],
+      [
+        31,
+        {
+          "capture": true,
+          "from": "a",
+          "piece": "P",
+          "to": "b4",
+        },
+        {
+          "capture": true,
+          "from": "c",
+          "piece": "P",
+          "to": "b4",
+        },
+      ],
+      [
+        32,
+        {
+          "piece": "R",
+          "to": "a5",
+        },
+        {
+          "piece": "N",
+          "to": "d5",
+        },
+      ],
+      [
+        33,
+        {
+          "piece": "P",
+          "to": "f3",
+        },
+        {
+          "piece": "B",
+          "to": "c8",
+        },
+      ],
+      [
+        34,
+        {
+          "piece": "K",
+          "to": "f2",
+        },
+        {
+          "piece": "B",
+          "to": "f5",
+        },
+      ],
+      [
+        35,
+        {
+          "piece": "R",
+          "to": "a7",
+        },
+        {
+          "piece": "P",
+          "to": "g6",
+        },
+      ],
+      [
+        36,
+        {
+          "check": true,
+          "piece": "R",
+          "to": "a6",
+        },
+        {
+          "piece": "K",
+          "to": "c5",
+        },
+      ],
+      [
+        37,
+        {
+          "piece": "K",
+          "to": "e1",
+        },
+        {
+          "piece": "N",
+          "to": "f4",
+        },
+      ],
+      [
+        38,
+        {
+          "piece": "P",
+          "to": "g3",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "h3",
+        },
+      ],
+      [
+        39,
+        {
+          "piece": "K",
+          "to": "d2",
+        },
+        {
+          "piece": "K",
+          "to": "b5",
+        },
+      ],
+      [
+        40,
+        {
+          "piece": "R",
+          "to": "d6",
+        },
+        {
+          "piece": "K",
+          "to": "c5",
+        },
+      ],
+      [
+        41,
+        {
+          "piece": "R",
+          "to": "a6",
+        },
+        {
+          "piece": "N",
+          "to": "f2",
+        },
+      ],
+      [
+        42,
+        {
+          "piece": "P",
+          "to": "g4",
+        },
+        {
+          "piece": "B",
+          "to": "d3",
+        },
+      ],
+      [
+        43,
+        {
+          "piece": "R",
+          "to": "e6",
+        },
+      ],
+    ],
+    "result": 0.5,
+  },
+]

@@ -1,0 +1,498 @@
+[
+  {
+    "meta": {
+      "Black": "Carlsen, Magnus",
+      "BlackElo": "2064",
+      "Date": "2001.04.10",
+      "ECO": "A46",
+      "Event": "NOR-ch op",
+      "Result": "0-1",
+      "Round": "?",
+      "Site": "?",
+      "White": "Kabashaj, Agron",
+      "WhiteElo": "0",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "d4",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        2,
+        {
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "piece": "P",
+          "to": "c5",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "P",
+          "to": "g3",
+        },
+        {
+          "capture": true,
+          "from": "c",
+          "piece": "P",
+          "to": "d4",
+        },
+      ],
+      [
+        4,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "d4",
+        },
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+      ],
+      [
+        5,
+        {
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "piece": "N",
+          "to": "c6",
+        },
+      ],
+      [
+        6,
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+      ],
+      [
+        7,
+        {
+          "capture": true,
+          "from": "c",
+          "piece": "P",
+          "to": "d5",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "d5",
+        },
+      ],
+      [
+        8,
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+        {
+          "from": "d",
+          "piece": "N",
+          "to": "b4",
+        },
+      ],
+      [
+        9,
+        {
+          "capture": true,
+          "check": true,
+          "piece": "Q",
+          "to": "d8",
+        },
+        {
+          "capture": true,
+          "piece": "K",
+          "to": "d8",
+        },
+      ],
+      [
+        10,
+        {
+          "piece": "N",
+          "to": "a3",
+        },
+        {
+          "piece": "B",
+          "to": "g4",
+        },
+      ],
+      [
+        11,
+        {
+          "piece": "B",
+          "to": "e2",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "f3",
+        },
+      ],
+      [
+        12,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "f3",
+        },
+        {
+          "piece": "N",
+          "to": "d4",
+        },
+      ],
+      [
+        13,
+        {
+          "piece": "B",
+          "to": "d1",
+        },
+        {
+          "check": true,
+          "piece": "N",
+          "to": "d3",
+        },
+      ],
+      [
+        14,
+        {
+          "piece": "K",
+          "to": "f1",
+        },
+        {
+          "piece": "R",
+          "to": "c8",
+        },
+      ],
+      [
+        15,
+        {
+          "piece": "B",
+          "to": "e3",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "b2",
+        },
+      ],
+      [
+        16,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "d4",
+        },
+        {
+          "capture": true,
+          "from": "e",
+          "piece": "P",
+          "to": "d4",
+        },
+      ],
+      [
+        17,
+        {
+          "piece": "N",
+          "to": "b5",
+        },
+        {
+          "piece": "B",
+          "to": "c5",
+        },
+      ],
+      [
+        18,
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+        {
+          "piece": "P",
+          "to": "a6",
+        },
+      ],
+      [
+        19,
+        {
+          "piece": "N",
+          "to": "d6",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "d6",
+        },
+      ],
+      [
+        20,
+        {
+          "capture": true,
+          "from": "e",
+          "piece": "P",
+          "to": "d6",
+        },
+        {
+          "piece": "P",
+          "to": "d3",
+        },
+      ],
+      [
+        21,
+        {
+          "piece": "B",
+          "to": "b3",
+        },
+        {
+          "piece": "R",
+          "to": "e8",
+        },
+      ],
+      [
+        22,
+        {
+          "piece": "K",
+          "to": "g2",
+        },
+        {
+          "piece": "R",
+          "to": "e2",
+        },
+      ],
+      [
+        23,
+        {
+          "from": "a",
+          "piece": "R",
+          "to": "b1",
+        },
+        {
+          "piece": "R",
+          "to": "c6",
+        },
+      ],
+      [
+        24,
+        {
+          "piece": "P",
+          "to": "d7",
+        },
+        {
+          "capture": true,
+          "piece": "K",
+          "to": "d7",
+        },
+      ],
+      [
+        25,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "f7",
+        },
+        {
+          "piece": "R",
+          "to": "f6",
+        },
+      ],
+      [
+        26,
+        {
+          "piece": "B",
+          "to": "d5",
+        },
+        {
+          "capture": true,
+          "check": true,
+          "from": "f",
+          "piece": "R",
+          "to": "f2",
+        },
+      ],
+      [
+        27,
+        {
+          "piece": "K",
+          "to": "h3",
+        },
+        {
+          "piece": "P",
+          "to": "b5",
+        },
+      ],
+      [
+        28,
+        {
+          "piece": "P",
+          "to": "g4",
+        },
+        {
+          "check": true,
+          "piece": "R",
+          "to": "e3",
+        },
+      ],
+      [
+        29,
+        {
+          "piece": "K",
+          "to": "h4",
+        },
+        {
+          "check": true,
+          "piece": "P",
+          "to": "g5",
+        },
+      ],
+      [
+        30,
+        {
+          "piece": "K",
+          "to": "h5",
+        },
+        {
+          "check": true,
+          "piece": "R",
+          "to": "h3",
+        },
+      ],
+      [
+        31,
+        {
+          "capture": true,
+          "piece": "K",
+          "to": "g5",
+        },
+        {
+          "capture": true,
+          "from": "h",
+          "piece": "R",
+          "to": "h2",
+        },
+      ],
+      [
+        32,
+        {
+          "from": "h",
+          "piece": "R",
+          "to": "g1",
+        },
+        {
+          "piece": "R",
+          "to": "e2",
+        },
+      ],
+      [
+        33,
+        {
+          "piece": "B",
+          "to": "b7",
+        },
+        {
+          "piece": "R",
+          "to": "e6",
+        },
+      ],
+      [
+        34,
+        {
+          "piece": "B",
+          "to": "g2",
+        },
+        {
+          "piece": "N",
+          "to": "c4",
+        },
+      ],
+      [
+        35,
+        {
+          "from": "b",
+          "piece": "R",
+          "to": "d1",
+        },
+        {
+          "piece": "P",
+          "to": "d2",
+        },
+      ],
+      [
+        36,
+        {
+          "piece": "B",
+          "to": "d5",
+        },
+        {
+          "check": true,
+          "piece": "R",
+          "to": "e5",
+        },
+      ],
+      [
+        37,
+        {
+          "piece": "K",
+          "to": "f6",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "d5",
+        },
+      ],
+      [
+        38,
+        {
+          "piece": "K",
+          "to": "g7",
+        },
+        {
+          "piece": "N",
+          "to": "b2",
+        },
+      ],
+      [
+        39,
+        {
+          "piece": "R",
+          "to": "h1",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "h1",
+        },
+      ],
+      [
+        40,
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "h1",
+        },
+        {
+          "piece": "P",
+          "promotion": "Q",
+          "to": "d1",
+        },
+      ],
+    ],
+    "result": 0,
+  },
+]

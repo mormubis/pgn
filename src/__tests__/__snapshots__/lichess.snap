@@ -1,0 +1,3741 @@
+[
+  {
+    "meta": {
+      "Black": "mliebelt",
+      "BlackElo": "1824",
+      "BlackRatingDiff": "+6",
+      "Date": "2024.01.02",
+      "ECO": "C56",
+      "Event": "Rated Blitz game",
+      "Result": "0-1",
+      "Site": "https://lichess.org/izqA4zcL",
+      "Termination": "Normal",
+      "TimeControl": "180+0",
+      "UTCDate": "2024.01.02",
+      "UTCTime": "17:14:13",
+      "Variant": "Standard",
+      "White": "mdolano",
+      "WhiteElo": "1854",
+      "WhiteRatingDiff": "-6",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+      ],
+      [
+        2,
+        {
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "piece": "N",
+          "to": "c6",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "B",
+          "to": "c4",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        4,
+        {
+          "piece": "P",
+          "to": "d4",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "e4",
+        },
+      ],
+      [
+        5,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "e5",
+        },
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+      ],
+      [
+        6,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "c6",
+        },
+        {
+          "capture": true,
+          "from": "b",
+          "piece": "P",
+          "to": "c6",
+        },
+      ],
+      [
+        7,
+        {
+          "piece": "B",
+          "to": "b3",
+        },
+        {
+          "piece": "Q",
+          "to": "h4",
+        },
+      ],
+      [
+        8,
+        {
+          "piece": "Q",
+          "to": "e2",
+        },
+        {
+          "piece": "B",
+          "to": "d6",
+        },
+      ],
+      [
+        9,
+        {
+          "piece": "P",
+          "to": "g3",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "g3",
+        },
+      ],
+      [
+        10,
+        {
+          "capture": true,
+          "from": "f",
+          "piece": "P",
+          "to": "g3",
+        },
+        {
+          "piece": "Q",
+          "to": "h3",
+        },
+      ],
+      [
+        11,
+        {
+          "piece": "N",
+          "to": "d2",
+        },
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g8",
+        },
+      ],
+      [
+        12,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "e4",
+        },
+        {
+          "capture": true,
+          "from": "d",
+          "piece": "P",
+          "to": "e4",
+        },
+      ],
+      [
+        13,
+        {
+          "piece": "B",
+          "to": "e3",
+        },
+        {
+          "piece": "B",
+          "to": "g4",
+        },
+      ],
+      [
+        14,
+        {
+          "piece": "Q",
+          "to": "f2",
+        },
+        {
+          "piece": "B",
+          "to": "f3",
+        },
+      ],
+      [
+        15,
+        {
+          "piece": "R",
+          "to": "f1",
+        },
+        {
+          "piece": "K",
+          "to": "h8",
+        },
+      ],
+      [
+        16,
+        {
+          "piece": "K",
+          "to": "d2",
+        },
+        {
+          "piece": "Q",
+          "to": "d7",
+        },
+      ],
+      [
+        17,
+        {
+          "from": "a",
+          "piece": "R",
+          "to": "e1",
+        },
+        {
+          "piece": "P",
+          "to": "c5",
+        },
+      ],
+      [
+        18,
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+        {
+          "piece": "P",
+          "to": "c6",
+        },
+      ],
+      [
+        19,
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+        {
+          "capture": true,
+          "from": "c",
+          "piece": "P",
+          "to": "d5",
+        },
+      ],
+      [
+        20,
+        {
+          "capture": true,
+          "from": "c",
+          "piece": "P",
+          "to": "d5",
+        },
+        {
+          "from": "f",
+          "piece": "R",
+          "to": "c8",
+        },
+      ],
+      [
+        21,
+        {
+          "piece": "B",
+          "to": "c4",
+        },
+        {
+          "piece": "Q",
+          "to": "a4",
+        },
+      ],
+      [
+        22,
+        {
+          "piece": "B",
+          "to": "b3",
+        },
+        {
+          "check": true,
+          "piece": "Q",
+          "to": "b4",
+        },
+      ],
+      [
+        23,
+        {
+          "piece": "K",
+          "to": "c1",
+        },
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+      ],
+      [
+        24,
+        {
+          "piece": "B",
+          "to": "c2",
+        },
+        {
+          "from": "a",
+          "piece": "R",
+          "to": "b8",
+        },
+      ],
+      [
+        25,
+        {
+          "piece": "B",
+          "to": "d1",
+        },
+        {
+          "piece": "P",
+          "to": "c3",
+        },
+      ],
+      [
+        26,
+        {
+          "piece": "P",
+          "to": "b3",
+        },
+        {
+          "check": true,
+          "piece": "Q",
+          "to": "a3",
+        },
+      ],
+      [
+        27,
+        {
+          "piece": "K",
+          "to": "c2",
+        },
+        {
+          "capture": true,
+          "check": true,
+          "piece": "Q",
+          "to": "a2",
+        },
+      ],
+      [
+        28,
+        {
+          "piece": "K",
+          "to": "c1",
+        },
+        {
+          "check": true,
+          "piece": "Q",
+          "to": "a1",
+        },
+      ],
+      [
+        29,
+        {
+          "piece": "K",
+          "to": "c2",
+        },
+        {
+          "checkmate": true,
+          "piece": "Q",
+          "to": "b2",
+        },
+      ],
+    ],
+    "result": 0,
+  },
+  {
+    "meta": {
+      "Black": "perakgk",
+      "BlackElo": "1871",
+      "BlackRatingDiff": "-6",
+      "Date": "2024.01.02",
+      "ECO": "B02",
+      "Event": "Rated Blitz game",
+      "Result": "1-0",
+      "Site": "https://lichess.org/g3NSXx8l",
+      "Termination": "Time forfeit",
+      "TimeControl": "180+0",
+      "UTCDate": "2024.01.02",
+      "UTCTime": "17:06:59",
+      "Variant": "Standard",
+      "White": "mliebelt",
+      "WhiteElo": "1818",
+      "WhiteRatingDiff": "+6",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+      ],
+      [
+        2,
+        {
+          "capture": true,
+          "from": "e",
+          "piece": "P",
+          "to": "d5",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "N",
+          "to": "c3",
+        },
+        {
+          "piece": "P",
+          "to": "c6",
+        },
+      ],
+      [
+        4,
+        {
+          "capture": true,
+          "from": "d",
+          "piece": "P",
+          "to": "c6",
+        },
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+      ],
+      [
+        5,
+        {
+          "piece": "B",
+          "to": "e2",
+        },
+        {
+          "piece": "B",
+          "to": "c5",
+        },
+      ],
+      [
+        6,
+        {
+          "piece": "P",
+          "to": "d3",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "c6",
+        },
+      ],
+      [
+        7,
+        {
+          "piece": "B",
+          "to": "e3",
+        },
+        {
+          "piece": "N",
+          "to": "d4",
+        },
+      ],
+      [
+        8,
+        {
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g8",
+        },
+      ],
+      [
+        9,
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g1",
+        },
+        {
+          "piece": "R",
+          "to": "e8",
+        },
+      ],
+      [
+        10,
+        {
+          "piece": "N",
+          "to": "e4",
+        },
+        {
+          "piece": "B",
+          "to": "f8",
+        },
+      ],
+      [
+        11,
+        {
+          "piece": "B",
+          "to": "g5",
+        },
+        {
+          "capture": true,
+          "check": true,
+          "piece": "N",
+          "to": "f3",
+        },
+      ],
+      [
+        12,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "f3",
+        },
+        {
+          "piece": "B",
+          "to": "e7",
+        },
+      ],
+      [
+        13,
+        {
+          "piece": "Q",
+          "to": "e2",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "e4",
+        },
+      ],
+      [
+        14,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "e7",
+        },
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "e7",
+        },
+      ],
+      [
+        15,
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "g6",
+        },
+      ],
+      [
+        16,
+        {
+          "piece": "P",
+          "to": "g3",
+        },
+        {
+          "piece": "P",
+          "to": "f5",
+        },
+      ],
+      [
+        17,
+        {
+          "check": true,
+          "piece": "Q",
+          "to": "d5",
+        },
+        {
+          "piece": "K",
+          "to": "g7",
+        },
+      ],
+      [
+        18,
+        {
+          "from": "a",
+          "piece": "R",
+          "to": "e1",
+        },
+        {
+          "piece": "R",
+          "to": "b8",
+        },
+      ],
+      [
+        19,
+        {
+          "piece": "P",
+          "to": "c3",
+        },
+        {
+          "piece": "P",
+          "to": "b6",
+        },
+      ],
+      [
+        20,
+        {
+          "piece": "Q",
+          "to": "b3",
+        },
+        {
+          "piece": "B",
+          "to": "a6",
+        },
+      ],
+      [
+        21,
+        {
+          "piece": "B",
+          "to": "e2",
+        },
+        {
+          "from": "b",
+          "piece": "R",
+          "to": "d8",
+        },
+      ],
+      [
+        22,
+        {
+          "piece": "R",
+          "to": "d1",
+        },
+        {
+          "piece": "Q",
+          "to": "d7",
+        },
+      ],
+      [
+        23,
+        {
+          "piece": "Q",
+          "to": "c2",
+        },
+        {
+          "piece": "Q",
+          "to": "c7",
+        },
+      ],
+      [
+        24,
+        {
+          "piece": "P",
+          "to": "b3",
+        },
+        {
+          "piece": "B",
+          "to": "b7",
+        },
+      ],
+      [
+        25,
+        {
+          "piece": "Q",
+          "to": "b2",
+        },
+        {
+          "piece": "Q",
+          "to": "c6",
+        },
+      ],
+      [
+        26,
+        {
+          "piece": "P",
+          "to": "f3",
+        },
+        {
+          "piece": "B",
+          "to": "a6",
+        },
+      ],
+      [
+        27,
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+        {
+          "piece": "R",
+          "to": "d4",
+        },
+      ],
+      [
+        28,
+        {
+          "piece": "R",
+          "to": "d2",
+        },
+        {
+          "from": "e",
+          "piece": "R",
+          "to": "d8",
+        },
+      ],
+      [
+        29,
+        {
+          "from": "f",
+          "piece": "R",
+          "to": "d1",
+        },
+        {
+          "piece": "B",
+          "to": "b7",
+        },
+      ],
+      [
+        30,
+        {
+          "piece": "K",
+          "to": "f2",
+        },
+        {
+          "piece": "P",
+          "to": "g5",
+        },
+      ],
+      [
+        31,
+        {
+          "piece": "P",
+          "to": "h3",
+        },
+        {
+          "piece": "P",
+          "to": "h5",
+        },
+      ],
+      [
+        32,
+        {
+          "piece": "P",
+          "to": "b4",
+        },
+        {
+          "piece": "P",
+          "to": "a6",
+        },
+      ],
+      [
+        33,
+        {
+          "piece": "P",
+          "to": "a4",
+        },
+        {
+          "piece": "P",
+          "to": "g4",
+        },
+      ],
+      [
+        34,
+        {
+          "piece": "P",
+          "to": "b5",
+        },
+        {
+          "piece": "Q",
+          "to": "c5",
+        },
+      ],
+      [
+        35,
+        {
+          "capture": true,
+          "from": "h",
+          "piece": "P",
+          "to": "g4",
+        },
+        {
+          "capture": true,
+          "from": "h",
+          "piece": "P",
+          "to": "g4",
+        },
+      ],
+      [
+        36,
+        {
+          "capture": true,
+          "from": "f",
+          "piece": "P",
+          "to": "g4",
+        },
+        {
+          "capture": true,
+          "from": "f",
+          "piece": "P",
+          "to": "g4",
+        },
+      ],
+      [
+        37,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "g4",
+        },
+        {
+          "check": true,
+          "piece": "R",
+          "to": "f4",
+        },
+      ],
+      [
+        38,
+        {
+          "piece": "K",
+          "to": "e1",
+        },
+        {
+          "check": true,
+          "piece": "Q",
+          "to": "f2",
+        },
+      ],
+      [
+        39,
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "f2",
+        },
+      ],
+    ],
+    "result": 1,
+  },
+  {
+    "meta": {
+      "Black": "mliebelt",
+      "BlackElo": "1824",
+      "BlackRatingDiff": "-6",
+      "Date": "2024.01.02",
+      "ECO": "C47",
+      "Event": "Rated Blitz game",
+      "Result": "1-0",
+      "Site": "https://lichess.org/pQpCecAJ",
+      "Termination": "Time forfeit",
+      "TimeControl": "180+0",
+      "UTCDate": "2024.01.02",
+      "UTCTime": "16:59:41",
+      "Variant": "Standard",
+      "White": "Khanlid",
+      "WhiteElo": "1797",
+      "WhiteRatingDiff": "+6",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+      ],
+      [
+        2,
+        {
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "piece": "N",
+          "to": "c6",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "B",
+          "to": "c4",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        4,
+        {
+          "piece": "N",
+          "to": "c3",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "e4",
+        },
+      ],
+      [
+        5,
+        {
+          "piece": "P",
+          "to": "d3",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "c3",
+        },
+      ],
+      [
+        6,
+        {
+          "capture": true,
+          "from": "b",
+          "piece": "P",
+          "to": "c3",
+        },
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+      ],
+      [
+        7,
+        {
+          "piece": "B",
+          "to": "b3",
+        },
+        {
+          "piece": "B",
+          "to": "g4",
+        },
+      ],
+      [
+        8,
+        {
+          "piece": "P",
+          "to": "h3",
+        },
+        {
+          "piece": "B",
+          "to": "h5",
+        },
+      ],
+      [
+        9,
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g1",
+        },
+        {
+          "piece": "B",
+          "to": "c5",
+        },
+      ],
+      [
+        10,
+        {
+          "piece": "R",
+          "to": "e1",
+        },
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g8",
+        },
+      ],
+      [
+        11,
+        {
+          "piece": "B",
+          "to": "g5",
+        },
+        {
+          "piece": "P",
+          "to": "f6",
+        },
+      ],
+      [
+        12,
+        {
+          "piece": "B",
+          "to": "h4",
+        },
+        {
+          "piece": "K",
+          "to": "h8",
+        },
+      ],
+      [
+        13,
+        {
+          "piece": "P",
+          "to": "g4",
+        },
+        {
+          "piece": "B",
+          "to": "f7",
+        },
+      ],
+      [
+        14,
+        {
+          "piece": "B",
+          "to": "g3",
+        },
+        {
+          "piece": "Q",
+          "to": "d7",
+        },
+      ],
+      [
+        15,
+        {
+          "piece": "N",
+          "to": "h4",
+        },
+        {
+          "piece": "P",
+          "to": "g6",
+        },
+      ],
+      [
+        16,
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+        {
+          "capture": true,
+          "from": "d",
+          "piece": "P",
+          "to": "c4",
+        },
+      ],
+      [
+        17,
+        {
+          "capture": true,
+          "from": "d",
+          "piece": "P",
+          "to": "c4",
+        },
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "d1",
+        },
+      ],
+      [
+        18,
+        {
+          "capture": true,
+          "from": "a",
+          "piece": "R",
+          "to": "d1",
+        },
+        {
+          "piece": "N",
+          "to": "d4",
+        },
+      ],
+      [
+        19,
+        {
+          "piece": "K",
+          "to": "g2",
+        },
+        {
+          "piece": "B",
+          "to": "b4",
+        },
+      ],
+      [
+        20,
+        {
+          "piece": "R",
+          "to": "e4",
+        },
+        {
+          "piece": "B",
+          "to": "e8",
+        },
+      ],
+      [
+        21,
+        {
+          "piece": "R",
+          "to": "e3",
+        },
+        {
+          "check": true,
+          "piece": "B",
+          "to": "c6",
+        },
+      ],
+      [
+        22,
+        {
+          "piece": "K",
+          "to": "h2",
+        },
+        {
+          "piece": "B",
+          "to": "c5",
+        },
+      ],
+      [
+        23,
+        {
+          "from": "e",
+          "piece": "R",
+          "to": "d3",
+        },
+        {
+          "piece": "B",
+          "to": "e4",
+        },
+      ],
+      [
+        24,
+        {
+          "piece": "R",
+          "to": "e3",
+        },
+        {
+          "piece": "B",
+          "to": "c6",
+        },
+      ],
+      [
+        25,
+        {
+          "piece": "P",
+          "to": "c3",
+        },
+        {
+          "piece": "N",
+          "to": "e6",
+        },
+      ],
+      [
+        26,
+        {
+          "piece": "R",
+          "to": "e2",
+        },
+        {
+          "from": "a",
+          "piece": "R",
+          "to": "d8",
+        },
+      ],
+      [
+        27,
+        {
+          "piece": "R",
+          "to": "b1",
+        },
+        {
+          "piece": "N",
+          "to": "g5",
+        },
+      ],
+      [
+        28,
+        {
+          "piece": "B",
+          "to": "c2",
+        },
+        {
+          "check": true,
+          "piece": "N",
+          "to": "f3",
+        },
+      ],
+      [
+        29,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "f3",
+        },
+      ],
+      [
+        30,
+        {
+          "from": "e",
+          "piece": "R",
+          "to": "e1",
+        },
+        {
+          "piece": "R",
+          "to": "d2",
+        },
+      ],
+      [
+        31,
+        {
+          "piece": "B",
+          "to": "e4",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "e4",
+        },
+      ],
+      [
+        32,
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "b6",
+        },
+      ],
+      [
+        33,
+        {
+          "piece": "R",
+          "to": "f1",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "a2",
+        },
+      ],
+      [
+        34,
+        {
+          "piece": "P",
+          "to": "h4",
+        },
+        {
+          "piece": "R",
+          "to": "d8",
+        },
+      ],
+      [
+        35,
+        {
+          "piece": "P",
+          "to": "h5",
+        },
+        {
+          "piece": "K",
+          "to": "g7",
+        },
+      ],
+      [
+        36,
+        {
+          "capture": true,
+          "from": "h",
+          "piece": "P",
+          "to": "g6",
+        },
+        {
+          "capture": true,
+          "from": "h",
+          "piece": "P",
+          "to": "g6",
+        },
+      ],
+      [
+        37,
+        {
+          "piece": "K",
+          "to": "h3",
+        },
+        {
+          "check": true,
+          "piece": "R",
+          "to": "h8",
+        },
+      ],
+      [
+        38,
+        {
+          "piece": "K",
+          "to": "g2",
+        },
+        {
+          "piece": "B",
+          "to": "d6",
+        },
+      ],
+      [
+        39,
+        {
+          "piece": "P",
+          "to": "c5",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "c5",
+        },
+      ],
+      [
+        40,
+        {
+          "piece": "R",
+          "to": "c4",
+        },
+        {
+          "piece": "R",
+          "to": "d8",
+        },
+      ],
+      [
+        41,
+        {
+          "piece": "R",
+          "to": "e4",
+        },
+        {
+          "piece": "R",
+          "to": "d3",
+        },
+      ],
+      [
+        42,
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+        {
+          "piece": "R",
+          "to": "c2",
+        },
+      ],
+      [
+        43,
+        {
+          "piece": "R",
+          "to": "a1",
+        },
+        {
+          "piece": "P",
+          "to": "a5",
+        },
+      ],
+      [
+        44,
+        {
+          "piece": "R",
+          "to": "a4",
+        },
+        {
+          "piece": "R",
+          "to": "d4",
+        },
+      ],
+      [
+        45,
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "d4",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "d4",
+        },
+      ],
+      [
+        46,
+        {
+          "piece": "P",
+          "to": "c5",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "c5",
+        },
+      ],
+      [
+        47,
+        {
+          "piece": "R",
+          "to": "e4",
+        },
+        {
+          "piece": "B",
+          "to": "b4",
+        },
+      ],
+      [
+        48,
+        {
+          "piece": "R",
+          "to": "c4",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "c4",
+        },
+      ],
+      [
+        49,
+        {
+          "piece": "K",
+          "to": "f3",
+        },
+        {
+          "piece": "P",
+          "to": "a4",
+        },
+      ],
+      [
+        50,
+        {
+          "piece": "K",
+          "to": "e3",
+        },
+        {
+          "piece": "P",
+          "to": "a3",
+        },
+      ],
+      [
+        51,
+        {
+          "piece": "K",
+          "to": "d3",
+        },
+        {
+          "piece": "R",
+          "to": "c5",
+        },
+      ],
+      [
+        52,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "e5",
+        },
+        {
+          "piece": "P",
+          "to": "a2",
+        },
+      ],
+      [
+        53,
+        {
+          "piece": "B",
+          "to": "a1",
+        },
+        {
+          "piece": "B",
+          "to": "a3",
+        },
+      ],
+      [
+        54,
+        {
+          "piece": "K",
+          "to": "d4",
+        },
+        {
+          "piece": "P",
+          "to": "b5",
+        },
+      ],
+      [
+        55,
+        {
+          "piece": "K",
+          "to": "d3",
+        },
+      ],
+    ],
+    "result": 1,
+  },
+  {
+    "meta": {
+      "Black": "Kwilliam",
+      "BlackElo": "1820",
+      "BlackRatingDiff": "+6",
+      "Date": "2024.01.02",
+      "ECO": "B01",
+      "Event": "Rated Blitz game",
+      "Result": "0-1",
+      "Site": "https://lichess.org/gNMldJgv",
+      "Termination": "Normal",
+      "TimeControl": "180+0",
+      "UTCDate": "2024.01.02",
+      "UTCTime": "16:56:09",
+      "Variant": "Standard",
+      "White": "mliebelt",
+      "WhiteElo": "1830",
+      "WhiteRatingDiff": "-6",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+      ],
+      [
+        2,
+        {
+          "capture": true,
+          "from": "e",
+          "piece": "P",
+          "to": "d5",
+        },
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "d5",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "N",
+          "to": "c3",
+        },
+        {
+          "piece": "Q",
+          "to": "d8",
+        },
+      ],
+      [
+        4,
+        {
+          "piece": "P",
+          "to": "d4",
+        },
+        {
+          "piece": "B",
+          "to": "f5",
+        },
+      ],
+      [
+        5,
+        {
+          "piece": "B",
+          "to": "e3",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        6,
+        {
+          "piece": "Q",
+          "to": "d2",
+        },
+        {
+          "piece": "P",
+          "to": "a6",
+        },
+      ],
+      [
+        7,
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "c1",
+        },
+        {
+          "piece": "P",
+          "to": "e6",
+        },
+      ],
+      [
+        8,
+        {
+          "from": "g",
+          "piece": "N",
+          "to": "e2",
+        },
+        {
+          "piece": "B",
+          "to": "b4",
+        },
+      ],
+      [
+        9,
+        {
+          "piece": "P",
+          "to": "a3",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "c3",
+        },
+      ],
+      [
+        10,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "c3",
+        },
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g8",
+        },
+      ],
+      [
+        11,
+        {
+          "piece": "P",
+          "to": "f3",
+        },
+        {
+          "piece": "N",
+          "to": "c6",
+        },
+      ],
+      [
+        12,
+        {
+          "piece": "P",
+          "to": "g4",
+        },
+        {
+          "piece": "B",
+          "to": "g6",
+        },
+      ],
+      [
+        13,
+        {
+          "piece": "B",
+          "to": "d3",
+        },
+        {
+          "piece": "P",
+          "to": "b5",
+        },
+      ],
+      [
+        14,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "g6",
+        },
+        {
+          "capture": true,
+          "from": "f",
+          "piece": "P",
+          "to": "g6",
+        },
+      ],
+      [
+        15,
+        {
+          "piece": "P",
+          "to": "h3",
+        },
+        {
+          "piece": "N",
+          "to": "d5",
+        },
+      ],
+      [
+        16,
+        {
+          "piece": "B",
+          "to": "g5",
+        },
+        {
+          "piece": "Q",
+          "to": "d6",
+        },
+      ],
+      [
+        17,
+        {
+          "piece": "N",
+          "to": "e4",
+        },
+        {
+          "piece": "Q",
+          "to": "d7",
+        },
+      ],
+      [
+        18,
+        {
+          "from": "h",
+          "piece": "R",
+          "to": "f1",
+        },
+        {
+          "piece": "P",
+          "to": "a5",
+        },
+      ],
+      [
+        19,
+        {
+          "piece": "K",
+          "to": "b1",
+        },
+        {
+          "piece": "P",
+          "to": "b4",
+        },
+      ],
+      [
+        20,
+        {
+          "piece": "P",
+          "to": "a4",
+        },
+        {
+          "piece": "P",
+          "to": "b3",
+        },
+      ],
+      [
+        21,
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+        {
+          "from": "d",
+          "piece": "N",
+          "to": "b4",
+        },
+      ],
+      [
+        22,
+        {
+          "piece": "N",
+          "to": "c5",
+        },
+        {
+          "piece": "Q",
+          "to": "d6",
+        },
+      ],
+      [
+        23,
+        {
+          "piece": "B",
+          "to": "f4",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "f4",
+        },
+      ],
+      [
+        24,
+        {
+          "piece": "N",
+          "to": "b7",
+        },
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "d4",
+        },
+      ],
+      [
+        25,
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "d4",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "d4",
+        },
+      ],
+      [
+        26,
+        {
+          "piece": "N",
+          "to": "c5",
+        },
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+      ],
+    ],
+    "result": 0,
+  },
+  {
+    "meta": {
+      "Black": "EmmanuelRamirez30",
+      "BlackElo": "1834",
+      "BlackRatingDiff": "-6",
+      "Date": "2024.01.02",
+      "ECO": "B32",
+      "Event": "Rated Blitz game",
+      "Result": "1-0",
+      "Site": "https://lichess.org/3o3oaj8x",
+      "Termination": "Normal",
+      "TimeControl": "180+0",
+      "UTCDate": "2024.01.02",
+      "UTCTime": "16:50:13",
+      "Variant": "Standard",
+      "White": "mliebelt",
+      "WhiteElo": "1824",
+      "WhiteRatingDiff": "+6",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "c5",
+        },
+      ],
+      [
+        2,
+        {
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "piece": "N",
+          "to": "c6",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "P",
+          "to": "d4",
+        },
+        {
+          "piece": "P",
+          "to": "a6",
+        },
+      ],
+      [
+        4,
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+        {
+          "piece": "N",
+          "to": "b4",
+        },
+      ],
+      [
+        5,
+        {
+          "piece": "P",
+          "to": "c3",
+        },
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "d5",
+        },
+      ],
+      [
+        6,
+        {
+          "capture": true,
+          "from": "e",
+          "piece": "P",
+          "to": "d5",
+        },
+        {
+          "piece": "P",
+          "to": "d6",
+        },
+      ],
+      [
+        7,
+        {
+          "piece": "B",
+          "to": "d3",
+        },
+        {
+          "piece": "B",
+          "to": "g4",
+        },
+      ],
+      [
+        8,
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g1",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        9,
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+        {
+          "piece": "P",
+          "to": "g6",
+        },
+      ],
+      [
+        10,
+        {
+          "piece": "P",
+          "to": "h3",
+        },
+        {
+          "piece": "B",
+          "to": "d7",
+        },
+      ],
+      [
+        11,
+        {
+          "piece": "N",
+          "to": "c3",
+        },
+        {
+          "piece": "B",
+          "to": "g7",
+        },
+      ],
+      [
+        12,
+        {
+          "piece": "B",
+          "to": "g5",
+        },
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g8",
+        },
+      ],
+      [
+        13,
+        {
+          "piece": "R",
+          "to": "e1",
+        },
+        {
+          "piece": "Q",
+          "to": "c8",
+        },
+      ],
+      [
+        14,
+        {
+          "piece": "K",
+          "to": "h2",
+        },
+        {
+          "piece": "N",
+          "to": "h5",
+        },
+      ],
+      [
+        15,
+        {
+          "piece": "Q",
+          "to": "c2",
+        },
+        {
+          "piece": "P",
+          "to": "e6",
+        },
+      ],
+      [
+        16,
+        {
+          "piece": "B",
+          "to": "e7",
+        },
+        {
+          "piece": "R",
+          "to": "e8",
+        },
+      ],
+      [
+        17,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "d6",
+        },
+        {
+          "capture": true,
+          "from": "e",
+          "piece": "P",
+          "to": "d5",
+        },
+      ],
+      [
+        18,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "d5",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "e1",
+        },
+      ],
+      [
+        19,
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "e1",
+        },
+        {
+          "piece": "P",
+          "to": "b5",
+        },
+      ],
+      [
+        20,
+        {
+          "check": true,
+          "piece": "N",
+          "to": "e7",
+        },
+        {
+          "piece": "K",
+          "to": "h8",
+        },
+      ],
+      [
+        21,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "c8",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "c8",
+        },
+      ],
+      [
+        22,
+        {
+          "capture": true,
+          "from": "c",
+          "piece": "P",
+          "to": "b5",
+        },
+        {
+          "capture": true,
+          "from": "a",
+          "piece": "P",
+          "to": "b5",
+        },
+      ],
+      [
+        23,
+        {
+          "piece": "R",
+          "to": "e7",
+        },
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+      ],
+      [
+        24,
+        {
+          "piece": "B",
+          "to": "e4",
+        },
+        {
+          "piece": "B",
+          "to": "e8",
+        },
+      ],
+      [
+        25,
+        {
+          "piece": "B",
+          "to": "b4",
+        },
+        {
+          "piece": "N",
+          "to": "f4",
+        },
+      ],
+      [
+        26,
+        {
+          "piece": "P",
+          "to": "b3",
+        },
+        {
+          "piece": "N",
+          "to": "d3",
+        },
+      ],
+      [
+        27,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "d3",
+        },
+        {
+          "piece": "K",
+          "to": "g8",
+        },
+      ],
+      [
+        28,
+        {
+          "piece": "B",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "c3",
+        },
+      ],
+      [
+        29,
+        {
+          "piece": "N",
+          "to": "e5",
+        },
+        {
+          "piece": "B",
+          "to": "f6",
+        },
+      ],
+      [
+        30,
+        {
+          "capture": true,
+          "check": true,
+          "piece": "R",
+          "to": "e8",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "e8",
+        },
+      ],
+      [
+        31,
+        {
+          "piece": "N",
+          "to": "d7",
+        },
+        {
+          "piece": "B",
+          "to": "d8",
+        },
+      ],
+      [
+        32,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "c3",
+        },
+        {
+          "check": true,
+          "piece": "B",
+          "to": "c7",
+        },
+      ],
+      [
+        33,
+        {
+          "piece": "P",
+          "to": "g3",
+        },
+        {
+          "piece": "R",
+          "to": "e7",
+        },
+      ],
+      [
+        34,
+        {
+          "check": true,
+          "piece": "N",
+          "to": "f6",
+        },
+        {
+          "piece": "K",
+          "to": "g7",
+        },
+      ],
+      [
+        35,
+        {
+          "check": true,
+          "piece": "N",
+          "to": "d5",
+        },
+        {
+          "piece": "B",
+          "to": "e5",
+        },
+      ],
+      [
+        36,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "e7",
+        },
+        {
+          "piece": "K",
+          "to": "f6",
+        },
+      ],
+      [
+        37,
+        {
+          "capture": true,
+          "check": true,
+          "piece": "B",
+          "to": "e5",
+        },
+      ],
+    ],
+    "result": 1,
+  },
+  {
+    "meta": {
+      "Black": "mliebelt",
+      "BlackElo": "1820",
+      "BlackRatingDiff": "+4",
+      "Date": "2023.12.29",
+      "ECO": "C54",
+      "Event": "2023 Winter Marathon",
+      "Result": "1/2-1/2",
+      "Site": "https://lichess.org/lESphi3n",
+      "Termination": "Normal",
+      "TimeControl": "180+0",
+      "UTCDate": "2023.12.29",
+      "UTCTime": "17:31:24",
+      "Variant": "Standard",
+      "White": "JUST_JK",
+      "WhiteElo": "2080",
+      "WhiteRatingDiff": "-15",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "e5",
+        },
+      ],
+      [
+        2,
+        {
+          "piece": "N",
+          "to": "f3",
+        },
+        {
+          "piece": "N",
+          "to": "c6",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "B",
+          "to": "c4",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        4,
+        {
+          "piece": "P",
+          "to": "c3",
+        },
+        {
+          "piece": "B",
+          "to": "c5",
+        },
+      ],
+      [
+        5,
+        {
+          "piece": "P",
+          "to": "d3",
+        },
+        {
+          "piece": "P",
+          "to": "a6",
+        },
+      ],
+      [
+        6,
+        {
+          "piece": "B",
+          "to": "b3",
+        },
+        {
+          "piece": "P",
+          "to": "d6",
+        },
+      ],
+      [
+        7,
+        {
+          "from": "b",
+          "piece": "N",
+          "to": "d2",
+        },
+        {
+          "piece": "B",
+          "to": "e6",
+        },
+      ],
+      [
+        8,
+        {
+          "piece": "B",
+          "to": "c2",
+        },
+        {
+          "piece": "B",
+          "to": "a7",
+        },
+      ],
+      [
+        9,
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g1",
+        },
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "g8",
+        },
+      ],
+      [
+        10,
+        {
+          "piece": "R",
+          "to": "e1",
+        },
+        {
+          "piece": "B",
+          "to": "g4",
+        },
+      ],
+      [
+        11,
+        {
+          "piece": "N",
+          "to": "f1",
+        },
+        {
+          "piece": "N",
+          "to": "d7",
+        },
+      ],
+      [
+        12,
+        {
+          "piece": "P",
+          "to": "h3",
+        },
+        {
+          "piece": "B",
+          "to": "h5",
+        },
+      ],
+      [
+        13,
+        {
+          "piece": "N",
+          "to": "g3",
+        },
+        {
+          "piece": "B",
+          "to": "g6",
+        },
+      ],
+      [
+        14,
+        {
+          "piece": "P",
+          "to": "d4",
+        },
+        {
+          "capture": true,
+          "from": "e",
+          "piece": "P",
+          "to": "d4",
+        },
+      ],
+      [
+        15,
+        {
+          "capture": true,
+          "from": "c",
+          "piece": "P",
+          "to": "d4",
+        },
+        {
+          "piece": "Q",
+          "to": "f6",
+        },
+      ],
+      [
+        16,
+        {
+          "piece": "B",
+          "to": "g5",
+        },
+        {
+          "piece": "Q",
+          "to": "e6",
+        },
+      ],
+      [
+        17,
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+        {
+          "piece": "Q",
+          "to": "e8",
+        },
+      ],
+      [
+        18,
+        {
+          "capture": true,
+          "from": "d",
+          "piece": "P",
+          "to": "c6",
+        },
+        {
+          "capture": true,
+          "from": "b",
+          "piece": "P",
+          "to": "c6",
+        },
+      ],
+      [
+        19,
+        {
+          "piece": "B",
+          "to": "a4",
+        },
+        {
+          "piece": "N",
+          "to": "e5",
+        },
+      ],
+      [
+        20,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "e5",
+        },
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "e5",
+        },
+      ],
+      [
+        21,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "c6",
+        },
+        {
+          "from": "a",
+          "piece": "R",
+          "to": "b8",
+        },
+      ],
+      [
+        22,
+        {
+          "piece": "P",
+          "to": "b3",
+        },
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "g5",
+        },
+      ],
+      [
+        23,
+        {
+          "piece": "Q",
+          "to": "d5",
+        },
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "d5",
+        },
+      ],
+      [
+        24,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "d5",
+        },
+        {
+          "from": "f",
+          "piece": "R",
+          "to": "e8",
+        },
+      ],
+      [
+        25,
+        {
+          "piece": "B",
+          "to": "c6",
+        },
+        {
+          "piece": "R",
+          "to": "e7",
+        },
+      ],
+      [
+        26,
+        {
+          "piece": "N",
+          "to": "f5",
+        },
+        {
+          "piece": "R",
+          "to": "e5",
+        },
+      ],
+      [
+        27,
+        {
+          "piece": "N",
+          "to": "g3",
+        },
+        {
+          "piece": "R",
+          "to": "c5",
+        },
+      ],
+      [
+        28,
+        {
+          "piece": "B",
+          "to": "d5",
+        },
+        {
+          "piece": "R",
+          "to": "b6",
+        },
+      ],
+      [
+        29,
+        {
+          "from": "a",
+          "piece": "R",
+          "to": "c1",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "c1",
+        },
+      ],
+      [
+        30,
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "c1",
+        },
+        {
+          "piece": "B",
+          "to": "b8",
+        },
+      ],
+      [
+        31,
+        {
+          "piece": "N",
+          "to": "f5",
+        },
+        {
+          "piece": "K",
+          "to": "f8",
+        },
+      ],
+      [
+        32,
+        {
+          "piece": "N",
+          "to": "d4",
+        },
+        {
+          "piece": "K",
+          "to": "e7",
+        },
+      ],
+      [
+        33,
+        {
+          "check": true,
+          "piece": "N",
+          "to": "c6",
+        },
+        {
+          "piece": "K",
+          "to": "d7",
+        },
+      ],
+      [
+        34,
+        {
+          "capture": true,
+          "check": true,
+          "piece": "N",
+          "to": "b8",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "b8",
+        },
+      ],
+      [
+        35,
+        {
+          "piece": "R",
+          "to": "c6",
+        },
+        {
+          "piece": "R",
+          "to": "b6",
+        },
+      ],
+      [
+        36,
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "b6",
+        },
+        {
+          "capture": true,
+          "from": "c",
+          "piece": "P",
+          "to": "b6",
+        },
+      ],
+      [
+        37,
+        {
+          "piece": "K",
+          "to": "f1",
+        },
+        {
+          "piece": "P",
+          "to": "f6",
+        },
+      ],
+      [
+        38,
+        {
+          "piece": "K",
+          "to": "e2",
+        },
+        {
+          "piece": "K",
+          "to": "e7",
+        },
+      ],
+      [
+        39,
+        {
+          "piece": "P",
+          "to": "g4",
+        },
+        {
+          "piece": "B",
+          "to": "f7",
+        },
+      ],
+      [
+        40,
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "f7",
+        },
+        {
+          "capture": true,
+          "piece": "K",
+          "to": "f7",
+        },
+      ],
+      [
+        41,
+        {
+          "piece": "K",
+          "to": "e3",
+        },
+        {
+          "piece": "K",
+          "to": "e6",
+        },
+      ],
+      [
+        42,
+        {
+          "piece": "P",
+          "to": "f4",
+        },
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+      ],
+      [
+        43,
+        {
+          "piece": "K",
+          "to": "d4",
+        },
+        {
+          "capture": true,
+          "from": "d",
+          "piece": "P",
+          "to": "e4",
+        },
+      ],
+      [
+        44,
+        {
+          "capture": true,
+          "piece": "K",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "g6",
+        },
+      ],
+      [
+        45,
+        {
+          "piece": "P",
+          "to": "a4",
+        },
+        {
+          "piece": "P",
+          "to": "h6",
+        },
+      ],
+      [
+        46,
+        {
+          "piece": "P",
+          "to": "h4",
+        },
+        {
+          "piece": "P",
+          "to": "g5",
+        },
+      ],
+      [
+        47,
+        {
+          "check": true,
+          "piece": "P",
+          "to": "f5",
+        },
+        {
+          "piece": "K",
+          "to": "d6",
+        },
+      ],
+      [
+        48,
+        {
+          "capture": true,
+          "from": "h",
+          "piece": "P",
+          "to": "g5",
+        },
+        {
+          "capture": true,
+          "from": "h",
+          "piece": "P",
+          "to": "g5",
+        },
+      ],
+      [
+        49,
+        {
+          "piece": "K",
+          "to": "d4",
+        },
+        {
+          "piece": "P",
+          "to": "b5",
+        },
+      ],
+      [
+        50,
+        {
+          "piece": "P",
+          "to": "a5",
+        },
+        {
+          "piece": "K",
+          "to": "c6",
+        },
+      ],
+      [
+        51,
+        {
+          "piece": "P",
+          "to": "b4",
+        },
+        {
+          "piece": "K",
+          "to": "d6",
+        },
+      ],
+      [
+        52,
+        {
+          "piece": "K",
+          "to": "e4",
+        },
+      ],
+    ],
+    "result": 0.5,
+  },
+  {
+    "meta": {
+      "Black": "carlosnoriega",
+      "BlackElo": "1752",
+      "BlackRatingDiff": "+1",
+      "Date": "2023.12.29",
+      "ECO": "B01",
+      "Event": "2023 Winter Marathon",
+      "Result": "1/2-1/2",
+      "Site": "https://lichess.org/N86tf20W",
+      "Termination": "Time forfeit",
+      "TimeControl": "180+0",
+      "UTCDate": "2023.12.29",
+      "UTCTime": "17:24:51",
+      "Variant": "Standard",
+      "White": "mliebelt",
+      "WhiteElo": "1821",
+      "WhiteRatingDiff": "-1",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "e4",
+        },
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+      ],
+      [
+        2,
+        {
+          "capture": true,
+          "from": "e",
+          "piece": "P",
+          "to": "d5",
+        },
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "d5",
+        },
+      ],
+      [
+        3,
+        {
+          "piece": "N",
+          "to": "c3",
+        },
+        {
+          "piece": "Q",
+          "to": "d8",
+        },
+      ],
+      [
+        4,
+        {
+          "piece": "P",
+          "to": "d4",
+        },
+        {
+          "piece": "N",
+          "to": "f6",
+        },
+      ],
+      [
+        5,
+        {
+          "piece": "B",
+          "to": "e3",
+        },
+        {
+          "piece": "P",
+          "to": "c6",
+        },
+      ],
+      [
+        6,
+        {
+          "piece": "Q",
+          "to": "d2",
+        },
+        {
+          "piece": "B",
+          "to": "f5",
+        },
+      ],
+      [
+        7,
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "c1",
+        },
+        {
+          "piece": "B",
+          "to": "g6",
+        },
+      ],
+      [
+        8,
+        {
+          "piece": "P",
+          "to": "f3",
+        },
+        {
+          "piece": "P",
+          "to": "e6",
+        },
+      ],
+      [
+        9,
+        {
+          "piece": "N",
+          "to": "h3",
+        },
+        {
+          "piece": "B",
+          "to": "b4",
+        },
+      ],
+      [
+        10,
+        {
+          "piece": "N",
+          "to": "f4",
+        },
+        {
+          "from": "b",
+          "piece": "N",
+          "to": "d7",
+        },
+      ],
+      [
+        11,
+        {
+          "piece": "B",
+          "to": "c4",
+        },
+        {
+          "piece": "Q",
+          "to": "e7",
+        },
+      ],
+      [
+        12,
+        {
+          "piece": "P",
+          "to": "a3",
+        },
+        {
+          "piece": "B",
+          "to": "a5",
+        },
+      ],
+      [
+        13,
+        {
+          "piece": "K",
+          "to": "b1",
+        },
+        {
+          "castling": true,
+          "piece": "K",
+          "to": "c8",
+        },
+      ],
+      [
+        14,
+        {
+          "piece": "B",
+          "to": "b3",
+        },
+        {
+          "piece": "K",
+          "to": "b8",
+        },
+      ],
+      [
+        15,
+        {
+          "piece": "N",
+          "to": "d3",
+        },
+        {
+          "piece": "N",
+          "to": "b6",
+        },
+      ],
+      [
+        16,
+        {
+          "check": true,
+          "piece": "B",
+          "to": "f4",
+        },
+        {
+          "piece": "K",
+          "to": "a8",
+        },
+      ],
+      [
+        17,
+        {
+          "piece": "N",
+          "to": "e5",
+        },
+        {
+          "from": "b",
+          "piece": "N",
+          "to": "d5",
+        },
+      ],
+      [
+        18,
+        {
+          "piece": "K",
+          "to": "a2",
+        },
+        {
+          "capture": true,
+          "check": true,
+          "piece": "N",
+          "to": "c3",
+        },
+      ],
+      [
+        19,
+        {
+          "capture": true,
+          "from": "b",
+          "piece": "P",
+          "to": "c3",
+        },
+        {
+          "piece": "N",
+          "to": "d5",
+        },
+      ],
+      [
+        20,
+        {
+          "piece": "N",
+          "to": "c4",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "c3",
+        },
+      ],
+      [
+        21,
+        {
+          "piece": "Q",
+          "to": "f2",
+        },
+        {
+          "piece": "P",
+          "to": "b5",
+        },
+      ],
+      [
+        22,
+        {
+          "piece": "N",
+          "to": "e5",
+        },
+        {
+          "piece": "B",
+          "to": "a5",
+        },
+      ],
+      [
+        23,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "c6",
+        },
+        {
+          "piece": "Q",
+          "to": "b7",
+        },
+      ],
+      [
+        24,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "a5",
+        },
+        {
+          "piece": "Q",
+          "to": "c8",
+        },
+      ],
+      [
+        25,
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+        {
+          "check": true,
+          "piece": "N",
+          "to": "c3",
+        },
+      ],
+      [
+        26,
+        {
+          "piece": "K",
+          "to": "b2",
+        },
+        {
+          "capture": true,
+          "check": true,
+          "piece": "N",
+          "to": "d1",
+        },
+      ],
+      [
+        27,
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "d1",
+        },
+        {
+          "capture": true,
+          "from": "b",
+          "piece": "P",
+          "to": "c4",
+        },
+      ],
+      [
+        28,
+        {
+          "capture": true,
+          "piece": "N",
+          "to": "c4",
+        },
+        {
+          "piece": "R",
+          "to": "d7",
+        },
+      ],
+      [
+        29,
+        {
+          "piece": "R",
+          "to": "c1",
+        },
+        {
+          "piece": "R",
+          "to": "b7",
+        },
+      ],
+      [
+        30,
+        {
+          "check": true,
+          "piece": "N",
+          "to": "b6",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "b6",
+        },
+      ],
+      [
+        31,
+        {
+          "capture": true,
+          "check": true,
+          "piece": "R",
+          "to": "c8",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "c8",
+        },
+      ],
+      [
+        32,
+        {
+          "piece": "B",
+          "to": "e3",
+        },
+        {
+          "piece": "B",
+          "to": "d3",
+        },
+      ],
+      [
+        33,
+        {
+          "piece": "P",
+          "to": "d5",
+        },
+        {
+          "from": "b",
+          "piece": "R",
+          "to": "b8",
+        },
+      ],
+      [
+        34,
+        {
+          "capture": true,
+          "from": "d",
+          "piece": "P",
+          "to": "e6",
+        },
+        {
+          "piece": "B",
+          "to": "c4",
+        },
+      ],
+      [
+        35,
+        {
+          "piece": "Q",
+          "to": "c2",
+        },
+        {
+          "capture": true,
+          "check": true,
+          "piece": "R",
+          "to": "b3",
+        },
+      ],
+      [
+        36,
+        {
+          "capture": true,
+          "piece": "Q",
+          "to": "b3",
+        },
+        {
+          "capture": true,
+          "piece": "B",
+          "to": "b3",
+        },
+      ],
+      [
+        37,
+        {
+          "capture": true,
+          "piece": "K",
+          "to": "b3",
+        },
+        {
+          "capture": true,
+          "from": "f",
+          "piece": "P",
+          "to": "e6",
+        },
+      ],
+      [
+        38,
+        {
+          "piece": "P",
+          "to": "f4",
+        },
+        {
+          "piece": "R",
+          "to": "d8",
+        },
+      ],
+      [
+        39,
+        {
+          "piece": "P",
+          "to": "g3",
+        },
+        {
+          "check": true,
+          "piece": "R",
+          "to": "d3",
+        },
+      ],
+      [
+        40,
+        {
+          "piece": "K",
+          "to": "c4",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "e3",
+        },
+      ],
+      [
+        41,
+        {
+          "piece": "K",
+          "to": "d4",
+        },
+        {
+          "piece": "R",
+          "to": "e2",
+        },
+      ],
+      [
+        42,
+        {
+          "piece": "P",
+          "to": "a4",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "h2",
+        },
+      ],
+      [
+        43,
+        {
+          "piece": "K",
+          "to": "e5",
+        },
+        {
+          "piece": "R",
+          "to": "g2",
+        },
+      ],
+      [
+        44,
+        {
+          "capture": true,
+          "piece": "K",
+          "to": "e6",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "g3",
+        },
+      ],
+      [
+        45,
+        {
+          "piece": "K",
+          "to": "e5",
+        },
+        {
+          "piece": "R",
+          "to": "a3",
+        },
+      ],
+      [
+        46,
+        {
+          "piece": "P",
+          "to": "a5",
+        },
+        {
+          "piece": "R",
+          "to": "a4",
+        },
+      ],
+      [
+        47,
+        {
+          "piece": "K",
+          "to": "e6",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "a5",
+        },
+      ],
+      [
+        48,
+        {
+          "piece": "K",
+          "to": "f7",
+        },
+        {
+          "check": true,
+          "piece": "R",
+          "to": "f5",
+        },
+      ],
+      [
+        49,
+        {
+          "capture": true,
+          "piece": "K",
+          "to": "g7",
+        },
+        {
+          "capture": true,
+          "piece": "R",
+          "to": "f4",
+        },
+      ],
+      [
+        50,
+        {
+          "capture": true,
+          "piece": "K",
+          "to": "h7",
+        },
+        {
+          "piece": "R",
+          "to": "f1",
+        },
+      ],
+      [
+        51,
+        {
+          "piece": "K",
+          "to": "g6",
+        },
+        {
+          "piece": "P",
+          "to": "a5",
+        },
+      ],
+      [
+        52,
+        {
+          "piece": "K",
+          "to": "g5",
+        },
+        {
+          "piece": "P",
+          "to": "a4",
+        },
+      ],
+      [
+        53,
+        {
+          "piece": "K",
+          "to": "g4",
+        },
+        {
+          "piece": "P",
+          "to": "a3",
+        },
+      ],
+      [
+        54,
+        {
+          "piece": "K",
+          "to": "g3",
+        },
+        {
+          "piece": "P",
+          "to": "a2",
+        },
+      ],
+      [
+        55,
+        {
+          "piece": "K",
+          "to": "g2",
+        },
+        {
+          "piece": "R",
+          "to": "b1",
+        },
+      ],
+      [
+        56,
+        {
+          "piece": "K",
+          "to": "h2",
+        },
+        {
+          "piece": "R",
+          "to": "b8",
+        },
+      ],
+      [
+        57,
+        {
+          "piece": "K",
+          "to": "g2",
+        },
+        {
+          "piece": "P",
+          "promotion": "N",
+          "to": "a1",
+        },
+      ],
+      [
+        58,
+        {
+          "piece": "K",
+          "to": "g3",
+        },
+        {
+          "piece": "K",
+          "to": "b7",
+        },
+      ],
+      [
+        59,
+        {
+          "piece": "K",
+          "to": "g4",
+        },
+        {
+          "piece": "R",
+          "to": "c8",
+        },
+      ],
+      [
+        60,
+        {
+          "piece": "K",
+          "to": "f3",
+        },
+        {
+          "piece": "K",
+          "to": "c6",
+        },
+      ],
+      [
+        61,
+        {
+          "piece": "K",
+          "to": "e4",
+        },
+        {
+          "piece": "R",
+          "to": "d8",
+        },
+      ],
+      [
+        62,
+        {
+          "piece": "K",
+          "to": "f5",
+        },
+        {
+          "piece": "K",
+          "to": "c5",
+        },
+      ],
+      [
+        63,
+        {
+          "piece": "K",
+          "to": "e5",
+        },
+        {
+          "check": true,
+          "piece": "R",
+          "to": "e8",
+        },
+      ],
+      [
+        64,
+        {
+          "piece": "K",
+          "to": "f6",
+        },
+        {
+          "piece": "K",
+          "to": "d5",
+        },
+      ],
+      [
+        65,
+        {
+          "piece": "K",
+          "to": "f7",
+        },
+        {
+          "piece": "R",
+          "to": "e1",
+        },
+      ],
+      [
+        66,
+        {
+          "piece": "K",
+          "to": "f6",
+        },
+      ],
+    ],
+    "result": 0.5,
+  },
+  {
+    "meta": {
+      "Black": "mliebelt",
+      "BlackElo": "1828",
+      "BlackRatingDiff": "-7",
+      "Date": "2023.12.29",
+      "ECO": "A10",
+      "Event": "2023 Winter Marathon",
+      "Result": "1-0",
+      "Site": "https://lichess.org/azeuKVgp",
+      "Termination": "Abandoned",
+      "TimeControl": "180+0",
+      "UTCDate": "2023.12.29",
+      "UTCTime": "17:22:47",
+      "Variant": "Standard",
+      "White": "eFe_002",
+      "WhiteElo": "1743",
+      "WhiteRatingDiff": "+7",
+    },
+    "moves": [
+      [
+        1,
+        {
+          "piece": "P",
+          "to": "c4",
+        },
+      ],
+    ],
+    "result": 1,
+  },
+]
