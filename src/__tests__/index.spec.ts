@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { describe, expect, it } from 'vitest';
 
-import parse from '../index.js';
+import parse from '../index.ts';
 
 function readFile(path: string): string {
   const filename = require.resolve(path);
@@ -24,24 +24,24 @@ const twic = readFile('./grammar/twic.pgn');
 const variants = readFile('./grammar/variants.pgn');
 
 const tests = {
-  // basic,
-  // benko,
-  // checkmate,
-  // comment,
+  basic,
+  benko,
+  checkmate,
+  comment,
   comments,
-  // games32,
-  // lichess,
-  // long,
-  // multiple,
-  // promotion,
-  // single,
-  // twic,
-  // variants,
+  games32,
+  lichess,
+  long,
+  multiple,
+  promotion,
+  single,
+  twic,
+  variants,
 };
 
 describe('PGN Parser', () => {
   Object.entries(tests).forEach(([label, input]) =>
-    it(label, { timeout: 15000 }, async () => {
+    it(label, { timeout: 10000 }, async () => {
       await expect(parse(input)).toMatchFileSnapshot(
         `./__snapshots__/${label}.snap`,
       );

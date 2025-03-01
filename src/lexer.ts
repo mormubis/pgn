@@ -12,6 +12,7 @@ function pickBy<T extends Record<string | number | symbol, unknown>>(
   );
 }
 
+// eslint-disable-next-line import-x/no-named-as-default-member
 const lexer = moo.states({
   main: {
     __: { lineBreaks: true, match: /\s+/ },
@@ -37,8 +38,8 @@ const lexer = moo.states({
     // --- MOVE ---
     // https://regex101.com/r/zwTzNe/1
     san: {
-      match:
-        /(?:[KQBNPR]?[a-h]?[1-8]?x?[a-h][1-8]|O-O-O|O-O)(?:=[a-h][1-8])?[+#]?/,
+      // @ts-expect-error Mismatching types
+      match: /(?:[KQBNPR]?[a-h]?[1-8]?x?[a-h][1-8]|O-O-O|O-O)(?:=[NBRQ])?[+#]?/,
       value: (s) => {
         if (['O-O', 'O-O-O'].includes(s)) {
           return { castling: true, long: s === 'O-O-O', piece: 'K', to: s };
@@ -62,6 +63,7 @@ const lexer = moo.states({
         );
       },
     },
+    // @ts-expect-error Mismatching types
     number: { match: /\d+[.]*/, value: (s) => Number(s.replace(/[.]/g, '')) },
 
     // --- NAG ---

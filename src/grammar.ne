@@ -33,7 +33,7 @@ GAME -> TAGS %__ MOVES %__ %result {%
         const index = Math.floor((start + i) / 2);
 
         if (acc[index] === undefined) {
-          acc[index] = [index + 1];
+          acc[index] = [index + 1, undefined];
         }
 
         if (move.number !== undefined && move.number.value !== index + 1) {
@@ -49,13 +49,13 @@ GAME -> TAGS %__ MOVES %__ %result {%
         }
 
         if (move.variants) {
-          move.variants = move.variants.map((variant) => pair(variant, start + i).filter(Boolean));
+          move.variants = move.variants.map((variant) => pair(variant, start + i));
         }
 
-        acc[index].push(move);
+        acc[index][color === 'white' ? 1 : 2] = move;
 
         return acc;
-      }, []);
+      }, []).slice(Math.floor(start / 2));
     }
 
     //return ({ meta: d[0], moves, result: String(d[4]) });

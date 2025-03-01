@@ -27,9 +27,7 @@
     "lib": ["ESNext"],
 
     /* Grammar outputs a lot of implicit any errors: */
-    "noImplicitAny": false,
-
-    "allowImportingTsExtensions": true
+    "noImplicitAny": false
   },
   "include": ["src/**/*"]
 }

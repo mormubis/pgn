@@ -43,6 +43,7 @@ type Variation = Moves[] | [[number, undefined, Move], ...Moves][];
 const { Grammar, Parser } = nearley;
 
 function _(input: string): PGN[] {
+  // @ts-expect-error Mismatching types
   const parser = new Parser(Grammar.fromCompiled(grammar));
 
   try {
@@ -66,7 +67,18 @@ function _(input: string): PGN[] {
  * @param input
  */
 export default function parse(input: string): PGN[] {
-  const games = input.split(/(?<=(?!")1-0|0-1|1\/2-1\/2|\*(?!"))(\n+)/g);
+  /**
+   * Syntax does not allow empty lines at the beginning or end of the PGN string.
+   */
+  const cleaned = input.replace(/^\s+|\s+$/g, '');
 
+  /**
+   * Split the PGN because nearly/moo has a problem with big files. Beyond the
+   * buffer size, the lexer will not work properly because is not feed with entire
+   * tokens.
+   */
+  const games = cleaned.split(/(?<=1-0|0-1|1\/2-1\/2|\*(?!"))(\s+)\n/g);
+
+  // Parse each game independently
   return games.map(_).flat();
 }
