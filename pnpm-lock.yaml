@@ -17,7 +17,7 @@ importers:
     devDependencies:
       '@eslint/js':
         specifier: ^9.21.0
-        version: 9.24.0
+        version: 9.25.0
       '@mliebelt/pgn-parser':
         specifier: ^1.4.15
         version: 1.4.15
