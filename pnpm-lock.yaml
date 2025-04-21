@@ -20,7 +20,7 @@ importers:
         version: 9.24.0
       '@mliebelt/pgn-parser':
         specifier: ^1.4.15
-        version: 1.4.15
+        version: 1.4.16
       '@types/moo':
         specifier: ^0.5.10
         version: 0.5.10
@@ -347,8 +347,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@mliebelt/pgn-parser@1.4.15':
-    resolution: {integrity: sha512-ONX3Tm9RFwUyE3h1n6TBCdQzxwjDQJumJlzEA2WlC+CvI5oVSJT+SOhe8RyQ5oLEebm3k6ZeH9zzrdTHf5miLg==}
+  '@mliebelt/pgn-parser@1.4.16':
+    resolution: {integrity: sha512-ifAJzfen9FsiR/i0ooy3HAiGrYoJEE/KwfHVIbD6IcIwpbtK2v5s5Bv4uoawFOi7HjXFp5TNwQN65TUY2scY3g==}
     hasBin: true
 
   '@mliebelt/pgn-types@1.0.4':
@@ -1872,7 +1872,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@mliebelt/pgn-parser@1.4.15':
+  '@mliebelt/pgn-parser@1.4.16':
     dependencies:
       '@mliebelt/pgn-types': 1.0.4
 
