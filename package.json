@@ -10,7 +10,7 @@
     "@mliebelt/pgn-parser": "^1.4.15",
     "@types/moo": "^0.5.10",
     "@types/nearley": "^2.11.5",
-    "@types/node": "^24.0.0",
+    "@types/node": "^25.0.0",
     "@typescript-eslint/parser": "^8.24.1",
     "@vitest/coverage-v8": "^3.0.6",
     "eslint": "^9.21.0",
