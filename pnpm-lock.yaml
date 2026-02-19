@@ -36,6 +36,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^3.0.6
         version: 3.2.0(vitest@3.2.0(@types/node@25.3.0)(yaml@2.8.1))
+      chess.js:
+        specifier: ^1.4.0
+        version: 1.4.0
       eslint:
         specifier: ^9.21.0
         version: 9.39.2
@@ -54,6 +57,9 @@ importers:
       lint-staged:
         specifier: ^16.0.0
         version: 16.2.7
+      pgn-parser:
+        specifier: ^2.2.1
+        version: 2.2.1
       prettier:
         specifier: ^3.5.2
         version: 3.8.1
@@ -755,6 +761,9 @@ packages:
     resolution: {integrity: sha512-OAlb+T7V4Op9OwdkjmguYRqncdlx5JiofwOAUkmTF+jNdHwzTaTs4sRAGpzLF3oOz5xAyDGrPgeIDFQmDOTiJw==}
     engines: {node: '>= 16'}
 
+  chess.js@1.4.0:
+    resolution: {integrity: sha512-BBJgrrtKQOzFLonR0l+k64A98NLemPwNsCskwb+29bRwobUa4iTm51E1kwGPbWXAcfdDa18nad6vpPPKPWarqw==}
+
   cli-cursor@5.0.0:
     resolution: {integrity: sha512-aCj4O5wKyszjMmDT4tZj93kxyydN/K5zPWSCe6/0AV/AA1pqe5ZBIw0a2ZfPQV7lL5/yb5HsUreJ6UFAF1tEQw==}
     engines: {node: '>=18'}
@@ -1266,6 +1275,10 @@ packages:
   pathval@2.0.0:
     resolution: {integrity: sha512-vE7JKRyES09KiunauX7nd2Q9/L7lhok4smP9RZTDeD4MVs72Dp2qNFVz39Nz5a0FVEW0BJR6C0DYrq6unoziZA==}
     engines: {node: '>= 14.16'}
+
+  pgn-parser@2.2.1:
+    resolution: {integrity: sha512-lZ16i3yLoyH6E8liDdo2x0GXXuEBCwtXl/N+ncKbaehLWOrD5oroUQpz8bH1xqvXkTChzZ8Wa68r/q1arhk1Gg==}
+    engines: {node: '>= 6.0.0'}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -2188,6 +2201,8 @@ snapshots:
 
   check-error@2.1.1: {}
 
+  chess.js@1.4.0: {}
+
   cli-cursor@5.0.0:
     dependencies:
       restore-cursor: 5.1.0
@@ -2703,6 +2718,8 @@ snapshots:
   pathe@2.0.3: {}
 
   pathval@2.0.0: {}
+
+  pgn-parser@2.2.1: {}
 
   picocolors@1.1.1: {}
 
