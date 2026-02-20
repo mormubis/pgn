@@ -1,8 +1,8 @@
-import { readFileSync } from 'fs';
-import { bench, describe } from 'vitest';
-import { Chess } from 'chess.js';
-import { parse as pgnParserParse } from 'pgn-parser';
 import { parseGame, parseGames } from '@mliebelt/pgn-parser';
+import { Chess } from 'chess.js';
+import { readFileSync } from 'fs';
+import { parse as pgnParserParse } from 'pgn-parser';
+import { bench, describe } from 'vitest';
 
 import parse from '../index.js';
 
@@ -27,10 +27,18 @@ const twic = readFile('./grammar/twic.pgn');
 const variants = readFile('./grammar/variants.pgn');
 
 // Single-game fixtures (all 4 parsers)
-const singleGameFixtures = { basic, benko, checkmate, comment, promotion, single, variants };
+const singleGameFixtures = {
+  basic,
+  benko,
+  checkmate,
+  comment,
+  promotion,
+  single,
+  variants,
+};
 
 // Multi-game fixtures (exclude chess.js, which only handles one game at a time)
-const multiGameFixtures = { multiple, comments, games32, lichess, twic, long };
+const multiGameFixtures = { comments, games32, lichess, long, multiple, twic };
 
 // ============================================================================
 // Single-game fixtures: compare all 4 parsers
