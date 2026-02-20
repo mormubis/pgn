@@ -27,7 +27,7 @@
     "vitest": "^3.0.6"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "exports": {
     ".": {
@@ -63,8 +63,7 @@
     "format": "pnpm run format:ci --write",
     "format:ci": "prettier -l \"**/*.+(css|js|json|jsx|md|mjs|mts|ts|tsx|yml|yaml)\"",
     "grammar:compile": "peggy --format commonjs -o src/grammar.cjs src/grammar.pegjs",
-    "grammar:diagram": "nearley-railroad src/grammar.ne -o diagram.html",
-    "grammar:test": "pnpm grammar:compile && nearley-test -s DATABASE src/grammar.cjs < ./test.pgn",
+    "grammar:test": "pnpm grammar:compile && peggy --format commonjs -o src/grammar.cjs --test-file ./test.pgn src/grammar.pegjs",
     "lint": "pnpm run lint:style && pnpm run lint:types",
     "lint:ci": "pnpm run lint:style --max-warnings 0 && pnpm run lint:types",
     "lint:style": "eslint \"src/**/*.{ts,tsx}\" \"*.mjs\" --fix",
