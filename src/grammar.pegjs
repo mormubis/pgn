@@ -1,10 +1,4 @@
 {{
-  function pickBy(obj, pred) {
-    return Object.fromEntries(
-      Object.entries(obj).filter(([, v]) => pred(v))
-    );
-  }
-
   function pairMoves(moves, start) {
     start = start ?? 0;
     return moves.reduce((acc, move, i) => {
@@ -147,21 +141,21 @@ SAN
       return { castling: true, long: isLong, piece: 'K', to: isLong ? 'O-O-O' : 'O-O' };
     }
     const m = s.match(
-      /^(?<piece>[KQBNPR])?(?<from>[a-h][1-8]|[a-h]|[1-8])?(?<capture>x)?(?<to>[a-h][1-8])(?:=(?<promotion>[NBRQ]))?(?<indication>[+#])?$/
+      /^([KQBNPR])?([a-h][1-8]|[a-h]|[1-8])?(x)?([a-h][1-8])(?:=([NBRQ]))?([+#])?$/
     );
-    const g = (m && m.groups) ? m.groups : {};
-    return pickBy(
-      {
-        piece:     g.piece || 'P',
-        from:      g.from,
-        capture:   Boolean(g.capture),
-        to:        g.to,
-        promotion: g.promotion,
-        check:     Boolean(g.indication && g.indication.includes('+')),
-        checkmate: Boolean(g.indication && g.indication.includes('#')),
-      },
-      Boolean
-    );
+    const piece      = (m && m[1]) ? m[1] : 'P';
+    const from       = (m && m[2]) ? m[2] : undefined;
+    const capture    = !!(m && m[3]);
+    const to         = m ? m[4] : undefined;
+    const promotion  = (m && m[5]) ? m[5] : undefined;
+    const indication = (m && m[6]) ? m[6] : undefined;
+    const result = { piece, to };
+    if (from)      result.from      = from;
+    if (capture)   result.capture   = true;
+    if (promotion) result.promotion = promotion;
+    if (indication === '+') result.check     = true;
+    if (indication === '#') result.checkmate = true;
+    return result;
   }
 
 // ─── RAV ─────────────────────────────────────────────────────────────────────
