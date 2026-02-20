@@ -1,6 +1,9 @@
 # Output
 /dist/
 
+# Worktrees
+/.worktrees/
+
 # Generated
 /src/grammar.cjs
 
