@@ -42,9 +42,13 @@ type Variation = Moves[] | [[number, undefined, Move], ...Moves][];
 // eslint-disable-next-line import-x/no-named-as-default-member
 const { Grammar, Parser } = nearley;
 
+// Cache the compiled grammar so it is only processed once per module load
+// rather than being re-built on every call to parse() / _().
+// @ts-expect-error Mismatching types
+const compiledGrammar = Grammar.fromCompiled(grammar);
+
 function _(input: string): PGN[] {
-  // @ts-expect-error Mismatching types
-  const parser = new Parser(Grammar.fromCompiled(grammar));
+  const parser = new Parser(compiledGrammar);
 
   try {
     parser.feed(input);

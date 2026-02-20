@@ -101,7 +101,7 @@ TAG -> "[" %identifier %__ %value "]" {%
 # --- MOVES -------------------------------------------------------------------
 #
 
-MOVES -> MOVE (%__:? RAV):* (%__ MOVES):? {%
+MOVES -> MOVE (%__ RAV):* (%__ MOVES):? {%
   (d) => {
     let moves = [d[0]];
 
@@ -121,23 +121,35 @@ MOVES -> MOVE (%__:? RAV):* (%__ MOVES):? {%
 # --- Move --------------------------------------------------------------------
 #
 
-MOVE -> %number:? %__:? %san (%__:? NAG):* (%__:? COMMENT):* {%
-  (d) => {
-    // We keep the token for number so we can warn about mismatches. Not really
-    // useful as numbers could be out of order.
-    const number = d[0] ?? undefined;
-    const annotations = d[3].map(d3 => d3[1]);
-    const comments = d[4].map(d4 => d4[1]).filter(Boolean);
-    const san = d[2].value;
+MOVE ->
+    %number %__:? %san (%__ NAG):* (%__ COMMENT):* {%
+      (d) => {
+        const number = d[0] ?? undefined;
+        const annotations = d[3].map(d3 => d3[1]);
+        const comments = d[4].map(d4 => d4[1]).filter(Boolean);
+        const san = d[2].value;
 
-    return {
-      number,
-      ...(annotations.length > 0 && { annotations }),
-      ...(comments.length > 0 && { comment: comments.join(' ').replace(/\n/g, '') }),
-      ...san,
-    };
-  }
-%}
+        return {
+          number,
+          ...(annotations.length > 0 && { annotations }),
+          ...(comments.length > 0 && { comment: comments.join(' ').replace(/\n/g, '') }),
+          ...san,
+        };
+      }
+    %}
+  | %san (%__ NAG):* (%__ COMMENT):* {%
+      (d) => {
+        const annotations = d[1].map(d1 => d1[1]);
+        const comments = d[2].map(d2 => d2[1]).filter(Boolean);
+        const san = d[0].value;
+
+        return {
+          ...(annotations.length > 0 && { annotations }),
+          ...(comments.length > 0 && { comment: comments.join(' ').replace(/\n/g, '') }),
+          ...san,
+        };
+      }
+    %}
 
 #
 # --- RAV ---------------------------------------------------------------------
