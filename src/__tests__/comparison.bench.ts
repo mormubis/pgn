@@ -1,6 +1,6 @@
 import { parseGame, parseGames } from '@mliebelt/pgn-parser';
 import { Chess } from 'chess.js';
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
 import { parse as pgnParserParse } from 'pgn-parser';
 import { bench, describe } from 'vitest';
 
@@ -44,7 +44,7 @@ const multiGameFixtures = { comments, games32, lichess, long, multiple, twic };
 // Single-game fixtures: compare all 4 parsers
 // ============================================================================
 
-Object.entries(singleGameFixtures).forEach(([label, input]) => {
+for (const [label, input] of Object.entries(singleGameFixtures)) {
   describe(`single-game: ${label}`, () => {
     bench('@echecs/pgn', () => {
       parse(input);
@@ -62,13 +62,13 @@ Object.entries(singleGameFixtures).forEach(([label, input]) => {
       new Chess().loadPgn(input);
     });
   });
-});
+}
 
 // ============================================================================
 // Multi-game fixtures: exclude chess.js (only handles single game)
 // ============================================================================
 
-Object.entries(multiGameFixtures).forEach(([label, input]) => {
+for (const [label, input] of Object.entries(multiGameFixtures)) {
   describe(`multi-game: ${label}`, () => {
     bench('@echecs/pgn', () => {
       parse(input);
@@ -82,4 +82,4 @@ Object.entries(multiGameFixtures).forEach(([label, input]) => {
       pgnParserParse(input);
     });
   });
-});
+}

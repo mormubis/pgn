@@ -74,7 +74,7 @@ export default function parse(input: string): PGN[] {
   /**
    * Syntax does not allow empty lines at the beginning or end of the PGN string.
    */
-  const cleaned = input.replace(/^\s+|\s+$/g, '');
+  const cleaned = input.replaceAll(/^\s+|\s+$/g, '');
 
   /**
    * Split the PGN because nearly/moo has a problem with big files. Beyond the
@@ -84,5 +84,5 @@ export default function parse(input: string): PGN[] {
   const games = cleaned.split(/(?<=1-0|0-1|1\/2-1\/2|\*(?!"))(\s+)\n/g);
 
   // Parse each game independently
-  return games.map(_).flat();
+  return games.flatMap((game) => _(game));
 }

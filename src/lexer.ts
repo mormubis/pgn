@@ -23,7 +23,7 @@ const lexer = moo.states({
       value: (s) =>
         s
           .slice(1, -1)
-          .replace(/[\n\t]/g, ' ')
+          .replaceAll(/[\n\t]/g, ' ')
           .trim(),
     },
     escape: /^%.*$/,
@@ -64,7 +64,10 @@ const lexer = moo.states({
       },
     },
     // @ts-expect-error Mismatching types
-    number: { match: /\d+[.]*/, value: (s) => Number(s.replace(/[.]/g, '')) },
+    number: {
+      match: /\d+[.]*/,
+      value: (s) => Number(s.replaceAll(/[.]/g, '')),
+    },
 
     // --- NAG ---
     nag_import: [

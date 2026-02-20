@@ -10,6 +10,7 @@ jobs:
     name: ✅ Check version
     outputs:
       changed: ${{ steps.check.outputs.changed }}
+      version: ${{ steps.check.outputs.version }}
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout code
@@ -36,7 +37,7 @@ jobs:
     name: 🚀 Release
     permissions:
       id-token: write
-      contents: read
+      contents: write
     runs-on: ubuntu-latest
     needs: [check, format, lint, test]
     if: needs.check.outputs.changed == 'true'
@@ -60,7 +61,13 @@ jobs:
       - name: 📥 Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 🗂️ Release to NPM
+      - name: Release to NPM
         run: pnpm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: 🏷️ Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.check.outputs.version }}
+          generate_release_notes: true

@@ -1,5 +1,8 @@
 {
   "author": "Adrian de la Rosa <adrian@delarosab.me>",
+  "bugs": {
+    "url": "https://github.com/mormubis/pgn/issues"
+  },
   "dependencies": {
     "moo": "^0.5.2",
     "nearley": "^2.20.1"
@@ -13,11 +16,13 @@
     "@types/node": "^25.0.0",
     "@typescript-eslint/parser": "^8.24.1",
     "@vitest/coverage-v8": "^3.0.6",
+    "@vitest/eslint-plugin": "^1.6.9",
     "chess.js": "^1.4.0",
     "eslint": "^9.21.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-import-resolver-typescript": "^4.1.1",
     "eslint-plugin-import-x": "^4.6.1",
+    "eslint-plugin-unicorn": "^63.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
     "pgn-parser": "^2.2.1",
@@ -26,11 +31,22 @@
     "typescript-eslint": "^8.24.1",
     "vitest": "^3.0.6"
   },
+  "engines": {
+    "node": ">=18"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "/dist/",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
+  "homepage": "https://github.com/mormubis/pgn#readme",
   "keywords": [
     "chess",
     "fide",
@@ -40,20 +56,23 @@
   "license": "MIT",
   "main": "dist/index.js",
   "name": "@echecs/pgn",
-  "repository": "mormubis/pgn",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mormubis/pgn.git"
+  },
   "scripts": {
     "bench": "vitest bench --run",
     "build": "pnpm run build:grammar && pnpm run build:entry",
-    "build:grammar": "pnpm run grammar:compile",
     "build:entry": "tsc --project tsconfig.build.json",
+    "build:grammar": "pnpm run grammar:compile",
     "format": "pnpm run format:ci --write",
-    "format:ci": "prettier --ignore-unknown --list-different \"**/*\"",
+    "format:ci": "prettier -l \"**/*.+(css|js|json|jsx|md|mjs|mts|ts|tsx|yml|yaml)\"",
     "grammar:compile": "nearleyc src/grammar.ne -o src/grammar.cjs",
     "grammar:diagram": "nearley-railroad src/grammar.ne -o diagram.html",
     "grammar:test": "pnpm grammar:compile && nearley-test -s DATABASE src/grammar.cjs < ./test.pgn",
     "lint": "pnpm run lint:style && pnpm run lint:types",
     "lint:ci": "pnpm run lint:style --max-warnings 0 && pnpm run lint:types",
-    "lint:style": "eslint \"src/**/*.{ts,tsx}\" --fix",
+    "lint:style": "eslint \"src/**/*.{ts,tsx}\" \"*.mjs\" --fix",
     "lint:types": "tsc --noEmit --project tsconfig.json",
     "prepare": "pnpm run build",
     "test": "pnpm grammar:compile && vitest run",

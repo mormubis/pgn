@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import parse from '../index.js';
@@ -40,11 +40,11 @@ const tests = {
 };
 
 describe('PGN Parser', () => {
-  Object.entries(tests).forEach(([label, input]) =>
-    it(label, { timeout: 15000 }, async () => {
+  for (const [label, input] of Object.entries(tests)) {
+    it(label, { timeout: 15_000 }, async () => {
       await expect(parse(input)).toMatchFileSnapshot(
         `./__snapshots__/${label}.snap`,
       );
-    }),
-  );
+    });
+  }
 });

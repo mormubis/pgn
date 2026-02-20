@@ -1,5 +1,5 @@
 // import { parse } from '@mliebelt/pgn-parser';
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
 import { bench, describe } from 'vitest';
 
 import parse from '../index.js';
@@ -41,10 +41,10 @@ const tests = {
 };
 
 describe('PGN Parser', () => {
-  Object.entries(tests).forEach(([label, input]) => {
+  for (const [label, input] of Object.entries(tests)) {
     bench(label, () => {
       // parse(input, { startRule: 'games' });
       parse(input);
     });
-  });
+  }
 });

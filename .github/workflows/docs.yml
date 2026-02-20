@@ -1,16 +1,20 @@
-name: 🧪 Test
+name: 📚 Docs
 
 on:
-  pull_request:
-  workflow_call:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 concurrency:
-  group: test-${{ github.head_ref || github.ref }}
+  group: docs-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  default:
-    name: 🧪 Test
+  deploy:
+    name: 📚 Deploy docs
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout code
@@ -30,11 +34,11 @@ jobs:
       - name: 📥 Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 🧪 Test
-        run: pnpm run test:coverage
+      - name: 📚 Generate docs
+        run: pnpm run docs
 
-      - name: 📊 Upload coverage
-        uses: codecov/codecov-action@v5
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
