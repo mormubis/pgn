@@ -96,14 +96,17 @@ MOVES
 MOVE
   = num:NUMBER? _ san:SAN nags:(_ n:NAG { return n; })* comments:(_ c:COMMENT { return c; })*
   {
-    const annotations = nags.filter(Boolean);
-    const commentText = comments.filter(Boolean).join(' ').replace(/\n/g, '');
-    return {
-      ...(num !== null && { number: num }),
-      ...(annotations.length > 0 && { annotations }),
-      ...(commentText.length > 0 && { comment: commentText }),
-      ...san,
-    };
+    const move = { ...san };
+    if (num !== null) move.number = num;
+    if (nags.length > 0) {
+      const annotations = nags.filter(Boolean);
+      if (annotations.length > 0) move.annotations = annotations;
+    }
+    if (comments.length > 0) {
+      const commentText = comments.filter(Boolean).join(' ').replace(/\n/g, '');
+      if (commentText.length > 0) move.comment = commentText;
+    }
+    return move;
   }
 
 NUMBER
