@@ -132,6 +132,31 @@ console.log(pgn);
 */
 ```
 
+## Performance
+
+`@echecs/pgn` uses a [Peggy](https://peggyjs.org/) PEG parser for O(n) parsing
+and is competitive with the fastest PGN parsers available.
+
+Benchmarked against `pgn-parser@2.2.1`, `@mliebelt/pgn-parser@1.4.19`, and
+`chess.js@1.4.0` on a representative set of real-world PGN fixtures:
+
+| Fixture                 | `@echecs/pgn` | `pgn-parser` | vs `pgn-parser`  |
+| ----------------------- | ------------- | ------------ | ---------------- |
+| single.pgn (1 move)     | 134,397 hz    | 130,834 hz   | **1.03x faster** |
+| checkmate.pgn           | 19,842 hz     | 22,195 hz    | 1.12x slower     |
+| basic.pgn               | 14,515 hz     | 16,095 hz    | 1.11x slower     |
+| multiple.pgn (4 games)  | 7,912 hz      | 9,490 hz     | 1.20x slower     |
+| lichess.pgn (100 games) | 1,348 hz      | 1,537 hz     | 1.14x slower     |
+| long.pgn (~3500 games)  | 2.92 hz       | 3.41 hz      | 1.17x slower     |
+
+The small remaining gap (~1.1–1.2x) reflects the additional work `@echecs/pgn`
+performs per move: full SAN decomposition, castling square resolution, move
+pairing, and numeric result conversion. `pgn-parser` outputs raw strings with a
+flat move list.
+
+See [`BENCHMARK_RESULTS.md`](./BENCHMARK_RESULTS.md) for full results and
+historical comparisons.
+
 ## Important Notes
 
 - `PGN` is a parser and does not verify the validity of the PGN games. It only
