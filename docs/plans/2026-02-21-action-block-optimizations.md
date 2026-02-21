@@ -1,10 +1,14 @@
 # Action Block Optimizations Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to
+> implement this plan task-by-task.
 
-**Goal:** Reduce per-move overhead in `src/grammar.pegjs` by eliminating redundant allocations, redundant regex parsing, and V8-deoptimising mutations.
+**Goal:** Reduce per-move overhead in `src/grammar.pegjs` by eliminating
+redundant allocations, redundant regex parsing, and V8-deoptimising mutations.
 
-**Architecture:** All changes are confined to `src/grammar.pegjs` (global initializer + rule action blocks). The public API and all TypeScript types are unchanged. All 13 snapshot tests must continue to pass exactly.
+**Architecture:** All changes are confined to `src/grammar.pegjs` (global
+initializer + rule action blocks). The public API and all TypeScript types are
+unchanged. All 13 snapshot tests must continue to pass exactly.
 
 **Tech Stack:** Peggy v5, vitest snapshots
 
@@ -17,21 +21,21 @@ After the nearley → Peggy migration, `@echecs/pgn` is still ~1.5x slower than
 what the action blocks do per move. Four specific inefficiencies account for
 most of the overhead:
 
-1. **SAN double-parse** — the PEG engine already parses SAN character-by-character;
-   the action block then fires a full named-group regex over the same string,
-   parsing it a second time.
+1. **SAN double-parse** — the PEG engine already parses SAN
+   character-by-character; the action block then fires a full named-group regex
+   over the same string, parsing it a second time.
 2. **`pickBy` intermediate allocations** — `Object.entries` + `filter` +
    `Object.fromEntries` allocates 3 intermediate objects per move to discard
    falsy properties from a known fixed set of 7 keys.
 3. **`delete` mutations in `pairMoves`** — `delete move.number` and
    `delete move.long` cause V8 hidden-class transitions on every move object.
-4. **Unconditional filter/join/replace on empty arrays** — `[].filter(Boolean).
-   join(' ').replace(/\n/g, '')` runs on every move even when no NAGs or
-   comments are present (>90% of moves).
+4. **Unconditional filter/join/replace on empty arrays** —
+   `[].filter(Boolean). join(' ').replace(/\n/g, '')` runs on every move even
+   when no NAGs or comments are present (>90% of moves).
 
-A bonus fix: `.slice(Math.floor(start / 2))` at the end of `pairMoves`
-copies the accumulator unconditionally; at the top level `start=0` always,
-making it a wasteful full copy.
+A bonus fix: `.slice(Math.floor(start / 2))` at the end of `pairMoves` copies
+the accumulator unconditionally; at the top level `start=0` always, making it a
+wasteful full copy.
 
 ---
 
@@ -62,6 +66,7 @@ and compare against the numbers in `BENCHMARK_RESULTS.md`.
 ### Task 1: Replace `pickBy` with direct conditional assignment in SAN action
 
 **Files:**
+
 - Modify: `src/grammar.pegjs` (lines 1–6, 144–165)
 
 The `pickBy` helper (lines 2–6) and its call site in the SAN action (lines
@@ -76,16 +81,14 @@ In the global initializer (`{{ }}`), **remove** the `pickBy` function entirely
 ```js
 // DELETE this function:
 function pickBy(obj, pred) {
-  return Object.fromEntries(
-    Object.entries(obj).filter(([, v]) => pred(v))
-  );
+  return Object.fromEntries(Object.entries(obj).filter(([, v]) => pred(v)));
 }
 ```
 
 In the SAN action block (lines 144–165), replace the regex + pickBy call with
 direct labeled-label extraction. The SAN rule already captures each token as
-`s`, so we still use `s` for castling detection. For non-castling moves, use
-the named-group regex result but build the object directly without `pickBy`:
+`s`, so we still use `s` for castling detection. For non-castling moves, use the
+named-group regex result but build the object directly without `pickBy`:
 
 ```pegjs
 SAN
@@ -150,14 +153,16 @@ git commit -m "perf: replace pickBy with direct property assignment in SAN actio
 ### Task 2: Guard NAG/comment processing with length checks in MOVE action
 
 **Files:**
+
 - Modify: `src/grammar.pegjs` (lines 102–113)
 
-The MOVE action currently runs `filter/join/replace` on every move regardless
-of whether there are NAGs or comments. Guard all three operations.
+The MOVE action currently runs `filter/join/replace` on every move regardless of
+whether there are NAGs or comments. Guard all three operations.
 
 **Step 1: Replace the MOVE action block**
 
 Current (lines 103–113):
+
 ```pegjs
 MOVE
   = num:NUMBER? _ san:SAN nags:(_ n:NAG { return n; })* comments:(_ c:COMMENT { return c; })*
@@ -174,6 +179,7 @@ MOVE
 ```
 
 Replace with:
+
 ```pegjs
 MOVE
   = num:NUMBER? _ san:SAN nags:(_ n:NAG { return n; })* comments:(_ c:COMMENT { return c; })*
@@ -216,55 +222,62 @@ git commit -m "perf: guard NAG/comment processing behind length checks in MOVE a
 ### Task 3: Remove V8-deoptimising `delete` mutations from `pairMoves`
 
 **Files:**
+
 - Modify: `src/grammar.pegjs` (lines 8–43)
 
-`delete move.number` and `delete move.long` cause V8 hidden-class transitions
-on every move object, deoptimising property access. Replace with
+`delete move.number` and `delete move.long` cause V8 hidden-class transitions on
+every move object, deoptimising property access. Replace with
 destructuring-and-omit to avoid mutation, and guard the `.slice()` call.
 
 **Step 1: Replace the `pairMoves` function**
 
 Current (lines 8–43):
+
 ```js
 function pairMoves(moves, start) {
   start = start ?? 0;
-  return moves.reduce((acc, move, i) => {
-    const color = (start + i) % 2 === 0 ? 'white' : 'black';
-    const index = Math.floor((start + i) / 2);
+  return moves
+    .reduce((acc, move, i) => {
+      const color = (start + i) % 2 === 0 ? 'white' : 'black';
+      const index = Math.floor((start + i) / 2);
 
-    if (acc[index] === undefined) {
-      acc[index] = [index + 1, undefined];
-    }
+      if (acc[index] === undefined) {
+        acc[index] = [index + 1, undefined];
+      }
 
-    if (move.number !== undefined && move.number !== index + 1) {
-      console.warn(
-        `Warning: Move number mismatch - ${move.number}`
-      );
-    }
-    delete move.number;
+      if (move.number !== undefined && move.number !== index + 1) {
+        console.warn(`Warning: Move number mismatch - ${move.number}`);
+      }
+      delete move.number;
 
-    if (move.castling) {
-      move.to =
-        color === 'white'
-          ? move.long ? 'c1' : 'g1'
-          : move.long ? 'c8' : 'g8';
-      delete move.long;
-    }
+      if (move.castling) {
+        move.to =
+          color === 'white'
+            ? move.long
+              ? 'c1'
+              : 'g1'
+            : move.long
+              ? 'c8'
+              : 'g8';
+        delete move.long;
+      }
 
-    if (move.variants) {
-      move.variants = move.variants.map((variant) =>
-        pairMoves(variant, start + i)
-      );
-    }
+      if (move.variants) {
+        move.variants = move.variants.map((variant) =>
+          pairMoves(variant, start + i),
+        );
+      }
 
-    acc[index][color === 'white' ? 1 : 2] = move;
+      acc[index][color === 'white' ? 1 : 2] = move;
 
-    return acc;
-  }, []).slice(Math.floor(start / 2));
+      return acc;
+    }, [])
+    .slice(Math.floor(start / 2));
 }
 ```
 
 Replace with:
+
 ```js
 function pairMoves(moves, start) {
   start = start ?? 0;
@@ -285,15 +298,11 @@ function pairMoves(moves, start) {
     }
 
     if (move.castling) {
-      move.to = isWhite
-        ? (long ? 'c1' : 'g1')
-        : (long ? 'c8' : 'g8');
+      move.to = isWhite ? (long ? 'c1' : 'g1') : long ? 'c8' : 'g8';
     }
 
     if (move.variants) {
-      move.variants = move.variants.map((variant) =>
-        pairMoves(variant, si)
-      );
+      move.variants = move.variants.map((variant) => pairMoves(variant, si));
     }
 
     acc[index][isWhite ? 1 : 2] = move;
@@ -303,11 +312,17 @@ function pairMoves(moves, start) {
 ```
 
 Key changes:
-- `reduce` → `for` loop (avoids callback overhead and closure allocation per iteration)
-- `delete move.number` / `delete move.long` → `const { number, long, ...move } = moves[i]` (destructure-and-omit, no mutation, no hidden-class transitions)
+
+- `reduce` → `for` loop (avoids callback overhead and closure allocation per
+  iteration)
+- `delete move.number` / `delete move.long` →
+  `const { number, long, ...move } = moves[i]` (destructure-and-omit, no
+  mutation, no hidden-class transitions)
 - `(start + i)` computed once as `si` per iteration
-- `Math.floor(x / 2)` → `x >> 1` (integer right shift — same result for non-negative integers, no float conversion)
-- `.slice(Math.floor(start / 2))` guarded: only called when `start !== 0` (variant calls); top-level calls (`start=0`) return `acc` directly
+- `Math.floor(x / 2)` → `x >> 1` (integer right shift — same result for
+  non-negative integers, no float conversion)
+- `.slice(Math.floor(start / 2))` guarded: only called when `start !== 0`
+  (variant calls); top-level calls (`start=0`) return `acc` directly
 
 **Step 2: Compile and test**
 
@@ -358,9 +373,15 @@ git commit -m "docs: update benchmark results after action block optimizations"
 
 ## Notes
 
-- `src/grammar.cjs` is gitignored — never commit it. It is regenerated by `pnpm grammar:compile` (which `pnpm test` calls automatically).
-- `pnpm test` calls `pnpm grammar:compile` first, so you never need to compile manually before testing.
-- The 13 snapshot files in `src/__tests__/__snapshots__/` must not change. These optimizations are pure performance improvements with no output changes.
-- The `result` field is numeric (`1`, `0`, `0.5`, or `"?"`). This is intentional and must not change.
-- Castling `to` squares: white O-O → `g1`, O-O-O → `c1`; black O-O → `g8`, O-O-O → `c8`.
-- The `variants` snapshot has `undefined` as the second element of some tuples — this is correct and must be preserved by `pairMoves`.
+- `src/grammar.cjs` is gitignored — never commit it. It is regenerated by
+  `pnpm grammar:compile` (which `pnpm test` calls automatically).
+- `pnpm test` calls `pnpm grammar:compile` first, so you never need to compile
+  manually before testing.
+- The 13 snapshot files in `src/__tests__/__snapshots__/` must not change. These
+  optimizations are pure performance improvements with no output changes.
+- The `result` field is numeric (`1`, `0`, `0.5`, or `"?"`). This is intentional
+  and must not change.
+- Castling `to` squares: white O-O → `g1`, O-O-O → `c1`; black O-O → `g8`, O-O-O
+  → `c8`.
+- The `variants` snapshot has `undefined` as the second element of some tuples —
+  this is correct and must be preserved by `pairMoves`.
