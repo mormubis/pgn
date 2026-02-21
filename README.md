@@ -132,6 +132,50 @@ console.log(pgn);
 */
 ```
 
+## Features
+
+`@echecs/pgn` supports the full PGN specification including features that most
+alternative parsers do not handle:
+
+### Recursive Annotation Variations (RAV)
+
+Parenthesised sub-lines are parsed into a structured `variants` tree, making
+`@echecs/pgn` suitable for opening books, study material, and annotated game
+databases — not just plain game records.
+
+```pgn
+5... Ba5 (5... Be7 6. d4) 6. Qb3 (6. d4 exd4 7. O-O)
+```
+
+Each move's `variants` field contains the alternative lines in the same paired
+`[moveNumber, white, black]` format as the main line.
+
+### NAG (Numeric Annotation Glyph) support
+
+Both symbolic (`!`, `?`, `!!`, `??`, `!?`, `?!`) and numeric (`$1`–`$255`) NAG
+forms are parsed and surfaced as an `annotations` array on the move object.
+
+```pgn
+12. Nf3! $14 { White has a slight advantage }
+```
+
+```typescript
+{ piece: 'N', to: 'f3', check: false, annotations: ['!', '$14'],
+  comment: 'White has a slight advantage' }
+```
+
+### Feature comparison
+
+| Feature                          | `@echecs/pgn` | `pgn-parser` | `@mliebelt/pgn-parser` | `chess.js` |
+| -------------------------------- | ------------- | ------------ | ---------------------- | ---------- |
+| RAV / variations                 | ✅            | ❌           | ✅                     | ❌         |
+| Deeply nested RAVs               | ✅            | ❌           | partial                | ❌         |
+| NAG annotations                  | ✅            | ❌           | ✅                     | ❌         |
+| Multi-game files                 | ✅            | ✅           | ✅                     | ❌         |
+| Decomposed SAN                   | ✅            | ❌           | ❌                     | ❌         |
+| Paired move structure            | ✅            | ❌           | ❌                     | ❌         |
+| Numeric result (`1`, `0`, `0.5`) | ✅            | ❌           | ❌                     | ❌         |
+
 ## Performance
 
 `@echecs/pgn` uses a [Peggy](https://peggyjs.org/) PEG parser for O(n) parsing
