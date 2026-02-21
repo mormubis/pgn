@@ -1,209 +1,142 @@
 # PGN
 
-`PGN` is a parser that is part of the **ECHECS** project, designed to interpret
-the
-[PGN (Portable Game Notation) specification](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm).
+[![npm](https://img.shields.io/npm/v/@echecs/pgn)](https://www.npmjs.com/package/@echecs/pgn)
+[![Test](https://github.com/mormubis/pgn/actions/workflows/test.yml/badge.svg)](https://github.com/mormubis/pgn/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+**PGN** is a fast TypeScript parser for
+[Portable Game Notation](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm)
+— the standard format for recording chess games.
+
+It parses PGN input into structured move objects with decomposed SAN, paired
+white/black moves, and full support for annotations and variations. Zero runtime
+dependencies.
+
+## Why this library?
+
+Most PGN parsers on npm either give you raw strings with no structure, or fail
+on anything beyond a plain game record. If you're building a chess engine,
+opening book, or game viewer, you need more:
+
+- **Decomposed SAN** — every move is parsed into `piece`, `from`, `to`,
+  `capture`, `promotion`, `check`, and `checkmate` fields. No regex on your
+  side.
+- **Paired move structure** — moves are returned as
+  `[moveNumber, whiteMove, blackMove]` tuples, ready to render or process
+  without further work.
+- **RAV support** — recursive annotation variations (`(...)` sub-lines) are
+  parsed into a `variants` tree on each move. Essential for opening books and
+  annotated games.
+- **NAG support** — symbolic (`!`, `?`, `!!`, `??`, `!?`, `?!`) and numeric
+  (`$1`–`$255`) annotations are surfaced as an `annotations` array. Essential
+  for Lichess and ChessBase exports.
+- **Multi-game files** — parse entire PGN databases in one call. Tested on files
+  with 3 500+ games.
+- **Fast** — built on a [Peggy](https://peggyjs.org/) PEG parser. Throughput is
+  within 1.1–1.2x of the fastest parsers on npm, which do far less work per move
+  (see [BENCHMARK_RESULTS.md](./BENCHMARK_RESULTS.md)).
+
+If you only need raw SAN strings and a flat move list, any PGN parser will do.
+If you need structured, engine-ready output with annotations and variations,
+this is the one.
 
 ## Installation
 
 ```bash
-npm install --save-dev @echecs/pgn
+npm install @echecs/pgn
+```
+
+## Quick Start
+
+```typescript
+import parse from '@echecs/pgn';
+
+const games = parse(`
+  [Event "Example"]
+  [White "Player1"]
+  [Black "Player2"]
+  [Result "1-0"]
+
+  1. e4 e5 2. Nf3 Nc6 3. Bb5 1-0
+`);
+
+console.log(games[0].moves[0]);
+// [1, { piece: 'P', to: 'e4' }, { piece: 'P', to: 'e5' }]
 ```
 
 ## Usage
 
-The `parse` function takes a PGN formatted string as input and returns an array
-of parsed PGN objects.
+`parse()` takes a PGN string and returns an array of game objects — one per game
+in the file.
 
 ```typescript
 parse(input: string): PGN[]
 ```
 
-### PGN Object Format
-
-Here’s the structure of the `PGN` object:
-
-#### PGN Object
+### PGN object
 
 ```typescript
 {
-    "meta": Meta,
-    "moves": Moves,
-    "result": "1-0" // possible values: "1-0", "0-1", "1/2-1/2", "?"
+  meta:   Meta,   // tag pairs (Event, Site, Date, White, Black, …)
+  moves:  Moves,  // paired move list
+  result: 1 | 0 | 0.5 | '?'
 }
 ```
 
-#### Meta Object
-
-The `meta` object contains metadata about the chess game.
+### Move object
 
 ```typescript
 {
-    "Event": "name of the tournament or match event",
-    "Site": "location of the event",
-    "Date": "starting date of the game",
-    "Round": "playing round ordinal of the game",
-    "White": "player of the white pieces",
-    "Black": "player of the black pieces",
-    "Result": "result of the game",
-    // Any other additional tags
-    [key]: "string"
+  piece:       'P' | 'R' | 'N' | 'B' | 'Q' | 'K', // always present
+  to:          string,       // destination square, e.g. "e4"
+  from?:       string,       // disambiguation, e.g. "e" or "e2"
+  capture?:    true,
+  castling?:   true,
+  check?:      true,
+  checkmate?:  true,
+  promotion?:  'R' | 'N' | 'B' | 'Q',
+  annotations?: string[],   // e.g. ["!", "$14"]
+  comment?:    string,
+  variants?:   Moves[],     // recursive annotation variations
 }
 ```
 
-#### Moves Array
+Moves are grouped into tuples: `[moveNumber, whiteMove, blackMove]`. If the last
+move of a game or variation was made by white, `blackMove` is `undefined`.
 
-`Moves` is an array representing the sequence of moves in the game. Each element
-is an array containing the move number, the white move, and the black move.
-
-```typescript
-[moveNumber, Move, Move];
-```
-
-Note: Half moves are included for variations or in cases where the last move was
-made by white.
-
-#### Move Object
-
-Each move is represented by the following structure:
-
-```typescript
-{
-  "annotations": ["!", "$126"], // optional, annotations for the move
-  "capture": false, // optional, indicates if any piece was captured
-  "castling": true, // optional, indicates if the move was castling
-  "check": false, // optional, indicates if the move put the rival king in check
-  "checkmate": false, // optional, indicates if it is a checkmate
-  "comment": "Some comment", // optional, comment about the move
-  "from": "e", // optional, disambiguation of the move
-  "piece": "K", // required, type of piece (P, R, N, B, Q, K)
-  "promotion": "Piece", // optional, promotion piece (R, N, B, Q)
-  "to": "g1", // required, ending square of the move
-  "variants": [...] // optional, array of moves for variations following Moves format
-}
-```
-
-### Example
-
-Here's a sample usage of the `PGN` parser:
-
-```typescript
-import { readFileSync } from 'fs';
-import parse from '@echecs/pgn';
-
-function readFile(path) {
-  const filename = require.resolve(path);
-  return readFileSync(filename, 'utf8');
-}
-
-const pgn = parse(readFile('./games/file.pgn'));
-
-// Output example of parsed `PGN`
-console.log(pgn);
-/*
-[
-   {
-     "meta": {
-       "Event": "Some Tournament",
-       "Site": "Some Location",
-       "Date": "2023.10.04",
-       "Round": "1",
-       "White": "Player1",
-       "Black": "Player2",
-       "Result": "1-0",
-       // additional tags...
-     },
-     "moves": [
-       [
-         1,
-         { "piece": "P", "to": "e4" },
-         { "piece": "P", "to": "e5" }
-       ],
-       [
-         2,
-         { "piece": "N", "to": "f3" },
-         { "piece": "N", "to": "c6" }
-       ],
-       // more moves...
-     ],
-     "result": "1-0"
-   }
-];
-*/
-```
-
-## Features
-
-`@echecs/pgn` supports the full PGN specification including features that most
-alternative parsers do not handle:
-
-### Recursive Annotation Variations (RAV)
-
-Parenthesised sub-lines are parsed into a structured `variants` tree, making
-`@echecs/pgn` suitable for opening books, study material, and annotated game
-databases — not just plain game records.
-
-```pgn
-5... Ba5 (5... Be7 6. d4) 6. Qb3 (6. d4 exd4 7. O-O)
-```
-
-Each move's `variants` field contains the alternative lines in the same paired
-`[moveNumber, white, black]` format as the main line.
-
-### NAG (Numeric Annotation Glyph) support
-
-Both symbolic (`!`, `?`, `!!`, `??`, `!?`, `?!`) and numeric (`$1`–`$255`) NAG
-forms are parsed and surfaced as an `annotations` array on the move object.
+### Annotations and comments
 
 ```pgn
 12. Nf3! $14 { White has a slight advantage }
 ```
 
 ```typescript
-{ piece: 'N', to: 'f3', check: false, annotations: ['!', '$14'],
-  comment: 'White has a slight advantage' }
+{
+  piece: 'N', to: 'f3',
+  annotations: ['!', '$14'],
+  comment: 'White has a slight advantage'
+}
 ```
 
-### Feature comparison
+### Variations
 
-| Feature                          | `@echecs/pgn` | `pgn-parser` | `@mliebelt/pgn-parser` | `chess.js` |
-| -------------------------------- | ------------- | ------------ | ---------------------- | ---------- |
-| RAV / variations                 | ✅            | ❌           | ✅                     | ❌         |
-| Deeply nested RAVs               | ✅            | ❌           | partial                | ❌         |
-| NAG annotations                  | ✅            | ❌           | ✅                     | ❌         |
-| Multi-game files                 | ✅            | ✅           | ✅                     | ❌         |
-| Decomposed SAN                   | ✅            | ❌           | ❌                     | ❌         |
-| Paired move structure            | ✅            | ❌           | ❌                     | ❌         |
-| Numeric result (`1`, `0`, `0.5`) | ✅            | ❌           | ❌                     | ❌         |
+```pgn
+5... Ba5 (5... Be7 6. d4) 6. Qb3
+```
 
-## Performance
+The alternative line appears as a `variants` array on the move where it
+branches:
 
-`@echecs/pgn` uses a [Peggy](https://peggyjs.org/) PEG parser for O(n) parsing
-and is competitive with the fastest PGN parsers available.
+```typescript
+{
+  piece: 'B', to: 'a5',
+  variants: [
+    [ [5, undefined, { piece: 'B', to: 'e7' }], [6, { piece: 'P', to: 'd4' }] ]
+  ]
+}
+```
 
-Benchmarked against `pgn-parser@2.2.1`, `@mliebelt/pgn-parser@1.4.19`, and
-`chess.js@1.4.0` on a representative set of real-world PGN fixtures:
+## Contributing
 
-| Fixture                 | `@echecs/pgn` | `pgn-parser` | vs `pgn-parser`  |
-| ----------------------- | ------------- | ------------ | ---------------- |
-| single.pgn (1 move)     | 134,397 hz    | 130,834 hz   | **1.03x faster** |
-| checkmate.pgn           | 19,842 hz     | 22,195 hz    | 1.12x slower     |
-| basic.pgn               | 14,515 hz     | 16,095 hz    | 1.11x slower     |
-| multiple.pgn (4 games)  | 7,912 hz      | 9,490 hz     | 1.20x slower     |
-| lichess.pgn (100 games) | 1,348 hz      | 1,537 hz     | 1.14x slower     |
-| long.pgn (~3500 games)  | 2.92 hz       | 3.41 hz      | 1.17x slower     |
-
-The small remaining gap (~1.1–1.2x) reflects the additional work `@echecs/pgn`
-performs per move: full SAN decomposition, castling square resolution, move
-pairing, and numeric result conversion. `pgn-parser` outputs raw strings with a
-flat move list.
-
-See [`BENCHMARK_RESULTS.md`](./BENCHMARK_RESULTS.md) for full results and
-historical comparisons.
-
-## Important Notes
-
-- `PGN` is a parser and does not verify the validity of the PGN games. It only
-  parses the provided content.
-- For game validation, use **@echecs/game** as it is responsible for verifying
-  game correctness as part of the **ECHECS** project.
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for
+guidelines on how to submit issues and pull requests.
