@@ -1,4 +1,11 @@
 {{
+  function applyIndicators(result, promo, ind) {
+    if (promo)       result.promotion = promo;
+    if (ind === '+') result.check     = true;
+    if (ind === '#') result.checkmate = true;
+    return result;
+  }
+
   function pairMoves(moves, start) {
     start = start ?? 0;
     const acc = [];
@@ -128,106 +135,36 @@ CASTLING
 PIECE_MOVE
   // Full-square disambig + capture: Qd1xe4
   = piece:$[KQBNPR] df:$[a-h] dr:$[1-8] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  {
-    const to = file + rank;
-    const result = { capture: true, from: df + dr, piece, to };
-    if (promo)       result.promotion = promo;
-    if (ind === '+') result.check     = true;
-    if (ind === '#') result.checkmate = true;
-    return result;
-  }
+  { return applyIndicators({ capture: true, from: df + dr, piece, to: file + rank }, promo, ind); }
   // Full-square disambig, no capture: Qd1e4
   / piece:$[KQBNPR] df:$[a-h] dr:$[1-8] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  {
-    const to = file + rank;
-    const result = { from: df + dr, piece, to };
-    if (promo)       result.promotion = promo;
-    if (ind === '+') result.check     = true;
-    if (ind === '#') result.checkmate = true;
-    return result;
-  }
+  { return applyIndicators({ from: df + dr, piece, to: file + rank }, promo, ind); }
   // File disambig + capture: Naxb4
   / piece:$[KQBNPR] df:$[a-h] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  {
-    const to = file + rank;
-    const result = { capture: true, from: df, piece, to };
-    if (promo)       result.promotion = promo;
-    if (ind === '+') result.check     = true;
-    if (ind === '#') result.checkmate = true;
-    return result;
-  }
+  { return applyIndicators({ capture: true, from: df, piece, to: file + rank }, promo, ind); }
   // Rank disambig + capture: N1xf3
   / piece:$[KQBNPR] dr:$[1-8] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  {
-    const to = file + rank;
-    const result = { capture: true, from: dr, piece, to };
-    if (promo)       result.promotion = promo;
-    if (ind === '+') result.check     = true;
-    if (ind === '#') result.checkmate = true;
-    return result;
-  }
+  { return applyIndicators({ capture: true, from: dr, piece, to: file + rank }, promo, ind); }
   // File disambig, no capture: Nbd7
   / piece:$[KQBNPR] df:$[a-h] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  {
-    const to = file + rank;
-    const result = { from: df, piece, to };
-    if (promo)       result.promotion = promo;
-    if (ind === '+') result.check     = true;
-    if (ind === '#') result.checkmate = true;
-    return result;
-  }
+  { return applyIndicators({ from: df, piece, to: file + rank }, promo, ind); }
   // Rank disambig, no capture: N1f3
   / piece:$[KQBNPR] dr:$[1-8] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  {
-    const to = file + rank;
-    const result = { from: dr, piece, to };
-    if (promo)       result.promotion = promo;
-    if (ind === '+') result.check     = true;
-    if (ind === '#') result.checkmate = true;
-    return result;
-  }
+  { return applyIndicators({ from: dr, piece, to: file + rank }, promo, ind); }
   // Capture, no disambig: Nxf3
   / piece:$[KQBNPR] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  {
-    const to = file + rank;
-    const result = { capture: true, piece, to };
-    if (promo)       result.promotion = promo;
-    if (ind === '+') result.check     = true;
-    if (ind === '#') result.checkmate = true;
-    return result;
-  }
+  { return applyIndicators({ capture: true, piece, to: file + rank }, promo, ind); }
   // Simple: Nf3
   / piece:$[KQBNPR] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  {
-    const to = file + rank;
-    const result = { piece, to };
-    if (promo)       result.promotion = promo;
-    if (ind === '+') result.check     = true;
-    if (ind === '#') result.checkmate = true;
-    return result;
-  }
+  { return applyIndicators({ piece, to: file + rank }, promo, ind); }
 
 PAWN_CAPTURE
   = from:$[a-h] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  {
-    const to = file + rank;
-    const result = { capture: true, from, piece: 'P', to };
-    if (promo)       result.promotion = promo;
-    if (ind === '+') result.check     = true;
-    if (ind === '#') result.checkmate = true;
-    return result;
-  }
+  { return applyIndicators({ capture: true, from, piece: 'P', to: file + rank }, promo, ind); }
 
 PAWN_PUSH
   = file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  {
-    const to = file + rank;
-    const result = { piece: 'P', to };
-    if (promo)       result.promotion = promo;
-    if (ind === '+') result.check     = true;
-    if (ind === '#') result.checkmate = true;
-    return result;
-  }
+  { return applyIndicators({ piece: 'P', to: file + rank }, promo, ind); }
 
 PROMO
   = "=" p:$[NBRQ] { return p; }
