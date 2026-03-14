@@ -8,6 +8,15 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.5.1] - 2026-03-14
+
+### Changed
+
+- README: document `stream()` API with signature and Node.js usage example
+- README: update type names (`Moves` → `MoveList`) and clarify `Move.from`
+  disambiguation and move tuple slot semantics
+- Updated benchmark results for v3.5.0 SAN rule restructure
+
 ## [3.5.0] - 2026-03-14
 
 ### Added
