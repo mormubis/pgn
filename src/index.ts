@@ -1,10 +1,10 @@
 import parser from './grammar.cjs';
 
+type Disambiguation = Square | File | Rank;
 type File = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
 type Piece = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
 type Rank = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
 type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
-
 type Square = `${File}${Rank}`;
 
 interface Meta {
@@ -19,22 +19,23 @@ interface Move {
   check?: boolean;
   checkmate?: boolean;
   comment?: string;
-  from?: File | Rank;
+  from?: Disambiguation;
   piece: Piece;
   promotion?: Piece;
   to: Square;
   variants?: Variation;
 }
 
-type Moves = [number, Move] | [number, Move, Move];
+type MovePair = [number, Move, Move?];
+type MoveList = MovePair[];
 
 interface PGN {
   meta: Meta;
-  moves: Moves;
-  result: Result;
+  moves: MoveList;
+  result: 1 | 0 | 0.5 | '?';
 }
 
-type Variation = Moves[] | [[number, undefined, Move], ...Moves][];
+type Variation = MoveList[];
 
 /**
  * Parse a PGN string into an array of games
