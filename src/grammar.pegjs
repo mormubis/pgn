@@ -127,10 +127,10 @@ SAN
   / PAWN_PUSH
 
 CASTLING
-  = "O-O-O" $[+#]?
-  { return { castling: true, long: true, piece: 'K', to: 'O-O-O' }; }
-  / "O-O" $[+#]?
-  { return { castling: true, long: false, piece: 'K', to: 'O-O' }; }
+  = "O-O-O" ind:$[+#]?
+  { return applyIndicators({ castling: true, long: true, piece: 'K', to: 'O-O-O' }, undefined, ind); }
+  / "O-O" ind:$[+#]?
+  { return applyIndicators({ castling: true, long: false, piece: 'K', to: 'O-O' }, undefined, ind); }
 
 PIECE_MOVE
   // Full-square disambig + capture: Qd1xe4
