@@ -8,7 +8,9 @@ import parse from '../index.js';
 
 function readFile(path: string): string {
   const filename = require.resolve(path);
-  return readFileSync(filename, 'utf8');
+  // Strip BOM (U+FEFF) — some fixtures are saved with a byte-order mark that
+  // @mliebelt/pgn-parser and pgn-parser do not accept.
+  return readFileSync(filename, 'utf8').replace(/^\uFEFF/, '');
 }
 
 // Load all fixture files
@@ -29,7 +31,6 @@ const variants = readFile('./grammar/variants.pgn');
 // Single-game fixtures (all 4 parsers)
 const singleGameFixtures = {
   basic,
-  benko,
   checkmate,
   comment,
   promotion,
@@ -38,7 +39,19 @@ const singleGameFixtures = {
 };
 
 // Multi-game fixtures (exclude chess.js, which only handles one game at a time)
-const multiGameFixtures = { comments, games32, lichess, long, multiple, twic };
+// benko.pgn: plain two-game file — moved here from singleGameFixtures so the
+//   multi-game APIs (parseGames / pgnParserParse) are used for comparison.
+// variants.pgn excluded: pgn-parser chokes on Unicode NAG symbols (e.g. ±);
+//   chess.js does not support RAV sub-lines. No fair comparison possible.
+const multiGameFixtures = {
+  benko,
+  comments,
+  games32,
+  lichess,
+  long,
+  multiple,
+  twic,
+};
 
 // ============================================================================
 // Single-game fixtures: compare all 4 parsers
