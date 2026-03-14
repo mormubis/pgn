@@ -113,51 +113,124 @@ NUMBER
 
 // ─── SAN ─────────────────────────────────────────────────────────────────────
 
-// SAN alternatives ordered most-specific to least-specific so PEG ordered
-// choice does not consume prefix characters that belong to a later, shorter
-// alternative.
-//
-// Fully-disambiguated:  Qd1xe4+   → piece + file + rank + capture + to
-// File-disambiguated:   exd5      → file + capture + to   (or just from_file + to)
-// Rank-disambiguated:   N1f3      → piece + rank + to
-// Simple:               Nf3 / e4  → piece + to  /  to
-
 SAN
-  = s:$(
-      "O-O-O" [+#]? / "O-O" [+#]?
-      / [KQBNPR] [a-h] [1-8] "x" [a-h] [1-8] ("=" [NBRQ])? [+#]?   // Qd1xe4 (full disambig capture)
-      / [KQBNPR] [a-h] [1-8] [a-h] [1-8] ("=" [NBRQ])? [+#]?        // Qd1e4  (full disambig)
-      / [KQBNPR] [a-h] "x" [a-h] [1-8] ("=" [NBRQ])? [+#]?          // Naxb4  (file disambig capture)
-      / [KQBNPR] [1-8] "x" [a-h] [1-8] ("=" [NBRQ])? [+#]?          // N1xf3  (rank disambig capture)
-      / [KQBNPR] [a-h] [a-h] [1-8] ("=" [NBRQ])? [+#]?              // Nbd7   (file disambig, no capture)
-      / [KQBNPR] [1-8] [a-h] [1-8] ("=" [NBRQ])? [+#]?               // N1f3   (rank disambig)
-      / [KQBNPR] "x" [a-h] [1-8] ("=" [NBRQ])? [+#]?                 // Nxf3   (piece capture, no disambig)
-      / [KQBNPR] [a-h] [1-8] ("=" [NBRQ])? [+#]?                     // Nf3    (piece + to)
-      / [a-h] "x" [a-h] [1-8] ("=" [NBRQ])? [+#]?                    // exd5   (pawn capture)
-      / [a-h] [1-8] ("=" [NBRQ])? [+#]?                               // e4     (pawn push)
-    )
+  = CASTLING
+  / PIECE_MOVE
+  / PAWN_CAPTURE
+  / PAWN_PUSH
+
+CASTLING
+  = "O-O-O" $[+#]?
+  { return { castling: true, long: true, piece: 'K', to: 'O-O-O' }; }
+  / "O-O" $[+#]?
+  { return { castling: true, long: false, piece: 'K', to: 'O-O' }; }
+
+PIECE_MOVE
+  // Full-square disambig + capture: Qd1xe4
+  = piece:$[KQBNPR] df:$[a-h] dr:$[1-8] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
   {
-    if (s.startsWith('O-O')) {
-      const isLong = s.startsWith('O-O-O');
-      return { castling: true, long: isLong, piece: 'K', to: isLong ? 'O-O-O' : 'O-O' };
-    }
-    const m = s.match(
-      /^([KQBNPR])?([a-h][1-8]|[a-h]|[1-8])?(x)?([a-h][1-8])(?:=([NBRQ]))?([+#])?$/
-    );
-    const piece      = (m && m[1]) ? m[1] : 'P';
-    const from       = (m && m[2]) ? m[2] : undefined;
-    const capture    = !!(m && m[3]);
-    const to         = m ? m[4] : undefined;
-    const promotion  = (m && m[5]) ? m[5] : undefined;
-    const indication = (m && m[6]) ? m[6] : undefined;
-    const result = { piece, to };
-    if (from)      result.from      = from;
-    if (capture)   result.capture   = true;
-    if (promotion) result.promotion = promotion;
-    if (indication === '+') result.check     = true;
-    if (indication === '#') result.checkmate = true;
+    const to = file + rank;
+    const result = { capture: true, from: df + dr, piece, to };
+    if (promo)       result.promotion = promo;
+    if (ind === '+') result.check     = true;
+    if (ind === '#') result.checkmate = true;
     return result;
   }
+  // Full-square disambig, no capture: Qd1e4
+  / piece:$[KQBNPR] df:$[a-h] dr:$[1-8] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
+  {
+    const to = file + rank;
+    const result = { from: df + dr, piece, to };
+    if (promo)       result.promotion = promo;
+    if (ind === '+') result.check     = true;
+    if (ind === '#') result.checkmate = true;
+    return result;
+  }
+  // File disambig + capture: Naxb4
+  / piece:$[KQBNPR] df:$[a-h] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
+  {
+    const to = file + rank;
+    const result = { capture: true, from: df, piece, to };
+    if (promo)       result.promotion = promo;
+    if (ind === '+') result.check     = true;
+    if (ind === '#') result.checkmate = true;
+    return result;
+  }
+  // Rank disambig + capture: N1xf3
+  / piece:$[KQBNPR] dr:$[1-8] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
+  {
+    const to = file + rank;
+    const result = { capture: true, from: dr, piece, to };
+    if (promo)       result.promotion = promo;
+    if (ind === '+') result.check     = true;
+    if (ind === '#') result.checkmate = true;
+    return result;
+  }
+  // File disambig, no capture: Nbd7
+  / piece:$[KQBNPR] df:$[a-h] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
+  {
+    const to = file + rank;
+    const result = { from: df, piece, to };
+    if (promo)       result.promotion = promo;
+    if (ind === '+') result.check     = true;
+    if (ind === '#') result.checkmate = true;
+    return result;
+  }
+  // Rank disambig, no capture: N1f3
+  / piece:$[KQBNPR] dr:$[1-8] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
+  {
+    const to = file + rank;
+    const result = { from: dr, piece, to };
+    if (promo)       result.promotion = promo;
+    if (ind === '+') result.check     = true;
+    if (ind === '#') result.checkmate = true;
+    return result;
+  }
+  // Capture, no disambig: Nxf3
+  / piece:$[KQBNPR] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
+  {
+    const to = file + rank;
+    const result = { capture: true, piece, to };
+    if (promo)       result.promotion = promo;
+    if (ind === '+') result.check     = true;
+    if (ind === '#') result.checkmate = true;
+    return result;
+  }
+  // Simple: Nf3
+  / piece:$[KQBNPR] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
+  {
+    const to = file + rank;
+    const result = { piece, to };
+    if (promo)       result.promotion = promo;
+    if (ind === '+') result.check     = true;
+    if (ind === '#') result.checkmate = true;
+    return result;
+  }
+
+PAWN_CAPTURE
+  = from:$[a-h] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
+  {
+    const to = file + rank;
+    const result = { capture: true, from, piece: 'P', to };
+    if (promo)       result.promotion = promo;
+    if (ind === '+') result.check     = true;
+    if (ind === '#') result.checkmate = true;
+    return result;
+  }
+
+PAWN_PUSH
+  = file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
+  {
+    const to = file + rank;
+    const result = { piece: 'P', to };
+    if (promo)       result.promotion = promo;
+    if (ind === '+') result.check     = true;
+    if (ind === '#') result.checkmate = true;
+    return result;
+  }
+
+PROMO
+  = "=" p:$[NBRQ] { return p; }
 
 // ─── RAV ─────────────────────────────────────────────────────────────────────
 
