@@ -8,6 +8,30 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.5.3] - 2026-03-14
+
+### Fixed
+
+- Castling moves with check or checkmate indicators (`O-O+`, `O-O#`, `O-O-O+`,
+  `O-O-O#`) now correctly set `check: true` / `checkmate: true` on the returned
+  Move object — previously the indicator was consumed and silently discarded
+- Security: pin `vite>=6.4.1`, `rollup>=4.59.0`, `glob>=10.5.0` via pnpm
+  overrides to resolve 8 Dependabot CVEs in devDependencies
+
+### Changed
+
+- Grammar: extract `applyIndicators` preamble helper to eliminate repeated
+  `promo`/`ind` logic across all SAN action blocks
+
+### Internal
+
+- Add `vitest.config.ts` to exclude `grammar.cjs` and bench files from coverage
+  reporting — coverage now reflects only authored source (`index.ts`)
+- Add explicit SAN unit tests for all grammar alternatives and indicator
+  combinations, covering patterns that snapshot tests cannot detect regressions
+  in (full-square disambiguation, castling indicators, promotion+checkmate,
+  etc.)
+
 ## [3.5.2] - 2026-03-14
 
 ### Fixed
