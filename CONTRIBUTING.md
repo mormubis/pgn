@@ -4,7 +4,7 @@ Thank you for your interest in contributing to `@echecs/pgn`.
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) >= 18
+- [Node.js](https://nodejs.org/) >= 20
 - [pnpm](https://pnpm.io/) (used as the package manager)
 
 ## Setup
