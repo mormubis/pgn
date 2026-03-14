@@ -31,8 +31,9 @@ opening book, or game viewer, you need more:
 - **NAG support** — symbolic (`!`, `?`, `!!`, `??`, `!?`, `?!`) and numeric
   (`$1`–`$255`) annotations are surfaced as an `annotations` array. Essential
   for Lichess and ChessBase exports.
-- **Multi-game files** — parse entire PGN databases in one call. Tested on files
-  with 3 500+ games.
+- **Multi-game files** — parse entire PGN databases in one call, or stream them
+  game-by-game with `stream()` for memory-efficient processing of large files.
+  Tested on files with 3 500+ games.
 - **Fast** — built on a [Peggy](https://peggyjs.org/) PEG parser. Throughput is
   within 1.1–1.2x of the fastest parsers on npm, which do far less work per move
   (see [BENCHMARK_RESULTS.md](./BENCHMARK_RESULTS.md)).
@@ -67,19 +68,41 @@ console.log(games[0].moves[0]);
 
 ## Usage
 
-`parse()` takes a PGN string and returns an array of game objects — one per game
-in the file.
+### `parse()`
+
+Takes a PGN string and returns an array of game objects — one per game in the
+file.
 
 ```typescript
 parse(input: string): PGN[]
+```
+
+### `stream()`
+
+Takes any `AsyncIterable<string>` and yields one `PGN` object per game. Memory
+usage stays proportional to one game at a time, making it suitable for large
+databases read from disk or a network stream.
+
+```typescript
+stream(input: AsyncIterable<string>): AsyncGenerator<PGN>
+```
+
+```typescript
+import { createReadStream } from 'node:fs';
+import { stream } from '@echecs/pgn';
+
+const chunks = createReadStream('database.pgn', { encoding: 'utf8' });
+for await (const game of stream(chunks)) {
+  console.log(game.meta.White, 'vs', game.meta.Black);
+}
 ```
 
 ### PGN object
 
 ```typescript
 {
-  meta:   Meta,   // tag pairs (Event, Site, Date, White, Black, …)
-  moves:  Moves,  // paired move list
+  meta:   Meta,      // tag pairs (Event, Site, Date, White, Black, …)
+  moves:  MoveList,  // paired move list
   result: 1 | 0 | 0.5 | '?'
 }
 ```
@@ -90,7 +113,7 @@ parse(input: string): PGN[]
 {
   piece:       'P' | 'R' | 'N' | 'B' | 'Q' | 'K', // always present
   to:          string,       // destination square, e.g. "e4"
-  from?:       string,       // disambiguation, e.g. "e" or "e2"
+  from?:       string,       // disambiguation: file "e", rank "2", or square "e2"
   capture?:    true,
   castling?:   true,
   check?:      true,
@@ -98,12 +121,13 @@ parse(input: string): PGN[]
   promotion?:  'R' | 'N' | 'B' | 'Q',
   annotations?: string[],   // e.g. ["!", "$14"]
   comment?:    string,
-  variants?:   Moves[],     // recursive annotation variations
+  variants?:   MoveList[],  // recursive annotation variations
 }
 ```
 
-Moves are grouped into tuples: `[moveNumber, whiteMove, blackMove]`. If the last
-move of a game or variation was made by white, `blackMove` is `undefined`.
+Moves are grouped into tuples: `[moveNumber, whiteMove, blackMove]`. Both move
+slots can be `undefined` — `whiteMove` when a variation begins on black's turn,
+`blackMove` when the game or variation ends on white's move.
 
 ### Annotations and comments
 
