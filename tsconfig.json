@@ -1,33 +1,22 @@
 {
   "compilerOptions": {
-    /* Base Options: */
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "ESNext",
     "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true,
-
-    /* Strictness */
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-
-    /* If transpiling with TypeScript: */
-    "module": "NodeNext",
-    "sourceMap": true,
-    "outDir": "dist/",
-    "rootDir": "src/",
-
-    /* AND if you're building for a library: */
     "declaration": true,
-
-    /* If your code doesn't run in the DOM: */
+    "esModuleInterop": true,
+    "isolatedModules": true,
     "lib": ["ESNext"],
-
-    /* Grammar outputs a lot of implicit any errors: */
-    "noImplicitAny": false
+    "module": "NodeNext",
+    "moduleDetection": "force",
+    "noImplicitAny": false,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "outDir": "dist/",
+    "resolveJsonModule": true,
+    "rootDir": "src/",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "ESNext"
   },
   "include": ["src/**/*"]
 }
