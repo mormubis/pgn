@@ -138,10 +138,13 @@ export async function* stream(
     }
   }
 
+  // Any remainder in the buffer after all chunks are consumed has no result
+  // token — the grammar requires one, so parse() will always return [] for it.
+  // Drain the generator to reset buffer/scanOffset state cleanly.
   for (const gameString of extractGames(true)) {
     const games = parse(gameString);
-    if (games.length > 0) {
-      yield games[0] as PGN;
+    for (const game of games) {
+      yield game;
     }
   }
 }

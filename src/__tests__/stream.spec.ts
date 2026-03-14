@@ -114,4 +114,29 @@ describe('stream()', () => {
     expect(games).toHaveLength(1);
     expect(games[0]?.meta['Event']).toBe('Sicilian 1-0 Attack');
   });
+
+  it('flushes a game whose input has no result token', async () => {
+    // Input with no result token — the remainder-flush path in extractGames(true)
+    // parse() will return [] for this malformed input, so stream yields nothing
+    const pgn = `[Event "Truncated"]
+[White "A"]
+[Black "B"]
+
+1. e4 e5`;
+    const games = await collect(stream(chunksOf(pgn, 1024)));
+    expect(games).toHaveLength(0);
+  });
+
+  it('yields a valid game flushed from the buffer after all chunks are consumed', async () => {
+    // Deliver the entire game in one chunk with no trailing whitespace or
+    // newline after the result token. The regex lookahead (?=[ \t\n\r]|$)
+    // matches $ only at the very end of the string — but v8 regex with /g
+    // and lastIndex set mid-string does not see $ as end-of-string.
+    // So the result token is NOT matched during the main loop; instead
+    // it lands in the final extractGames(true) remainder-flush path.
+    const pgn = '[Event "B"]\n[Result "0-1"]\n\n1. d4 0-1';
+    const games = await collect(stream(fromArray([pgn])));
+    expect(games).toHaveLength(1);
+    expect(games[0]?.meta['Event']).toBe('B');
+  });
 });

@@ -47,4 +47,8 @@ describe('PGN Parser', () => {
       );
     });
   }
+
+  it('returns [] for malformed input', () => {
+    expect(parse('not valid pgn !!!')).toEqual([]);
+  });
 });
