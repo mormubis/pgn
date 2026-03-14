@@ -8,6 +8,27 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.5.0] - 2026-03-14
+
+### Added
+
+- `stream(input: AsyncIterable<string>): AsyncGenerator<PGN>` — new named export
+  for incremental, memory-efficient parsing of large PGN databases
+
+### Changed
+
+- `Move.from` widened from `File | Rank` to `Disambiguation`
+  (`Square | File | Rank`) to correctly type fully-disambiguated moves (e.g.
+  `Qd1xe4` → `from: "d1"`)
+- `type Moves` renamed to `MoveList`; new
+  `MovePair = [number, Move | undefined, Move?]` tuple
+- `type Variation` simplified to `MoveList[]`
+
+### Performance
+
+- Restructured `SAN` grammar rule to eliminate post-match regex on every move;
+  closes remaining ~1.1–1.2x gap vs `pgn-parser` on move-heavy fixtures
+
 ## [3.4.0] - 2026-02-21
 
 ### Changed
