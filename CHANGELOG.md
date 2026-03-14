@@ -8,6 +8,18 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.5.2] - 2026-03-14
+
+### Fixed
+
+- Benchmark: `benko.pgn` moved to multi-game group and compared with the correct
+  `parseGames` API — previously called `parseGame` (single-game), causing all
+  comparison parsers to error
+- Benchmark: `comments.pgn` BOM (`U+FEFF`) now stripped before parsing, enabling
+  comparison against `@mliebelt/pgn-parser` and `pgn-parser`
+- Benchmark: fixture exclusion reasons documented in `BENCHMARK_RESULTS.md` and
+  in bench source comments
+
 ## [3.5.1] - 2026-03-14
 
 ### Changed
