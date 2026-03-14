@@ -62,20 +62,45 @@ export async function* stream(
   input: AsyncIterable<string>,
 ): AsyncGenerator<PGN> {
   let buffer = '';
-  let depth = 0; // bracket depth — tracks {…} comment nesting
+  let depth = 0; // brace depth — tracks {…} comment nesting
+  let inString = false; // whether we're inside a "…" tag value string
+  let scanOffset = 0; // first index in buffer not yet scanned for state changes
 
-  function* flush(final: boolean): Generator<string> {
-    // Scan buffer for RESULT tokens at depth 0
+  function* extractGames(final: boolean): Generator<string> {
+    // Single-pass scan: update depth/inString state from scanOffset onward,
+    // and check for RESULT tokens at depth 0 across the full unscanned region.
+    // Token detection starts from lastIndex (always 0 on entry) so that tokens
+    // whose first character precedes scanOffset are still found.
     const re = /(?:1-0|0-1|1\/2-1\/2|\*)(?=[ \t\n\r]|$)/g;
     let lastIndex = 0;
 
     for (let index = 0; index < buffer.length; index++) {
       const ch = buffer[index];
-      if (ch === '{') {
-        depth++;
-      } else if (ch === '}') {
-        depth = Math.max(0, depth - 1);
-      } else if (depth === 0) {
+
+      // Update state only for newly-seen characters
+      if (index >= scanOffset) {
+        if (inString) {
+          if (ch === '"') {
+            inString = false;
+          }
+          continue;
+        }
+        if (ch === '{') {
+          depth++;
+          continue;
+        }
+        if (ch === '}') {
+          depth = Math.max(0, depth - 1);
+          continue;
+        }
+        if (ch === '"' && depth === 0) {
+          inString = true;
+          continue;
+        }
+      }
+
+      // Token detection: only at depth 0, outside strings, in unscanned content
+      if (!inString && depth === 0 && index >= lastIndex) {
         re.lastIndex = index;
         const m = re.exec(buffer);
         if (m && m.index === index) {
@@ -92,14 +117,20 @@ export async function* stream(
       if (remainder.length > 0) {
         yield remainder;
       }
+      buffer = '';
+      scanOffset = 0;
+    } else {
+      buffer = buffer.slice(lastIndex);
+      // After trimming lastIndex chars from the front, adjust scanOffset.
+      // We scanned the full old buffer, so new scanOffset = old buffer.length - lastIndex
+      // = new buffer.length.
+      scanOffset = buffer.length;
     }
-
-    buffer = buffer.slice(lastIndex);
   }
 
   for await (const chunk of input) {
     buffer += chunk;
-    for (const gameString of flush(false)) {
+    for (const gameString of extractGames(false)) {
       const games = parse(gameString);
       if (games.length > 0) {
         yield games[0] as PGN;
@@ -107,7 +138,7 @@ export async function* stream(
     }
   }
 
-  for (const gameString of flush(true)) {
+  for (const gameString of extractGames(true)) {
     const games = parse(gameString);
     if (games.length > 0) {
       yield games[0] as PGN;

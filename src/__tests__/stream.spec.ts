@@ -93,4 +93,25 @@ describe('stream()', () => {
     const games = await collect(stream(fromArray([singleGame])));
     expect(games).toHaveLength(1);
   });
+
+  it('handles comments that span chunk boundaries', async () => {
+    const pgn = `[Event "Test"]
+[Result "1-0"]
+
+1. e4 { a long comment } e5 1-0`;
+    // Use chunk size of 20 to force the comment to span multiple chunks
+    const games = await collect(stream(chunksOf(pgn, 20)));
+    expect(games).toHaveLength(1);
+    expect(games[0]?.result).toBe(1);
+  });
+
+  it('handles result tokens inside tag values', async () => {
+    const pgn = `[Event "Sicilian 1-0 Attack"]
+[Result "1-0"]
+
+1. e4 c5 1-0`;
+    const games = await collect(stream(chunksOf(pgn, 1024)));
+    expect(games).toHaveLength(1);
+    expect(games[0]?.meta['Event']).toBe('Sicilian 1-0 Attack');
+  });
 });
