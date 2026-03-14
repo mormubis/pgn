@@ -1,11 +1,11 @@
 import parser from './grammar.cjs';
 
-type Disambiguation = Square | File | Rank;
 type File = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
 type Piece = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
 type Rank = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
 type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
 type Square = `${File}${Rank}`;
+type Disambiguation = Square | File | Rank;
 
 interface Meta {
   Result: Result;
@@ -26,7 +26,7 @@ interface Move {
   variants?: Variation;
 }
 
-type MovePair = [number, Move, Move?];
+type MovePair = [number, Move | undefined, Move?];
 type MoveList = MovePair[];
 
 interface PGN {
