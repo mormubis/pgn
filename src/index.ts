@@ -111,7 +111,9 @@ export default function parse(input: string, options?: ParseOptions): PGN[] {
   const cleaned = input.replace(/^\uFEFF/, '').replaceAll(/^\s+|\s+$/g, '');
 
   try {
-    const games = parser.parse(cleaned) as PGN[];
+    const games = parser.parse(cleaned, {
+      onWarning: options?.onWarning,
+    }) as PGN[];
     warnMissingSTR(games, options);
     return games;
   } catch (error) {

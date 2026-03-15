@@ -1,4 +1,8 @@
 {{
+  // Module-level variable set once per parse() call via the per-parse initializer.
+  // Holds the user-supplied onWarning callback (or null when not provided).
+  let _warn = null;
+
   function applyIndicators(result, promo, ind) {
     if (promo)       result.promotion = promo;
     if (ind === '+') result.check     = true;
@@ -31,7 +35,16 @@
       const long   = raw.long;
 
       if (number !== undefined && number !== moveNum) {
-        console.warn(`Warning: Move number mismatch - ${number}`);
+        if (_warn) {
+          _warn({
+            column: 1,
+            line: 1,
+            message: `Move number mismatch: expected ${moveNum}, got ${number}`,
+            offset: 0,
+          });
+        } else {
+          console.warn(`Warning: Move number mismatch - ${number}`);
+        }
       }
 
       // Build the clean output object — only public Move fields.
@@ -67,6 +80,13 @@
     }
   }
 }}
+
+{
+  // options is Peggy's options object; user-supplied keys pass through unchanged.
+  // _warn is set once per parse() call so pairMoves (global scope) can access it.
+  // @ts-expect-error — Peggy interop: options type is narrower than actual object
+  _warn = typeof options?.onWarning === 'function' ? options.onWarning : null;
+}
 
 // ─── DATABASE ────────────────────────────────────────────────────────────────
 

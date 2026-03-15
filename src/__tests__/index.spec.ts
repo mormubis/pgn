@@ -126,6 +126,24 @@ describe('PGN Parser', () => {
     expect(() => parse('1. e4 1-0')).not.toThrow();
   });
 
+  it('calls onWarning for a move number mismatch', () => {
+    const warnings: unknown[] = [];
+    // Move numbers are wrong — 1. e4 is labelled as move 5
+    const pgn =
+      '[Event "E"]\n[Site "S"]\n[Date "2000.01.01"]\n[Round "1"]\n' +
+      '[White "W"]\n[Black "B"]\n[Result "1-0"]\n\n5. e4 e5 1-0';
+    const result = parse(pgn, { onWarning: (w) => warnings.push(w) });
+    expect(result).toHaveLength(1);
+    expect(
+      warnings.some(
+        (w) =>
+          typeof w === 'object' &&
+          w !== null &&
+          /Move number mismatch/.test((w as { message: string }).message),
+      ),
+    ).toBe(true);
+  });
+
   it('calls onError with parse error information', () => {
     const errors: unknown[] = [];
     // "XBAD" starts at offset 0, line 1, column 1 — gives a concrete anchor
