@@ -67,9 +67,20 @@ export async function* stream(
   let scanOffset = 0; // first index in buffer not yet scanned for state changes
 
   function* extractGames(final: boolean): Generator<string> {
-    // Pass 1: advance persistent depth/inString state over newly-seen characters
+    // Single O(n) pass: update persistent depth/inString state for newly-seen
+    // characters AND detect result tokens at depth 0.
+    //
+    // Result tokens (1-0, 0-1, 1/2-1/2, *) are only attempted at characters
+    // '1', '0', '*' when depth === 0 and !inString. The regex is only executed
+    // at those candidate positions and advances its search forward each time,
+    // so total regex work is O(n) across the scan.
+    const re = /(?:1-0|0-1|1\/2-1\/2|\*)(?=[ \t\n\r]|$)/g;
+    let lastIndex = 0;
+
     for (let i = scanOffset; i < buffer.length; i++) {
       const ch = buffer[i];
+
+      // State updates for depth and string tracking
       if (inString) {
         if (ch === '"') {
           inString = false;
@@ -84,52 +95,29 @@ export async function* stream(
         depth = Math.max(0, depth - 1);
         continue;
       }
+      // Quotes inside braces are not string delimiters (PGN tag values only
+      // appear at depth 0).
       if (ch === '"' && depth === 0) {
         inString = true;
         continue;
       }
-    }
-    scanOffset = buffer.length;
 
-    // Pass 2: single forward scan to find result tokens at depth 0.
-    // Local state re-derived from scratch so the regex advances monotonically.
-    const re = /(?:1-0|0-1|1\/2-1\/2|\*)(?=[ \t\n\r]|$)/g;
-    let scanDepth = 0;
-    let scanInString = false;
-    let lastIndex = 0;
-
-    for (let i = 0; i < buffer.length; i++) {
-      const ch = buffer[i];
-      if (scanInString) {
-        if (ch === '"') {
-          scanInString = false;
-        }
-        continue;
-      }
-      if (ch === '{') {
-        scanDepth++;
-        continue;
-      }
-      if (ch === '}') {
-        scanDepth = Math.max(0, scanDepth - 1);
-        continue;
-      }
-      if (ch === '"' && scanDepth === 0) {
-        scanInString = true;
-        continue;
-      }
-
-      if (scanDepth === 0) {
+      // Token detection: only at depth 0, and only at characters that can start
+      // a result token ('1', '0', '*'). This avoids invoking the regex on every
+      // depth-0 character — regex is called at most once per candidate.
+      if (depth === 0 && (ch === '1' || ch === '0' || ch === '*')) {
         re.lastIndex = i;
         const m = re.exec(buffer);
         if (m && m.index === i) {
           const end = i + m[0].length;
           yield buffer.slice(lastIndex, end);
           lastIndex = end;
-          i = end - 1;
+          i = end - 1; // outer loop will increment past the consumed token
         }
       }
     }
+
+    scanOffset = buffer.length;
 
     if (final && lastIndex < buffer.length) {
       const remainder = buffer.slice(lastIndex).trim();
@@ -139,6 +127,9 @@ export async function* stream(
       buffer = '';
       scanOffset = 0;
     } else {
+      // Trim consumed games from the buffer. depth/inString already account for
+      // the full old buffer, so scanOffset = new buffer.length marks it as
+      // fully state-scanned.
       buffer = buffer.slice(lastIndex);
       scanOffset = buffer.length;
     }
