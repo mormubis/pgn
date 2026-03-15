@@ -138,6 +138,17 @@ describe('stream()', () => {
     expect(games[1]?.meta['Event']).toBe('G2');
   });
 
+  it('forwards onWarning through stream() for games with missing STR tags', async () => {
+    const warnings: unknown[] = [];
+    const games = await collect(
+      stream(fromArray(['1. e4 1-0\n']), {
+        onWarning: (w) => warnings.push(w),
+      }),
+    );
+    expect(games).toHaveLength(1);
+    expect(warnings).toHaveLength(7);
+  });
+
   it('calls onError for malformed game chunks with a result token', async () => {
     const errors: unknown[] = [];
     const games: unknown[] = [];

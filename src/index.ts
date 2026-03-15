@@ -46,6 +46,42 @@ export interface ParseError {
 
 export interface ParseOptions {
   onError?: (error: ParseError) => void;
+  onWarning?: (warning: ParseWarning) => void;
+}
+
+export interface ParseWarning {
+  column: number;
+  line: number;
+  message: string;
+  offset: number;
+}
+
+const STR_TAGS = [
+  'Black',
+  'Date',
+  'Event',
+  'Result',
+  'Round',
+  'Site',
+  'White',
+] as const;
+
+function warnMissingSTR(games: PGN[], options: ParseOptions | undefined): void {
+  if (!options?.onWarning) {
+    return;
+  }
+  for (const game of games) {
+    for (const key of STR_TAGS) {
+      if (!(key in game.meta)) {
+        options.onWarning({
+          column: 1,
+          line: 1,
+          message: `Missing STR tag: ${key}`,
+          offset: 0,
+        });
+      }
+    }
+  }
 }
 
 function toParseError(thrown: unknown): ParseError {
@@ -72,7 +108,9 @@ export default function parse(input: string, options?: ParseOptions): PGN[] {
   const cleaned = input.replace(/^\uFEFF/, '').replaceAll(/^\s+|\s+$/g, '');
 
   try {
-    return parser.parse(cleaned) as PGN[];
+    const games = parser.parse(cleaned) as PGN[];
+    warnMissingSTR(games, options);
+    return games;
   } catch (error) {
     options?.onError?.(toParseError(error));
     return [];

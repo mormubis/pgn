@@ -99,6 +99,33 @@ describe('PGN Parser', () => {
     expect(result[1]?.result).toBe(0);
   });
 
+  it('calls onWarning for each missing STR tag', () => {
+    const warnings: unknown[] = [];
+    // Tagless game — all 7 STR tags missing
+    const result = parse('1. e4 1-0', { onWarning: (w) => warnings.push(w) });
+    expect(result).toHaveLength(1);
+    expect(warnings).toHaveLength(7);
+    expect(warnings[0]).toMatchObject({
+      column: 1,
+      line: 1,
+      message: expect.stringMatching(/^Missing STR tag:/),
+      offset: 0,
+    });
+  });
+
+  it('does not call onWarning when all STR tags are present', () => {
+    const warnings: unknown[] = [];
+    const pgn =
+      '[Event "E"]\n[Site "S"]\n[Date "2000.01.01"]\n[Round "1"]\n' +
+      '[White "W"]\n[Black "B"]\n[Result "1-0"]\n\n1. e4 1-0';
+    parse(pgn, { onWarning: (w) => warnings.push(w) });
+    expect(warnings).toHaveLength(0);
+  });
+
+  it('does not throw when onWarning is omitted', () => {
+    expect(() => parse('1. e4 1-0')).not.toThrow();
+  });
+
   it('calls onError with parse error information', () => {
     const errors: unknown[] = [];
     // "XBAD" starts at offset 0, line 1, column 1 — gives a concrete anchor
