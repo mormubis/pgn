@@ -127,6 +127,17 @@ describe('stream()', () => {
     expect(games).toHaveLength(0);
   });
 
+  it('does not lose a game when a result token straddles a chunk boundary', async () => {
+    // Regression test: if chunk 1 ends with '1' (start of '1-0') and chunk 2
+    // begins with '-0', the token must still be detected and both games yielded.
+    const game1 = '[Event "G1"]\n[Result "1-0"]\n\n1. e4 1';
+    const game2 = '-0\n\n[Event "G2"]\n[Result "0-1"]\n\n1. d4 0-1';
+    const games = await collect(stream(fromArray([game1, game2])));
+    expect(games).toHaveLength(2);
+    expect(games[0]?.meta['Event']).toBe('G1');
+    expect(games[1]?.meta['Event']).toBe('G2');
+  });
+
   it('calls onError for malformed game chunks with a result token', async () => {
     const errors: unknown[] = [];
     const games: unknown[] = [];

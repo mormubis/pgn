@@ -95,45 +95,56 @@ export async function* stream(
   let scanOffset = 0; // first index in buffer not yet scanned for state changes
 
   function* extractGames(final: boolean): Generator<string> {
-    // Single O(n) pass: update persistent depth/inString state for newly-seen
-    // characters AND detect result tokens at depth 0.
+    // Combined state-update and token-detection pass.
+    //
+    // State updates (depth/inString) only run for newly-seen characters
+    // (index >= scanOffset). Token detection also covers a lookback window of
+    // MAX_TOKEN_LEN-1 = 6 positions before scanOffset so that result tokens
+    // that straddle a chunk boundary (e.g. '1' at end of chunk N, '-0' at
+    // start of chunk N+1) are not missed. The depth/inString state at those
+    // positions is already correct from the previous call.
     //
     // Result tokens (1-0, 0-1, 1/2-1/2, *) are only attempted at characters
-    // '1', '0', '*' when depth === 0 and !inString. The regex is only executed
-    // at those candidate positions and advances its search forward each time,
-    // so total regex work is O(n) across the scan.
+    // '1', '0', '*' when depth === 0 and !inString — O(n) regex work.
+    const MAX_TOKEN_LEN = 7; // len("1/2-1/2")
     const re = /(?:1-0|0-1|1\/2-1\/2|\*)(?=[ \t\n\r]|$)/g;
     let lastIndex = 0;
+    const tokenStart = Math.max(0, scanOffset - (MAX_TOKEN_LEN - 1));
 
-    for (let index = scanOffset; index < buffer.length; index++) {
+    for (let index = tokenStart; index < buffer.length; index++) {
       const ch = buffer[index];
 
-      // State updates for depth and string tracking
-      if (inString) {
-        if (ch === '"') {
-          inString = false;
+      // State updates only for newly-seen characters
+      if (index >= scanOffset) {
+        if (inString) {
+          if (ch === '"') {
+            inString = false;
+          }
+          continue;
         }
-        continue;
-      }
-      if (ch === '{') {
-        depth++;
-        continue;
-      }
-      if (ch === '}') {
-        depth = Math.max(0, depth - 1);
-        continue;
-      }
-      // Quotes inside braces are not string delimiters (PGN tag values only
-      // appear at depth 0).
-      if (ch === '"' && depth === 0) {
-        inString = true;
-        continue;
+        if (ch === '{') {
+          depth++;
+          continue;
+        }
+        if (ch === '}') {
+          depth = Math.max(0, depth - 1);
+          continue;
+        }
+        // Quotes inside braces are not string delimiters (PGN tag values only
+        // appear at depth 0).
+        if (ch === '"' && depth === 0) {
+          inString = true;
+          continue;
+        }
       }
 
-      // Token detection: only at depth 0, and only at characters that can start
-      // a result token ('1', '0', '*'). This avoids invoking the regex on every
-      // depth-0 character — regex is called at most once per candidate.
-      if (depth === 0 && (ch === '1' || ch === '0' || ch === '*')) {
+      // Token detection at depth 0, only at characters that can start a
+      // result token ('1', '0', '*'). Regex is called at most once per candidate.
+      if (
+        !inString &&
+        depth === 0 &&
+        (ch === '1' || ch === '0' || ch === '*')
+      ) {
         re.lastIndex = index;
         const m = re.exec(buffer);
         if (m && m.index === index) {
