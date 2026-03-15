@@ -34,17 +34,13 @@
       const number = raw.number;
       const long   = raw.long;
 
-      if (number !== undefined && number !== moveNum) {
-        if (_warn) {
-          _warn({
-            column: 1,
-            line: 1,
-            message: `Move number mismatch: expected ${moveNum}, got ${number}`,
-            offset: 0,
-          });
-        } else {
-          console.warn(`Warning: Move number mismatch - ${number}`);
-        }
+      if (_warn && number !== undefined && number !== moveNum) {
+        _warn({
+          column: 1,
+          line: 1,
+          message: `Move number mismatch: expected ${moveNum}, got ${number}`,
+          offset: 0,
+        });
       }
 
       // Build the clean output object — only public Move fields.

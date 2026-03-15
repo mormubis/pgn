@@ -134,14 +134,13 @@ describe('PGN Parser', () => {
       '[White "W"]\n[Black "B"]\n[Result "1-0"]\n\n5. e4 e5 1-0';
     const result = parse(pgn, { onWarning: (w) => warnings.push(w) });
     expect(result).toHaveLength(1);
-    expect(
-      warnings.some(
-        (w) =>
-          typeof w === 'object' &&
-          w !== null &&
-          /Move number mismatch/.test((w as { message: string }).message),
-      ),
-    ).toBe(true);
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toMatchObject({
+      column: 1,
+      line: 1,
+      message: 'Move number mismatch: expected 1, got 5',
+      offset: 0,
+    });
   });
 
   it('calls onError with parse error information', () => {
