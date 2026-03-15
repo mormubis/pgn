@@ -87,6 +87,7 @@ export default function parse(input: string, options?: ParseOptions): PGN[] {
  */
 export async function* stream(
   input: AsyncIterable<string>,
+  options?: ParseOptions,
 ): AsyncGenerator<PGN> {
   let buffer = '';
   let depth = 0; // brace depth — tracks {…} comment nesting
@@ -165,7 +166,7 @@ export async function* stream(
   for await (const chunk of input) {
     buffer += chunk;
     for (const gameString of extractGames(false)) {
-      const games = parse(gameString);
+      const games = parse(gameString, options);
       if (games.length > 0) {
         yield games[0] as PGN;
       }
@@ -176,7 +177,7 @@ export async function* stream(
   // token — the grammar requires one, so parse() will always return [] for it.
   // Drain the generator to reset buffer/scanOffset state cleanly.
   for (const gameString of extractGames(true)) {
-    const games = parse(gameString);
+    const games = parse(gameString, options);
     for (const game of games) {
       yield game;
     }

@@ -127,6 +127,24 @@ describe('stream()', () => {
     expect(games).toHaveLength(0);
   });
 
+  it('calls onError for malformed game chunks with a result token', async () => {
+    const errors: unknown[] = [];
+    const games: unknown[] = [];
+    for await (const game of stream(fromArray(['XBAD 1-0\n']), {
+      onError: (error) => errors.push(error),
+    })) {
+      games.push(game);
+    }
+    expect(games).toHaveLength(0);
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toMatchObject({
+      column: 1,
+      line: 1,
+      message: expect.stringMatching(/Expected|expected/i),
+      offset: 0,
+    });
+  });
+
   it('yields a valid game flushed from the buffer after all chunks are consumed', async () => {
     // Deliver the entire game in one chunk with no trailing whitespace or
     // newline after the result token. The regex lookahead (?=[ \t\n\r]|$)
