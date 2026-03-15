@@ -178,6 +178,9 @@ export async function* stream(
   }
 
   for await (const chunk of input) {
+    // Strip BOM when the buffer is empty (i.e. before any content has been
+    // accumulated). This covers both the first chunk and the degenerate case
+    // where the BOM arrives as its own chunk followed by the rest of the input.
     if (buffer.length === 0) {
       buffer = chunk.replace(/^\uFEFF/, '');
     } else {
