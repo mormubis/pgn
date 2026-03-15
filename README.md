@@ -135,6 +135,31 @@ for await (const game of stream(chunks, { onError: console.error })) {
 > (truncated input). Incomplete input at end-of-stream is treated as expected
 > behaviour, not a parse error.
 
+### Warnings
+
+Pass `onWarning` to observe spec-compliance issues that do not prevent parsing:
+
+```typescript
+import parse, { type ParseWarning } from '@echecs/pgn';
+
+const games = parse(input, {
+  onWarning(warn: ParseWarning) {
+    console.warn(warn.message);
+  },
+});
+```
+
+`onWarning` receives a `ParseWarning` with the same fields as `ParseError`:
+`message`, `offset`, `line`, `column`.
+
+Currently fires for: missing STR tags (`Event`, `Site`, `Date`, `Round`,
+`White`, `Black`, `Result`). Warnings are emitted in alphabetical key order.
+
+The same option is accepted by `stream()`.
+
+> **Note:** `onWarning` position fields (`offset`, `line`, `column`) are nominal
+> placeholders — missing tags have no source location.
+
 ### PGN object
 
 ```typescript

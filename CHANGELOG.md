@@ -8,6 +8,25 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.7.0] - 2026-03-15
+
+### Added
+
+- `onWarning` option for `parse()` and `stream()`: fires once per missing STR
+  tag (`Event`, `Site`, `Date`, `Round`, `White`, `Black`, `Result`). Warnings
+  are emitted in alphabetical key order.
+- `ParseWarning` is now an exported type with the same shape as `ParseError`.
+
+### Fixed
+
+- `parse()` and `stream()` now strip a UTF-8 BOM (`\uFEFF`) at the start of
+  input. Chessbase and Windows editors commonly produce BOM-prefixed PGN files
+  that previously failed silently.
+- Tag values containing escaped quotes (`\"`) or escaped backslashes (`\\`) now
+  parse correctly per PGN spec section 7.
+- Games with no tag pairs (bare move list + result) now parse correctly per PGN
+  spec section 8.1 ("zero or more tag pairs"). These games return `meta: {}`.
+
 ## [3.6.2] - 2026-03-15
 
 ### Performance
