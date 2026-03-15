@@ -60,7 +60,8 @@ describe('PGN Parser', () => {
   });
 
   it('handles escaped quotes in tag values', () => {
-    const pgn = String.raw`[Event "\"Café\""]` + '\n[Result "1-0"]\n\n1. e4 1-0';
+    const pgn =
+      String.raw`[Event "\"Café\""]` + '\n[Result "1-0"]\n\n1. e4 1-0';
     const result = parse(pgn);
     expect(result).toHaveLength(1);
     expect(result[0]?.meta['Event']).toBe('"Café"');
@@ -71,6 +72,14 @@ describe('PGN Parser', () => {
     const result = parse(pgn);
     expect(result).toHaveLength(1);
     expect(result[0]?.meta['Site']).toBe(String.raw`A\B`);
+  });
+
+  it('handles a backslash immediately followed by an escaped quote', () => {
+    // PGN tag value "A\\\"B" should produce A\"B (backslash then quote)
+    const pgn = String.raw`[Event "A\\\"B"]` + '\n[Result "1-0"]\n\n1. e4 1-0';
+    const result = parse(pgn);
+    expect(result).toHaveLength(1);
+    expect(result[0]?.meta['Event']).toBe('A\\"B');
   });
 
   it('calls onError with parse error information', () => {
