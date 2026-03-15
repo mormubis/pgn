@@ -13,8 +13,8 @@ and this project adheres to
 ### Added
 
 - `onWarning` option for `parse()` and `stream()`: fires once per missing STR
-  tag (`Event`, `Site`, `Date`, `Round`, `White`, `Black`, `Result`). Warnings
-  are emitted in alphabetical key order.
+  tag. Emitted in alphabetical key order: `Black`, `Date`, `Event`, `Result`,
+  `Round`, `Site`, `White`.
 - `ParseWarning` is now an exported type with the same shape as `ParseError`.
 
 ### Fixed
