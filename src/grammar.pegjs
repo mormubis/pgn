@@ -100,13 +100,32 @@ GAME
 
 TAGS
   = head:TAG tail:(_ t:TAG { return t; })*
-  { return Object.assign({}, head, ...tail); }
+  {
+    const all = [head, ...tail];
+    if (_warn) {
+      const seen = Object.create(null);
+      for (const tag of all) {
+        const key = tag._key;
+        if (seen[key]) {
+          _warn({
+            column: tag._loc.column,
+            line: tag._loc.line,
+            message: `Duplicate tag: "${key}"`,
+            offset: tag._loc.offset,
+          });
+        }
+        seen[key] = true;
+      }
+      return Object.assign({}, ...all.map(({ _key: _, _loc: __, ...rest }) => rest));
+    }
+    return Object.assign({}, ...all);
+  }
   / ""
   { return {}; }
 
 TAG
   = "[" _ id:IDENTIFIER _ val:STRING _ "]"
-  { return { [id]: val }; }
+  { return _warn ? { _key: id, _loc: location().start, [id]: val } : { [id]: val }; }
 
 IDENTIFIER
   = $[a-zA-Z0-9_]+

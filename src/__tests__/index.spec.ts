@@ -186,6 +186,44 @@ describe('PGN Parser', () => {
     ).toBe(true);
   });
 
+  it('calls onWarning for a duplicate tag name', () => {
+    const warnings: unknown[] = [];
+    const pgn =
+      '[Event "First"]\n[Event "Second"]\n[Result "1-0"]\n\n1. e4 1-0';
+    const result = parse(pgn, { onWarning: (w) => warnings.push(w) });
+    expect(result).toHaveLength(1);
+    // Last-write-wins: meta.Event should be "Second"
+    expect(result[0]?.meta['Event']).toBe('Second');
+    expect(
+      warnings.some(
+        (w) =>
+          typeof w === 'object' &&
+          w !== null &&
+          /Duplicate tag.*Event/.test((w as { message: string }).message),
+      ),
+    ).toBe(true);
+  });
+
+  it('reports exact line and column for the duplicate tag', () => {
+    const warnings: unknown[] = [];
+    // Line 1: [Event "First"], line 2: [Event "Second"] — duplicate is at line 2, col 1
+    const pgn =
+      '[Event "First"]\n[Event "Second"]\n[Result "1-0"]\n\n1. e4 1-0';
+    parse(pgn, { onWarning: (w) => warnings.push(w) });
+    interface Warning {
+      column: number;
+      line: number;
+      message: string;
+      offset: number;
+    }
+    const dupe = (warnings as Warning[]).find((w) =>
+      /Duplicate tag.*Event/.test(w.message),
+    );
+    expect(dupe).toBeDefined();
+    expect(dupe?.line).toBe(2);
+    expect(dupe?.column).toBe(1);
+  });
+
   it('calls onError with parse error information', () => {
     const errors: unknown[] = [];
     // "XBAD" starts at offset 0, line 1, column 1 — gives a concrete anchor
