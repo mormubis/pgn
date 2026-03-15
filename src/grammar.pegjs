@@ -8,26 +8,30 @@
 
   function pairMoves(moves, start) {
     start = start ?? 0;
-    const acc = [];
+    const half = start >> 1;
+    const acc = new Array(Math.ceil((moves.length + (start & 1)) / 2));
     for (let i = 0; i < moves.length; i++) {
       const si = start + i;
-      const isWhite = si % 2 === 0;
-      const index = (si - (isWhite ? 0 : 1)) >> 1;
+      const isWhite = (si & 1) === 0;
+      const pairIdx = (si >> 1) - half;
 
-      if (acc[index] === undefined) {
-        acc[index] = [index + 1, undefined];
+      const moveNum = (si >> 1) + 1;
+      if (acc[pairIdx] === undefined) {
+        acc[pairIdx] = [moveNum, undefined];
       }
 
-      const { number, long, ...move } = moves[i];
+      const move = moves[i];
+      const number = move.number;
+      const long = move.long;
+      delete move.number;
+      delete move.long;
 
-      if (number !== undefined && number !== index + 1) {
+      if (number !== undefined && number !== moveNum) {
         console.warn(`Warning: Move number mismatch - ${number}`);
       }
 
       if (move.castling) {
-        move.to = isWhite
-          ? (long ? 'c1' : 'g1')
-          : (long ? 'c8' : 'g8');
+        move.to = isWhite ? (long ? 'c1' : 'g1') : (long ? 'c8' : 'g8');
       }
 
       if (move.variants) {
@@ -36,9 +40,9 @@
         );
       }
 
-      acc[index][isWhite ? 1 : 2] = move;
+      acc[pairIdx][isWhite ? 1 : 2] = move;
     }
-    return start === 0 ? acc : acc.slice(start >> 1);
+    return acc;
   }
 
   function mapResult(result) {
