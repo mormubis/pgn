@@ -8,6 +8,15 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.8.2] - 2026-03-15
+
+### Fixed
+
+- `comment_multiline` now handles one level of nested braces
+  (`{ see {Fischer} 1972 }`). Previously the comment terminated at the first
+  `}`, causing the rest of the game to fail to parse. Real-world PGN from GUI
+  exports commonly contains embedded `{…}` spans inside comments.
+
 ## [3.8.1] - 2026-03-15
 
 ### Fixed
