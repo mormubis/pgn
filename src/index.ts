@@ -69,7 +69,7 @@ function toParseError(thrown: unknown): ParseError {
  * @param input
  */
 export default function parse(input: string, options?: ParseOptions): PGN[] {
-  const cleaned = input.replaceAll(/^\s+|\s+$/g, '');
+  const cleaned = input.replace(/^\uFEFF/, '').replaceAll(/^\s+|\s+$/g, '');
 
   try {
     return parser.parse(cleaned) as PGN[];
@@ -178,7 +178,11 @@ export async function* stream(
   }
 
   for await (const chunk of input) {
-    buffer += chunk;
+    if (buffer.length === 0) {
+      buffer = chunk.replace(/^\uFEFF/, '');
+    } else {
+      buffer += chunk;
+    }
     for (const gameString of extractGames(false)) {
       const games = parse(gameString, options);
       if (games.length > 0) {

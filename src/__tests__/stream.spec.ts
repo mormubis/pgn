@@ -156,6 +156,13 @@ describe('stream()', () => {
     });
   });
 
+  it('strips a UTF-8 BOM from the start of the first chunk', async () => {
+    const pgn = '[Event "Test"]\n[Result "1-0"]\n\n1. e4 1-0';
+    const games = await collect(stream(fromArray(['\uFEFF' + pgn])));
+    expect(games).toHaveLength(1);
+    expect(games[0]?.meta['Event']).toBe('Test');
+  });
+
   it('yields a valid game flushed from the buffer after all chunks are consumed', async () => {
     // Deliver the entire game in one chunk with no trailing whitespace or
     // newline after the result token. The regex lookahead (?=[ \t\n\r]|$)

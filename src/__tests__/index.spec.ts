@@ -52,6 +52,13 @@ describe('PGN Parser', () => {
     expect(parse('not valid pgn !!!')).toEqual([]);
   });
 
+  it('strips a UTF-8 BOM from the start of input', () => {
+    const withBom = '\uFEFF[Event "Test"]\n[Result "1-0"]\n\n1. e4 1-0';
+    const result = parse(withBom);
+    expect(result).toHaveLength(1);
+    expect(result[0]?.meta['Event']).toBe('Test');
+  });
+
   it('calls onError with parse error information', () => {
     const errors: unknown[] = [];
     // "XBAD" starts at offset 0, line 1, column 1 — gives a concrete anchor

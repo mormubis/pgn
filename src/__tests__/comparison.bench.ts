@@ -8,9 +8,7 @@ import parse from '../index.js';
 
 function readFile(path: string): string {
   const filename = require.resolve(path);
-  // Strip BOM (U+FEFF) — some fixtures are saved with a byte-order mark that
-  // @mliebelt/pgn-parser and pgn-parser do not accept.
-  return readFileSync(filename, 'utf8').replace(/^\uFEFF/, '');
+  return readFileSync(filename, 'utf8');
 }
 
 // Load all fixture files
