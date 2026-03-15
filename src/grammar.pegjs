@@ -104,7 +104,9 @@ MOVE
     if (num !== null) san.number = num;
     if (nags.length > 0) {
       const out = [];
-      for (let i = 0; i < nags.length; i++) { if (nags[i]) out.push(nags[i]); }
+      for (let i = 0; i < nags.length; i++) {
+        if (nags[i]) { out.push(nags[i]); }
+      }
       if (out.length > 0) san.annotations = out;
     }
     if (comments.length > 0) {
