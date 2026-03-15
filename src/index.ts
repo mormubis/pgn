@@ -8,8 +8,8 @@ type Square = `${File}${Rank}`;
 type Disambiguation = Square | File | Rank;
 
 interface Meta {
-  Result: Result;
-  [key: string]: string;
+  Result?: Result;
+  [key: string]: string | undefined;
 }
 
 interface Move {

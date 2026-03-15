@@ -88,6 +88,7 @@ describe('PGN Parser', () => {
     expect(result).toHaveLength(1);
     expect(result[0]?.meta).toEqual({});
     expect(result[0]?.result).toBe(1);
+    expect(result[0]?.meta.Result).toBeUndefined();
   });
 
   it('parses a mixed file with tagged and tagless games', () => {
