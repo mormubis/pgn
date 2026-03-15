@@ -255,6 +255,14 @@ describe('PIECE_MOVE', () => {
   });
 });
 
+it('rejects promotion on a non-pawn piece: Nf3=Q', () => {
+  expect(white('Nf3=Q')).toBeUndefined();
+});
+
+it('rejects promotion on a non-pawn capture: Nxf3=Q', () => {
+  expect(white('Nxf3=Q')).toBeUndefined();
+});
+
 // ─── PAWN_PUSH ───────────────────────────────────────────────────────────────
 
 describe('PAWN_PUSH', () => {

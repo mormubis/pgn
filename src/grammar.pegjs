@@ -193,29 +193,29 @@ CASTLING
 
 PIECE_MOVE
   // Full-square disambig + capture: Qd1xe4
-  = piece:$[KQBNPR] df:$[a-h] dr:$[1-8] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  { return applyIndicators({ capture: true, from: df + dr, piece, to: file + rank }, promo, ind); }
+  = piece:$[KQBNPR] df:$[a-h] dr:$[1-8] "x" file:$[a-h] rank:$[1-8] ind:$[+#]?
+  { return applyIndicators({ capture: true, from: df + dr, piece, to: file + rank }, undefined, ind); }
   // Full-square disambig, no capture: Qd1e4
-  / piece:$[KQBNPR] df:$[a-h] dr:$[1-8] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  { return applyIndicators({ from: df + dr, piece, to: file + rank }, promo, ind); }
+  / piece:$[KQBNPR] df:$[a-h] dr:$[1-8] file:$[a-h] rank:$[1-8] ind:$[+#]?
+  { return applyIndicators({ from: df + dr, piece, to: file + rank }, undefined, ind); }
   // File disambig + capture: Naxb4
-  / piece:$[KQBNPR] df:$[a-h] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  { return applyIndicators({ capture: true, from: df, piece, to: file + rank }, promo, ind); }
+  / piece:$[KQBNPR] df:$[a-h] "x" file:$[a-h] rank:$[1-8] ind:$[+#]?
+  { return applyIndicators({ capture: true, from: df, piece, to: file + rank }, undefined, ind); }
   // Rank disambig + capture: N1xf3
-  / piece:$[KQBNPR] dr:$[1-8] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  { return applyIndicators({ capture: true, from: dr, piece, to: file + rank }, promo, ind); }
+  / piece:$[KQBNPR] dr:$[1-8] "x" file:$[a-h] rank:$[1-8] ind:$[+#]?
+  { return applyIndicators({ capture: true, from: dr, piece, to: file + rank }, undefined, ind); }
   // File disambig, no capture: Nbd7
-  / piece:$[KQBNPR] df:$[a-h] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  { return applyIndicators({ from: df, piece, to: file + rank }, promo, ind); }
+  / piece:$[KQBNPR] df:$[a-h] file:$[a-h] rank:$[1-8] ind:$[+#]?
+  { return applyIndicators({ from: df, piece, to: file + rank }, undefined, ind); }
   // Rank disambig, no capture: N1f3
-  / piece:$[KQBNPR] dr:$[1-8] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  { return applyIndicators({ from: dr, piece, to: file + rank }, promo, ind); }
+  / piece:$[KQBNPR] dr:$[1-8] file:$[a-h] rank:$[1-8] ind:$[+#]?
+  { return applyIndicators({ from: dr, piece, to: file + rank }, undefined, ind); }
   // Capture, no disambig: Nxf3
-  / piece:$[KQBNPR] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  { return applyIndicators({ capture: true, piece, to: file + rank }, promo, ind); }
+  / piece:$[KQBNPR] "x" file:$[a-h] rank:$[1-8] ind:$[+#]?
+  { return applyIndicators({ capture: true, piece, to: file + rank }, undefined, ind); }
   // Simple: Nf3
-  / piece:$[KQBNPR] file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  { return applyIndicators({ piece, to: file + rank }, promo, ind); }
+  / piece:$[KQBNPR] file:$[a-h] rank:$[1-8] ind:$[+#]?
+  { return applyIndicators({ piece, to: file + rank }, undefined, ind); }
 
 PAWN_CAPTURE
   = from:$[a-h] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
