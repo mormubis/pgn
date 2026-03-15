@@ -8,6 +8,18 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.8.1] - 2026-03-15
+
+### Fixed
+
+- `PIECE_MOVE` no longer accepts promotion syntax (`=Q`, `=N`, etc.) on non-pawn
+  pieces. `Nf3=Q` previously parsed silently and produced a `Move` object with a
+  nonsensical `promotion` field; it now causes a parse failure. Only `PAWN_PUSH`
+  and `PAWN_CAPTURE` accept the `PROMO` suffix, as required by the PGN spec.
+- `Meta.Result` is now typed as optional (`Result?: Result`) to reflect that
+  tagless games (no tag pairs) return `meta: {}` with no `Result` key. The field
+  was previously typed as required, which was incorrect at runtime.
+
 ## [3.8.0] - 2026-03-15
 
 ### Added
