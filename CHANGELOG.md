@@ -8,6 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.8.3] - 2026-03-15
+
+### Added
+
+- `stream()` now accepts a Web Streams `ReadableStream<string>` in addition to
+  `AsyncIterable<string>`. This covers
+  `fetch().body.pipeThrough(new TextDecoderStream())` in browser and edge
+  runtimes. The type signature is widened accordingly — no behaviour change for
+  existing `AsyncIterable` callers.
+
 ## [3.8.2] - 2026-03-15
 
 ### Fixed
