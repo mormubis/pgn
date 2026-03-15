@@ -8,6 +8,33 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.6.0] - 2026-03-15
+
+### Added
+
+- `onError` option for `parse()` and `stream()`: pass
+  `onError: (err: ParseError) => void` to observe parse failures instead of
+  silently receiving `[]`. `ParseError` carries `message`, `offset`, `line`, and
+  `column` from the Peggy parser.
+- `ParseError` and `ParseOptions` are now exported types.
+
+### Changed
+
+- `stream()` accepts an optional second argument `options?: ParseOptions`
+  (backward-compatible).
+
+### Performance
+
+- Grammar `MOVE` action block: eliminated per-move object spread (`{ ...san }`)
+  and replaced `filter`/`join` chains with explicit loops — reduces heap
+  allocation on every move.
+- `pairMoves`: pre-sized accumulator with `new Array(...)` and removed
+  rest-spread destructuring — avoids per-move object creation and reduces V8
+  array resizing.
+- `stream()` boundary scanner: now O(n) per chunk — regex is only attempted at
+  characters that can start a result token (`1`, `0`, `*`) rather than at every
+  depth-0 character.
+
 ## [3.5.3] - 2026-03-14
 
 ### Fixed

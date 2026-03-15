@@ -97,6 +97,40 @@ for await (const game of stream(chunks)) {
 }
 ```
 
+### Error handling
+
+By default, `parse()` and `stream()` silently return `[]` / skip games on parse
+failure. Pass an `onError` callback to observe failures:
+
+```typescript
+import parse, { type ParseError } from '@echecs/pgn';
+
+const games = parse(input, {
+  onError(err: ParseError) {
+    console.error(
+      `Parse failed at line ${err.line}:${err.column} — ${err.message}`,
+    );
+  },
+});
+```
+
+The same option is accepted by `stream()`:
+
+```typescript
+for await (const game of stream(chunks, { onError: console.error })) {
+  // …
+}
+```
+
+`onError` receives a `ParseError` with:
+
+| Field     | Type     | Description                                |
+| --------- | -------- | ------------------------------------------ |
+| `message` | `string` | Human-readable description from the parser |
+| `offset`  | `number` | Character offset in the input (0-based)    |
+| `line`    | `number` | 1-based line number                        |
+| `column`  | `number` | 1-based column number                      |
+
 ### PGN object
 
 ```typescript
