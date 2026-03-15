@@ -74,18 +74,21 @@ Takes a PGN string and returns an array of game objects — one per game in the
 file.
 
 ```typescript
-parse(input: string): PGN[]
+parse(input: string, options?: ParseOptions): PGN[]
 ```
 
 ### `stream()`
 
-Takes any `AsyncIterable<string>` and yields one `PGN` object per game. Memory
-usage stays proportional to one game at a time, making it suitable for large
-databases read from disk or a network stream.
+Takes any `AsyncIterable<string>` or Web Streams `ReadableStream<string>` and
+yields one `PGN` object per game. Memory usage stays proportional to one game at
+a time, making it suitable for large databases read from disk or a network
+stream.
 
 ```typescript
-stream(input: AsyncIterable<string>): AsyncGenerator<PGN>
+stream(input: AsyncIterable<string> | ReadableStream<string>, options?: ParseOptions): AsyncGenerator<PGN>
 ```
+
+**Node.js (file):**
 
 ```typescript
 import { createReadStream } from 'node:fs';
@@ -93,6 +96,18 @@ import { stream } from '@echecs/pgn';
 
 const chunks = createReadStream('database.pgn', { encoding: 'utf8' });
 for await (const game of stream(chunks)) {
+  console.log(game.meta.White, 'vs', game.meta.Black);
+}
+```
+
+**Browser / edge (fetch):**
+
+```typescript
+import { stream } from '@echecs/pgn';
+
+const response = await fetch('database.pgn');
+const text = response.body.pipeThrough(new TextDecoderStream());
+for await (const game of stream(text)) {
   console.log(game.meta.White, 'vs', game.meta.Black);
 }
 ```
@@ -175,6 +190,10 @@ The same option is accepted by `stream()`.
   result: 1 | 0 | 0.5 | '?'
 }
 ```
+
+`meta` is an index of all tag pairs from the PGN header. The `Result` key is
+optional — games with no tag pairs return `meta: {}`. Use `game.result` (always
+present) as the authoritative game outcome.
 
 ### Move object
 
