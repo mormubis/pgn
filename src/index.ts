@@ -84,6 +84,9 @@ export default function parse(input: string, options?: ParseOptions): PGN[] {
  * Memory usage stays proportional to one game at a time.
  *
  * @param input - Any AsyncIterable<string> (Node.js readable stream, fetch body, etc.)
+ * @param options - Optional. Pass `onError` to observe parse failures instead of
+ *   silently skipping malformed games. Not called for truncated streams (input
+ *   ending without a result token).
  */
 export async function* stream(
   input: AsyncIterable<string>,
