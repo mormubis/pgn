@@ -87,6 +87,34 @@ function warnMissingSTR(games: PGN[], options: ParseOptions | undefined): void {
   }
 }
 
+const RESULT_TO_STR: Readonly<Record<string, string>> = {
+  '0': '0-1',
+  '0.5': '1/2-1/2',
+  '1': '1-0',
+  '?': '*',
+};
+
+function warnResultMismatch(
+  games: PGN[],
+  options: ParseOptions | undefined,
+): void {
+  if (!options?.onWarning) {
+    return;
+  }
+  for (const game of games) {
+    const tagResult = game.meta['Result'];
+    const tokenResult = RESULT_TO_STR[String(game.result)];
+    if (tagResult !== undefined && tagResult !== tokenResult) {
+      options.onWarning({
+        column: 1,
+        line: 1,
+        message: `Result tag "${tagResult}" does not match game termination marker "${tokenResult ?? String(game.result)}"`,
+        offset: 0,
+      });
+    }
+  }
+}
+
 function toParseError(thrown: unknown): ParseError {
   if (thrown !== null && typeof thrown === 'object' && 'message' in thrown) {
     const error = thrown as Record<string, unknown>;
@@ -115,6 +143,7 @@ export default function parse(input: string, options?: ParseOptions): PGN[] {
       onWarning: options?.onWarning,
     }) as PGN[];
     warnMissingSTR(games, options);
+    warnResultMismatch(games, options);
     return games;
   } catch (error) {
     options?.onError?.(toParseError(error));

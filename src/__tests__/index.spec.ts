@@ -143,6 +143,41 @@ describe('PGN Parser', () => {
     });
   });
 
+  it('calls onWarning when Result tag does not match termination marker', () => {
+    const warnings: unknown[] = [];
+    // Tag says 1/2-1/2 but game ends with 1-0
+    const pgn =
+      '[Event "E"]\n[Site "S"]\n[Date "2000.01.01"]\n[Round "1"]\n' +
+      '[White "W"]\n[Black "B"]\n[Result "1/2-1/2"]\n\n1. e4 1-0';
+    const result = parse(pgn, { onWarning: (w) => warnings.push(w) });
+    expect(result).toHaveLength(1);
+    // Only the result mismatch warning — no missing STR warnings (all present)
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toMatchObject({
+      column: 1,
+      line: 1,
+      message:
+        'Result tag "1/2-1/2" does not match game termination marker "1-0"',
+      offset: 0,
+    });
+  });
+
+  it('does not call onWarning when Result tag matches termination marker', () => {
+    const warnings: unknown[] = [];
+    const pgn =
+      '[Event "E"]\n[Site "S"]\n[Date "2000.01.01"]\n[Round "1"]\n' +
+      '[White "W"]\n[Black "B"]\n[Result "1-0"]\n\n1. e4 1-0';
+    parse(pgn, { onWarning: (w) => warnings.push(w) });
+    expect(
+      warnings.some(
+        (w) =>
+          typeof w === 'object' &&
+          w !== null &&
+          /Result tag/.test((w as { message: string }).message),
+      ),
+    ).toBe(false);
+  });
+
   it('calls onError with parse error information', () => {
     const errors: unknown[] = [];
     // "XBAD" starts at offset 0, line 1, column 1 — gives a concrete anchor
