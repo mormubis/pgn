@@ -8,6 +8,17 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.6.2] - 2026-03-15
+
+### Performance
+
+- `pairMoves`: replaced `delete move.number; delete move.long` with an explicit
+  clean output object constructed from only the known public `Move` fields.
+  `delete` was fragmenting V8 hidden classes across move objects with different
+  optional fields (e.g. promotion moves), causing megamorphic deoptimisation and
+  GC pressure. `promotion.pgn` gap vs `pgn-parser` restored from 1.26x to 1.06x;
+  `long.pgn` and `twic.pgn` also improved.
+
 ## [3.6.1] - 2026-03-15
 
 ### Fixed

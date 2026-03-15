@@ -22,22 +22,33 @@
         acc[pairIdx] = [moveNum, undefined];
       }
 
-      const move = moves[i];
-      const number = move.number;
-      const long = move.long;
-      delete move.number;
-      delete move.long;
+      // Read internal bookkeeping fields off the raw grammar object.
+      // We never put them on the output — building an explicit clean object
+      // keeps V8 hidden classes consistent across all moves in the array,
+      // avoiding megamorphic deoptimisation from `delete`.
+      const raw = moves[i];
+      const number = raw.number;
+      const long   = raw.long;
 
       if (number !== undefined && number !== moveNum) {
         console.warn(`Warning: Move number mismatch - ${number}`);
       }
 
-      if (move.castling) {
+      // Build the clean output object — only public Move fields.
+      const move = { piece: raw.piece, to: raw.to };
+      if (raw.from      !== undefined) { move.from      = raw.from; }
+      if (raw.capture   !== undefined) { move.capture   = raw.capture; }
+      if (raw.castling  !== undefined) {
+        move.castling = raw.castling;
         move.to = isWhite ? (long ? 'c1' : 'g1') : (long ? 'c8' : 'g8');
       }
-
-      if (move.variants) {
-        move.variants = move.variants.map((variant) =>
+      if (raw.check     !== undefined) { move.check     = raw.check; }
+      if (raw.checkmate !== undefined) { move.checkmate = raw.checkmate; }
+      if (raw.promotion !== undefined) { move.promotion = raw.promotion; }
+      if (raw.annotations !== undefined) { move.annotations = raw.annotations; }
+      if (raw.comment   !== undefined) { move.comment   = raw.comment; }
+      if (raw.variants  !== undefined) {
+        move.variants = raw.variants.map((variant) =>
           pairMoves(variant, si)
         );
       }
