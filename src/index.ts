@@ -151,19 +151,53 @@ export default function parse(input: string, options?: ParseOptions): PGN[] {
   }
 }
 
+// Minimal structural type for the Web Streams ReadableStream<string>.
+// Avoids pulling in the full DOM lib while still accepting any conforming
+// ReadableStream implementation (browser, Node.js 18+, edge runtimes).
+interface StringReadableStream {
+  getReader(): {
+    read(): Promise<{ done: boolean; value: string | undefined }>;
+    releaseLock(): void;
+  };
+}
+
+async function* readableStreamToIterable(
+  rs: StringReadableStream,
+): AsyncGenerator<string> {
+  const reader = rs.getReader();
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      if (value !== undefined) {
+        yield value;
+      }
+    }
+  } finally {
+    reader.releaseLock();
+  }
+}
+
 /**
- * Stream-parse a PGN AsyncIterable, yielding one PGN object per game.
- * Memory usage stays proportional to one game at a time.
+ * Stream-parse a PGN AsyncIterable or Web Streams ReadableStream, yielding
+ * one PGN object per game. Memory usage stays proportional to one game at a time.
  *
- * @param input - Any AsyncIterable<string> (Node.js readable stream, fetch body, etc.)
+ * @param input - Any AsyncIterable<string> or ReadableStream<string>
+ *   (Node.js readable stream, fetch body piped through TextDecoderStream, etc.)
  * @param options - Optional. Pass `onError` to observe parse failures instead of
  *   silently skipping malformed games. Not called for truncated streams (input
  *   ending without a result token).
  */
 export async function* stream(
-  input: AsyncIterable<string>,
+  input: AsyncIterable<string> | StringReadableStream,
   options?: ParseOptions,
 ): AsyncGenerator<PGN> {
+  if ('getReader' in input) {
+    yield* stream(readableStreamToIterable(input), options);
+    return;
+  }
   let buffer = '';
   let depth = 0; // brace depth — tracks {…} comment nesting
   let inString = false; // whether we're inside a "…" tag value string

@@ -190,6 +190,33 @@ describe('stream()', () => {
     expect(games[0]?.meta['Event']).toBe('Test');
   });
 
+  it('accepts a Web Streams ReadableStream<string>', async () => {
+    const rs = new ReadableStream<string>({
+      start(controller) {
+        controller.enqueue(singleGame);
+        controller.close();
+      },
+    });
+    const games = await collect(stream(rs));
+    expect(games).toHaveLength(1);
+    expect(games[0]?.meta['White']).toBe('A');
+  });
+
+  it('accepts a Web Streams ReadableStream<string> with multiple chunks', async () => {
+    const rs = new ReadableStream<string>({
+      start(controller) {
+        for (let i = 0; i < twoGames.length; i += 5) {
+          controller.enqueue(twoGames.slice(i, i + 5));
+        }
+        controller.close();
+      },
+    });
+    const games = await collect(stream(rs));
+    expect(games).toHaveLength(2);
+    expect(games[0]?.meta['Event']).toBe('Game 1');
+    expect(games[1]?.meta['Event']).toBe('Game 2');
+  });
+
   it('yields a valid game flushed from the buffer after all chunks are consumed', async () => {
     // Deliver the entire game in one chunk with no trailing whitespace or
     // newline after the result token. The regex lookahead (?=[ \t\n\r]|$)
