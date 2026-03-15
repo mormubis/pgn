@@ -8,6 +8,27 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.8.0] - 2026-03-15
+
+### Added
+
+- `onWarning` now fires for move number mismatches (e.g. `5. e4` appearing as
+  the first move). Previously emitted unconditionally to `console.warn`; now
+  routed through `onWarning` when provided. `console.warn` is no longer called
+  for move number mismatches — if you relied on it, add an `onWarning` callback.
+- `onWarning` fires when the `[Result "..."]` tag value does not match the game
+  termination marker at the end of the movetext (e.g. `[Result "1/2-1/2"]` with
+  a `1-0` termination marker).
+- `onWarning` fires for duplicate tag names (same tag appearing more than once
+  in the tag pair section). The `line` and `column` fields point to the opening
+  `[` of the duplicate — exact source position, not a nominal placeholder.
+
+### Changed
+
+- Move number mismatch no longer emits to `console.warn` when `onWarning` is not
+  provided. It is now silently ignored, consistent with how missing STR tag
+  warnings are handled.
+
 ## [3.7.0] - 2026-03-15
 
 ### Added

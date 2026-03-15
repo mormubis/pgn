@@ -152,13 +152,19 @@ const games = parse(input, {
 `onWarning` receives a `ParseWarning` with the same fields as `ParseError`:
 `message`, `offset`, `line`, `column`.
 
-Currently fires for: missing STR tags (`Event`, `Site`, `Date`, `Round`,
-`White`, `Black`, `Result`). Warnings are emitted in alphabetical key order.
+Currently fires for:
+
+- Missing STR tags (`Black`, `Date`, `Event`, `Result`, `Round`, `Site`,
+  `White`) — emitted in alphabetical key order; position fields are nominal
+  placeholders
+- Move number mismatch (declared move number in the PGN text doesn't match the
+  move's actual position) — position fields are nominal placeholders
+- Result tag mismatch (`[Result "..."]` tag value differs from the game
+  termination marker) — position fields are nominal placeholders
+- Duplicate tag names — `line` and `column` point to the opening `[` of the
+  duplicate tag
 
 The same option is accepted by `stream()`.
-
-> **Note:** `onWarning` position fields (`offset`, `line`, `column`) are nominal
-> placeholders — missing tags have no source location.
 
 ### PGN object
 
