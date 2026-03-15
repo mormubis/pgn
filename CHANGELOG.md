@@ -8,6 +8,23 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.6.1] - 2026-03-15
+
+### Fixed
+
+- `stream()`: result tokens straddling a chunk boundary (e.g. `1` at end of
+  chunk N, `-0` at start of chunk N+1) were silently missed, causing the two
+  affected games to be merged and the second game to be lost. The boundary
+  scanner now looks back up to 6 characters into already-scanned content on each
+  chunk to catch split tokens.
+- `stream()`: `onError` was incorrectly forwarded to the remainder-flush path,
+  causing it to fire for truncated streams (input ending without a result token)
+  — which is expected behaviour, not a parse error. The remainder-flush path now
+  calls `parse()` without options.
+- `toParseError`: `ParseError.offset` was always `0` — the field was being read
+  from the top level of the Peggy error object, which does not exist. It is now
+  correctly read from `location.start.offset`.
+
 ## [3.6.0] - 2026-03-15
 
 ### Added
