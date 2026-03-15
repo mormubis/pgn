@@ -25,69 +25,73 @@ Comparative benchmarks for `@echecs/pgn` against three alternative PGN parsers:
 
 ```
 name                         hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn           14,728.52  0.0559  0.3120  0.0679  0.0675  0.1365  0.1525  0.1865  ±0.44%     7365
-@mliebelt/pgn-parser  14,755.77  0.0560  0.2483  0.0678  0.0673  0.1400  0.1659  0.2152  ±0.44%     7378
-pgn-parser            15,607.40  0.0528  0.2849  0.0641  0.0636  0.1334  0.1540  0.1913  ±0.43%     7804
-chess.js               1,511.79  0.5784  0.9565  0.6615  0.6817  0.8531  0.8693  0.9565  ±0.56%      757
+@echecs/pgn           14,789.06  0.0551  0.4954  0.0676  0.0670  0.1415  0.1582  0.2028  ±0.52%     7395
+@mliebelt/pgn-parser  14,470.25  0.0566  0.3342  0.0691  0.0699  0.1419  0.1607  0.1951  ±0.44%     7236
+pgn-parser            15,931.77  0.0522  0.3125  0.0628  0.0629  0.1272  0.1444  0.1967  ±0.40%     7966
+chess.js               1,515.36  0.5917  1.0026  0.6599  0.6788  0.8349  0.8765  1.0026  ±0.54%      758
 ```
 
-**pgn-parser is 1.06x faster than @echecs/pgn**
+**pgn-parser is 1.08x faster than @echecs/pgn**
 
 ### checkmate.pgn
 
 ```
 name                         hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn           20,566.39  0.0408  0.4027  0.0486  0.0484  0.1047  0.1263  0.1787  ±0.44%    10284
-@mliebelt/pgn-parser  18,759.47  0.0415  2.4060  0.0533  0.0516  0.1412  0.1705  0.2682  ±1.16%     9380
-pgn-parser            21,686.68  0.0390  0.3672  0.0461  0.0461  0.0674  0.1164  0.1916  ±0.42%    10844
-chess.js               1,883.06  0.4647  1.7213  0.5311  0.5394  0.7115  0.7695  1.7213  ±0.74%      942
+@echecs/pgn           20,773.03  0.0395  0.2991  0.0481  0.0481  0.1075  0.1279  0.1634  ±0.43%    10387
+@mliebelt/pgn-parser  18,547.23  0.0410  2.3758  0.0539  0.0515  0.1426  0.1720  0.2134  ±1.15%     9274
+pgn-parser            20,404.68  0.0383  2.4034  0.0490  0.0467  0.1244  0.1808  0.3845  ±1.64%    10203
+chess.js               1,913.05  0.4495  0.9304  0.5227  0.5288  0.7230  0.7433  0.9304  ±0.53%      957
 ```
 
-**pgn-parser is 1.05x faster than @echecs/pgn**
+**@echecs/pgn is the fastest** at 20,773 hz (1.02x faster than pgn-parser)
 
-**@echecs/pgn leads @mliebelt/pgn-parser** at 20,566 hz vs 18,759 hz
+**@echecs/pgn leads @mliebelt/pgn-parser** at 20,773 hz vs 18,547 hz (1.12x)
 
 ### comment.pgn
 
 ```
 name                         hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn           10,480.54  0.0798  0.3642  0.0954  0.0955  0.1563  0.2333  0.2848  ±0.45%     5241
-@mliebelt/pgn-parser  11,058.80  0.0755  0.3431  0.0904  0.0910  0.1380  0.1663  0.2503  ±0.37%     5530
-pgn-parser            11,352.80  0.0736  0.3947  0.0881  0.0886  0.1370  0.2059  0.2569  ±0.43%     5677
-chess.js               1,391.05  0.6626  1.0401  0.7189  0.7262  0.9457  1.0019  1.0401  ±0.59%      696
+@echecs/pgn           10,398.13  0.0801  0.6268  0.0962  0.0966  0.1582  0.2418  0.2903  ±0.49%     5200
+@mliebelt/pgn-parser  11,243.95  0.0757  0.3724  0.0889  0.0890  0.1302  0.1884  0.2546  ±0.39%     5622
+pgn-parser            11,607.12  0.0740  0.4185  0.0862  0.0862  0.1169  0.1787  0.2744  ±0.41%     5804
+chess.js               1,407.13  0.6533  1.2865  0.7107  0.7160  0.8832  0.9035  1.2865  ±0.54%      704
 ```
 
-**pgn-parser is 1.08x faster than @echecs/pgn**
+**pgn-parser is 1.12x faster than @echecs/pgn**
 
 ### promotion.pgn
 
 ```
 name                         hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn           10,732.97  0.0760  0.6202  0.0932  0.0944  0.1462  0.2322  0.3065  ±0.54%     5367
-@mliebelt/pgn-parser  11,627.80  0.0734  0.3175  0.0860  0.0865  0.1324  0.1749  0.2464  ±0.38%     5814
-pgn-parser            12,187.98  0.0703  0.3785  0.0820  0.0824  0.1253  0.1721  0.2569  ±0.41%     6095
-chess.js                 982.52  0.9026  1.6171  1.0178  1.0651  1.3139  1.3211  1.6171  ±0.74%      492
+@echecs/pgn            9,864.76  0.0756  1.4228  0.1014  0.0910  0.3917  0.4550  0.6547  ±1.56%     4933
+@mliebelt/pgn-parser  11,758.79  0.0720  0.3327  0.0850  0.0850  0.1278  0.1642  0.2619  ±0.39%     5880
+pgn-parser            12,476.92  0.0699  0.3270  0.0801  0.0800  0.1066  0.1759  0.2528  ±0.38%     6239
+chess.js               1,047.13  0.9086  1.2013  0.9550  0.9676  1.1248  1.1882  1.2013  ±0.44%      524
 ```
 
-**pgn-parser is 1.14x faster than @echecs/pgn**
+**pgn-parser is 1.26x faster than @echecs/pgn**
+
+_Note: the high p99/p999 for `@echecs/pgn` (0.39–0.65ms vs 0.11–0.25ms for
+others) indicates GC pressure, likely from `delete` on move objects in
+`pairMoves` triggering V8 hidden class deoptimisation. Under investigation._
 
 ### single.pgn
 
 ```
 name                          hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn           133,400.23  0.0060  0.2061  0.0075  0.0073  0.0120  0.0174  0.0655  ±0.40%    66701
-@mliebelt/pgn-parser   78,424.57  0.0102  0.2901  0.0128  0.0124  0.0229  0.0331  0.1310  ±0.49%    39213
-pgn-parser            117,462.89  0.0064  4.6953  0.0085  0.0077  0.0317  0.0375  0.0536  ±1.91%    58732
-chess.js               34,724.30  0.0240  0.4342  0.0288  0.0284  0.0412  0.0604  0.1973  ±0.44%    17363
+@echecs/pgn           137,045.51  0.0059  0.2384  0.0073  0.0072  0.0102  0.0137  0.0328  ±0.36%    68523
+@mliebelt/pgn-parser   79,177.19  0.0101  0.2077  0.0126  0.0124  0.0208  0.0295  0.1231  ±0.44%    39589
+pgn-parser            118,797.55  0.0063  4.1907  0.0084  0.0077  0.0327  0.0382  0.0664  ±1.73%    59399
+chess.js               35,164.51  0.0233  0.2868  0.0284  0.0279  0.0459  0.0712  0.1922  ±0.45%    17583
 ```
 
-**@echecs/pgn is the fastest** at 133,400 hz (1.14x faster than pgn-parser)
+**@echecs/pgn is the fastest** at 137,046 hz (1.15x faster than pgn-parser)
 
 ### variants.pgn
 
 ```
 name                          hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn            46,766.14  0.0188  0.3337  0.0214  0.0208  0.0315  0.0366  0.1944  ±0.47%    23384
+@echecs/pgn            46,582.11  0.0179  0.3037  0.0215  0.0209  0.0297  0.0430  0.2118  ±0.53%    23292
 @mliebelt/pgn-parser           —      —       —      —       —       —       —       —        —        —
 pgn-parser                     —      —       —      —       —       —       —       —        —        —
 chess.js                       —      —       —      —       —       —       —       —        —        —
@@ -103,125 +107,127 @@ not support RAV sub-lines. `@mliebelt/pgn-parser` handles both but its
 
 ```
 name                        hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn           6,049.22  0.1505  0.4450  0.1653  0.1656  0.2517  0.3536  0.4160  ±0.48%     3025
-@mliebelt/pgn-parser  6,316.36  0.1400  0.5147  0.1583  0.1588  0.2559  0.3555  0.4275  ±0.51%     3159
-pgn-parser            6,732.40  0.1387  0.3834  0.1485  0.1491  0.2080  0.3225  0.3497  ±0.41%     3367
+@echecs/pgn           6,008.13  0.1415  0.4875  0.1664  0.1673  0.3120  0.3506  0.4127  ±0.55%     3005
+@mliebelt/pgn-parser  6,337.32  0.1326  0.4545  0.1578  0.1578  0.2497  0.3414  0.3896  ±0.50%     3169
+pgn-parser            6,628.08  0.1264  1.2461  0.1509  0.1515  0.2448  0.3072  0.3511  ±0.62%     3315
 ```
 
-**pgn-parser is 1.11x faster than @echecs/pgn**
+**pgn-parser is 1.10x faster than @echecs/pgn**
 
 ### comments.pgn (3 parsers; chess.js excluded)
 
 ```
 name                       hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn           350.67  2.6144  3.6388  2.8517  2.9156  3.4717  3.6388  3.6388  ±0.88%      176
-@mliebelt/pgn-parser  297.95  3.1053  3.8318  3.3563  3.4691  3.8191  3.8318  3.8318  ±0.75%      150
-pgn-parser            335.77  2.7935  3.8825  2.9782  3.0433  3.6266  3.8825  3.8825  ±0.80%      168
+@echecs/pgn           351.42  2.6667  3.3155  2.8456  2.9188  3.2657  3.3155  3.3155  ±0.74%      176
+@mliebelt/pgn-parser  296.63  3.1288  4.0607  3.3712  3.4641  3.9058  4.0607  4.0607  ±0.83%      149
+pgn-parser            331.39  2.7841  3.6922  3.0176  3.0752  3.4510  3.6922  3.6922  ±0.75%      166
 ```
 
-**@echecs/pgn is the fastest** — 1.04x faster than pgn-parser, 1.18x faster than
+**@echecs/pgn is the fastest** — 1.06x faster than pgn-parser, 1.18x faster than
 @mliebelt/pgn-parser
 
 ### games32.pgn (3 parsers; chess.js excluded)
 
 ```
 name                      hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn           399.03  2.3182  3.3233  2.5061  2.5569  3.0812  3.2573  3.3233  ±0.88%      200
-@mliebelt/pgn-parser  372.20  2.5256  3.5490  2.6868  2.7140  3.1420  3.5490  3.5490  ±0.73%      187
-pgn-parser            439.06  2.1198  2.7519  2.2776  2.3121  2.6862  2.7203  2.7519  ±0.72%      220
+@echecs/pgn           401.08  2.3334  3.0395  2.4933  2.5532  2.8492  2.8556  3.0395  ±0.66%      201
+@mliebelt/pgn-parser  374.61  2.4690  3.4971  2.6694  2.7489  3.2189  3.4971  3.4971  ±0.88%      188
+pgn-parser            440.58  2.1503  2.7173  2.2697  2.3233  2.5572  2.5749  2.7173  ±0.58%      221
 ```
 
 **pgn-parser is 1.10x faster than @echecs/pgn**
 
-**@echecs/pgn leads @mliebelt/pgn-parser** at 399 hz vs 372 hz
+**@echecs/pgn leads @mliebelt/pgn-parser** at 401 hz vs 375 hz
 
 ### lichess.pgn (3 parsers; chess.js excluded)
 
 ```
 name                        hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn           1,387.21  0.6671  1.0049  0.7209  0.7304  0.9265  0.9552  1.0049  ±0.53%      694
-@mliebelt/pgn-parser  1,302.23  0.7132  1.2136  0.7679  0.7740  1.0245  1.0706  1.2136  ±0.64%      652
-pgn-parser            1,395.63  0.6047  2.0292  0.7165  0.7003  1.4617  1.5817  2.0292  ±1.89%      698
+@echecs/pgn           1,375.12  0.6272  1.0896  0.7272  0.7315  0.9521  1.0073  1.0896  ±0.60%      688
+@mliebelt/pgn-parser  1,334.88  0.6803  1.2149  0.7491  0.7522  1.0539  1.1289  1.2149  ±0.67%      668
+pgn-parser            1,537.61  0.6073  1.1993  0.6504  0.6553  0.8655  0.9084  1.1993  ±0.56%      769
 ```
 
-**pgn-parser is effectively tied with @echecs/pgn** (1.01x)
+**pgn-parser is 1.12x faster than @echecs/pgn**
 
-**@echecs/pgn leads @mliebelt/pgn-parser** at 1,387 hz vs 1,302 hz
+**@echecs/pgn leads @mliebelt/pgn-parser** at 1,375 hz vs 1,335 hz
 
 ### multiple.pgn (3 parsers; chess.js excluded)
 
 ```
 name                        hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn           8,695.17  0.1025  0.3685  0.1150  0.1154  0.1871  0.2921  0.3234  ±0.48%     4348
-@mliebelt/pgn-parser  8,885.90  0.1013  0.4717  0.1125  0.1125  0.1871  0.2763  0.3551  ±0.52%     4443
-pgn-parser            8,481.77  0.0933  1.0031  0.1179  0.1085  0.4018  0.4976  0.6535  ±1.48%     4243
+@echecs/pgn           8,772.15  0.0967  0.3589  0.1140  0.1139  0.2032  0.2813  0.3223  ±0.49%     4387
+@mliebelt/pgn-parser  8,830.58  0.0938  0.4241  0.1132  0.1130  0.2049  0.2869  0.4132  ±0.58%     4416
+pgn-parser            9,583.70  0.0876  0.4339  0.1043  0.1044  0.1855  0.2745  0.3534  ±0.53%     4792
 ```
 
-**@echecs/pgn leads pgn-parser** at 8,695 hz vs 8,482 hz (new: previously 1.11x
-slower)
-
-**@mliebelt/pgn-parser leads @echecs/pgn** at 8,886 hz vs 8,695 hz (1.02x)
+**pgn-parser is 1.09x faster than @echecs/pgn**
 
 ### twic.pgn (3 parsers; chess.js excluded)
 
 ```
 name                        hz      min      max     mean      p75      p99     p995     p999      rme  samples
-@echecs/pgn           41.2570  23.3116  25.7296  24.2383  24.4917  25.7296  25.7296  25.7296  ±1.10%       21
-@mliebelt/pgn-parser  41.6188  23.0041  27.7857  24.0276  24.1597  27.7857  27.7857  27.7857  ±1.85%       21
-pgn-parser            46.6361  20.8195  22.1778  21.4426  21.7513  22.1778  22.1778  22.1778  ±0.88%       24
+@echecs/pgn           41.1455  23.4979  25.5975  24.3040  24.5153  25.5975  25.5975  25.5975  ±1.23%       21
+@mliebelt/pgn-parser  43.2050  22.3152  31.1391  23.1455  23.0082  31.1391  31.1391  31.1391  ±3.51%       22
+pgn-parser            47.9873  20.4604  21.3641  20.8389  21.0188  21.3641  21.3641  21.3641  ±0.51%       24
 ```
 
-**pgn-parser is 1.13x faster than @echecs/pgn**
+**pgn-parser is 1.17x faster than @echecs/pgn**
 
 ### long.pgn (Large fixture: ~3500 games; chess.js excluded)
 
 ```
 name                      hz     min     max    mean     p75     p99    p995    p999     rme  samples
-@echecs/pgn           2.9789  326.38  361.77  335.70  338.30  361.77  361.77  361.77  ±2.21%       10
-@mliebelt/pgn-parser  3.1889  303.84  325.95  313.59  322.36  325.95  325.95  325.95  ±1.86%       10
-pgn-parser            3.3487  295.32  304.13  298.62  299.62  304.13  304.13  304.13  ±0.75%       10
+@echecs/pgn           3.0004  327.24  341.54  333.28  337.27  341.54  341.54  341.54  ±1.03%       10
+@mliebelt/pgn-parser  3.2244  302.56  325.47  310.13  317.96  325.47  325.47  325.47  ±1.88%       10
+pgn-parser            3.4013  288.20  301.47  294.01  296.20  301.47  301.47  301.47  ±1.07%       10
 ```
 
-**pgn-parser is 1.12x faster than @echecs/pgn**
+**pgn-parser is 1.13x faster than @echecs/pgn**
 
 ## Summary
 
 | Fixture       | @echecs/pgn vs pgn-parser  | @echecs/pgn vs @mliebelt |
 | ------------- | -------------------------- | ------------------------ |
-| single.pgn    | **1.14x faster**           | **1.70x faster**         |
-| variants.pgn  | — (pgn-parser unsupported) | **1.15x faster**         |
-| comments.pgn  | **1.04x faster**           | **1.18x faster**         |
-| multiple.pgn  | **1.02x faster**           | 1.02x slower             |
-| lichess.pgn   | effectively tied (1.01x)   | **1.07x faster**         |
-| basic.pgn     | 1.06x slower               | effectively tied         |
-| checkmate.pgn | 1.05x slower               | **1.10x faster**         |
-| benko.pgn     | 1.11x slower               | 1.05x slower             |
-| comment.pgn   | 1.08x slower               | 1.05x slower             |
-| promotion.pgn | 1.14x slower               | 1.08x slower             |
+| single.pgn    | **1.15x faster**           | **1.73x faster**         |
+| variants.pgn  | — (pgn-parser unsupported) | **1.16x faster**         |
+| checkmate.pgn | **1.02x faster**           | **1.12x faster**         |
+| comments.pgn  | **1.06x faster**           | **1.18x faster**         |
+| basic.pgn     | 1.08x slower               | 1.02x faster             |
+| comment.pgn   | 1.12x slower               | 1.08x slower             |
+| benko.pgn     | 1.10x slower               | 1.05x slower             |
+| multiple.pgn  | 1.09x slower               | effectively tied         |
+| lichess.pgn   | 1.12x slower               | **1.03x faster**         |
 | games32.pgn   | 1.10x slower               | **1.07x faster**         |
-| twic.pgn      | 1.13x slower               | effectively tied         |
-| long.pgn      | 1.12x slower               | 1.07x faster             |
+| long.pgn      | 1.13x slower               | 1.07x faster             |
+| twic.pgn      | 1.17x slower               | 1.05x faster             |
+| promotion.pgn | 1.26x slower ⚠️            | 1.19x slower             |
 
 ## Key Findings
 
-1. **`@echecs/pgn` leads on `single.pgn`, `variants.pgn`, `comments.pgn`,
-   `multiple.pgn`, and `lichess.pgn`** — fixtures that exercise features the
-   other parsers partially or fully lack (RAVs, Unicode NAGs, heavy annotation
-   content) or where the allocation improvements from v3.6.0 have the most
-   impact.
+1. **`@echecs/pgn` leads on `single.pgn`, `variants.pgn`, `checkmate.pgn`, and
+   `comments.pgn`** — fixtures that exercise features the other parsers
+   partially or fully lack (RAVs, Unicode NAGs, heavy annotation content) or
+   where the v3.6.0 allocation improvements have the most impact.
 
-2. **Notable improvement on `multiple.pgn`**: previously 1.11x slower than
-   `pgn-parser`, now 1.02x faster — the grammar action block mutation-in-place
-   changes have measurable impact on multi-game files.
+2. **`checkmate.pgn` flipped**: previously 1.07x slower than `pgn-parser`, now
+   1.02x faster — the in-place SAN mutation changes are measurably helping
+   move-heavy fixtures with check/checkmate indicators.
 
-3. **Consistent ~1.05–1.14x gap vs `pgn-parser`** on most single-game move-heavy
-   fixtures, reflecting the different scope: `pgn-parser` outputs raw strings
+3. **`promotion.pgn` regression** (1.14x → 1.26x slower): the
+   `delete move.number; delete move.long` approach in `pairMoves` likely
+   triggers V8 hidden class deoptimisation on promotion moves, where the object
+   shape changes more than for ordinary moves. The elevated p99/p999 latency
+   confirms GC pressure. Under investigation for v3.6.1.
+
+4. **Consistent ~1.08–1.17x gap vs `pgn-parser`** on most move-heavy fixtures,
+   reflecting the structural scope difference: `pgn-parser` outputs raw strings
    and a flat move list; `@echecs/pgn` performs full SAN decomposition, castling
    resolution, move pairing, and result conversion.
 
-4. **`@echecs/pgn` beats `@mliebelt/pgn-parser`** on single, variants, comments,
-   checkmate, games32, and lichess — the majority of fixtures.
+5. **`@echecs/pgn` beats `@mliebelt/pgn-parser`** on single, variants,
+   checkmate, comments, lichess, and games32 — the majority of fixtures.
 
-5. **`variants.pgn` remains a genuine exclusion**: `pgn-parser` does not support
+6. **`variants.pgn` remains a genuine exclusion**: `pgn-parser` does not support
    Unicode NAG symbols; `chess.js` does not support RAV sub-lines. No fair
    comparison is possible.
