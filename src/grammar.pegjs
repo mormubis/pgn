@@ -85,6 +85,8 @@ GAME
 TAGS
   = head:TAG tail:(_ t:TAG { return t; })*
   { return Object.assign({}, head, ...tail); }
+  / ""
+  { return {}; }
 
 TAG
   = "[" _ id:IDENTIFIER _ val:STRING _ "]"

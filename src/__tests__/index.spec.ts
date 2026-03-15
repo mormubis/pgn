@@ -79,7 +79,24 @@ describe('PGN Parser', () => {
     const pgn = String.raw`[Event "A\\\"B"]` + '\n[Result "1-0"]\n\n1. e4 1-0';
     const result = parse(pgn);
     expect(result).toHaveLength(1);
-    expect(result[0]?.meta['Event']).toBe('A\\"B');
+    expect(result[0]?.meta['Event']).toBe(String.raw`A\"B`);
+  });
+
+  it('parses a game with no tags', () => {
+    const pgn = '1. e4 e5 2. Nf3 Nc6 1-0';
+    const result = parse(pgn);
+    expect(result).toHaveLength(1);
+    expect(result[0]?.meta).toEqual({});
+    expect(result[0]?.result).toBe(1);
+  });
+
+  it('parses a mixed file with tagged and tagless games', () => {
+    const pgn = '[Event "Tagged"]\n[Result "1-0"]\n\n1. e4 1-0\n\n1. d4 0-1';
+    const result = parse(pgn);
+    expect(result).toHaveLength(2);
+    expect(result[0]?.meta['Event']).toBe('Tagged');
+    expect(result[1]?.meta).toEqual({});
+    expect(result[1]?.result).toBe(0);
   });
 
   it('calls onError with parse error information', () => {
