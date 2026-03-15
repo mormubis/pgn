@@ -57,7 +57,7 @@ function toParseError(thrown: unknown): ParseError {
       column: typeof start?.['column'] === 'number' ? start['column'] : 1,
       line: typeof start?.['line'] === 'number' ? start['line'] : 1,
       message: String(error['message']),
-      offset: typeof error['offset'] === 'number' ? error['offset'] : 0,
+      offset: typeof start?.['offset'] === 'number' ? start['offset'] : 0,
     };
   }
   return { column: 1, line: 1, message: String(thrown), offset: 0 };

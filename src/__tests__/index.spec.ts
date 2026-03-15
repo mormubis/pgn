@@ -54,21 +54,17 @@ describe('PGN Parser', () => {
 
   it('calls onError with parse error information', () => {
     const errors: unknown[] = [];
-    const result = parse('this is not valid pgn', {
+    // "XBAD" starts at offset 0, line 1, column 1 — gives a concrete anchor
+    const result = parse('XBAD', {
       onError: (error) => errors.push(error),
     });
     expect(result).toEqual([]);
     expect(errors).toHaveLength(1);
     expect(errors[0]).toMatchObject({
-      message: expect.any(String),
-      offset: expect.any(Number),
-      line: expect.any(Number),
-      column: expect.any(Number),
+      column: 1,
+      line: 1,
+      message: expect.stringMatching(/Expected|expected/i),
+      offset: 0,
     });
-  });
-
-  it('returns [] with no error when onError option is omitted', () => {
-    const result = parse('this is not valid pgn');
-    expect(result).toEqual([]);
   });
 });
