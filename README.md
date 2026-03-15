@@ -131,6 +131,10 @@ for await (const game of stream(chunks, { onError: console.error })) {
 | `line`    | `number` | 1-based line number                        |
 | `column`  | `number` | 1-based column number                      |
 
+> **Note:** `onError` is not called when a stream ends without a result token
+> (truncated input). Incomplete input at end-of-stream is treated as expected
+> behaviour, not a parse error.
+
 ### PGN object
 
 ```typescript
