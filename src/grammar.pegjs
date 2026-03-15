@@ -8,6 +8,8 @@
 
   function pairMoves(moves, start) {
     start = start ?? 0;
+    if (moves.length === 0) { return []; }
+    // half = first pair index in the full game; pairIdx below is relative to it
     const half = start >> 1;
     const acc = new Array(Math.ceil((moves.length + (start & 1)) / 2));
     for (let i = 0; i < moves.length; i++) {
