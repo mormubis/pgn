@@ -168,14 +168,22 @@ describe('PGN Parser', () => {
       '[Event "E"]\n[Site "S"]\n[Date "2000.01.01"]\n[Round "1"]\n' +
       '[White "W"]\n[Black "B"]\n[Result "1-0"]\n\n1. e4 1-0';
     parse(pgn, { onWarning: (w) => warnings.push(w) });
+    // All 7 STR tags present and matching — zero warnings expected
+    expect(warnings).toHaveLength(0);
+  });
+
+  it('does not warn about Result mismatch when Result tag is absent', () => {
+    const warnings: unknown[] = [];
+    // No tags at all — only STR missing warnings, not a result mismatch
+    parse('1. e4 1-0', { onWarning: (w) => warnings.push(w) });
     expect(
-      warnings.some(
+      warnings.every(
         (w) =>
           typeof w === 'object' &&
           w !== null &&
-          /Result tag/.test((w as { message: string }).message),
+          (w as { message: string }).message.startsWith('Missing STR tag:'),
       ),
-    ).toBe(false);
+    ).toBe(true);
   });
 
   it('calls onError with parse error information', () => {
