@@ -67,47 +67,66 @@ export async function* stream(
   let scanOffset = 0; // first index in buffer not yet scanned for state changes
 
   function* extractGames(final: boolean): Generator<string> {
-    // Single-pass scan: update depth/inString state from scanOffset onward,
-    // and check for RESULT tokens at depth 0 across the full unscanned region.
-    // Token detection starts from lastIndex (always 0 on entry) so that tokens
-    // whose first character precedes scanOffset are still found.
+    // Pass 1: advance persistent depth/inString state over newly-seen characters
+    for (let i = scanOffset; i < buffer.length; i++) {
+      const ch = buffer[i];
+      if (inString) {
+        if (ch === '"') {
+          inString = false;
+        }
+        continue;
+      }
+      if (ch === '{') {
+        depth++;
+        continue;
+      }
+      if (ch === '}') {
+        depth = Math.max(0, depth - 1);
+        continue;
+      }
+      if (ch === '"' && depth === 0) {
+        inString = true;
+        continue;
+      }
+    }
+    scanOffset = buffer.length;
+
+    // Pass 2: single forward scan to find result tokens at depth 0.
+    // Local state re-derived from scratch so the regex advances monotonically.
     const re = /(?:1-0|0-1|1\/2-1\/2|\*)(?=[ \t\n\r]|$)/g;
+    let scanDepth = 0;
+    let scanInString = false;
     let lastIndex = 0;
 
-    for (let index = 0; index < buffer.length; index++) {
-      const ch = buffer[index];
-
-      // Update state only for newly-seen characters
-      if (index >= scanOffset) {
-        if (inString) {
-          if (ch === '"') {
-            inString = false;
-          }
-          continue;
+    for (let i = 0; i < buffer.length; i++) {
+      const ch = buffer[i];
+      if (scanInString) {
+        if (ch === '"') {
+          scanInString = false;
         }
-        if (ch === '{') {
-          depth++;
-          continue;
-        }
-        if (ch === '}') {
-          depth = Math.max(0, depth - 1);
-          continue;
-        }
-        if (ch === '"' && depth === 0) {
-          inString = true;
-          continue;
-        }
+        continue;
+      }
+      if (ch === '{') {
+        scanDepth++;
+        continue;
+      }
+      if (ch === '}') {
+        scanDepth = Math.max(0, scanDepth - 1);
+        continue;
+      }
+      if (ch === '"' && scanDepth === 0) {
+        scanInString = true;
+        continue;
       }
 
-      // Token detection: only at depth 0, outside strings, in unscanned content
-      if (!inString && depth === 0 && index >= lastIndex) {
-        re.lastIndex = index;
+      if (scanDepth === 0) {
+        re.lastIndex = i;
         const m = re.exec(buffer);
-        if (m && m.index === index) {
-          const end = index + m[0].length;
+        if (m && m.index === i) {
+          const end = i + m[0].length;
           yield buffer.slice(lastIndex, end);
           lastIndex = end;
-          index = end - 1; // outer loop will increment
+          i = end - 1;
         }
       }
     }
@@ -121,9 +140,6 @@ export async function* stream(
       scanOffset = 0;
     } else {
       buffer = buffer.slice(lastIndex);
-      // After trimming lastIndex chars from the front, adjust scanOffset.
-      // We scanned the full old buffer, so new scanOffset = old buffer.length - lastIndex
-      // = new buffer.length.
       scanOffset = buffer.length;
     }
   }
