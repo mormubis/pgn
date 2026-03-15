@@ -101,17 +101,20 @@ MOVES
 MOVE
   = num:NUMBER? _ san:SAN nags:(_ n:NAG { return n; })* comments:(_ c:COMMENT { return c; })*
   {
-    const move = { ...san };
-    if (num !== null) move.number = num;
+    if (num !== null) san.number = num;
     if (nags.length > 0) {
-      const annotations = nags.filter(Boolean);
-      if (annotations.length > 0) move.annotations = annotations;
+      const out = [];
+      for (let i = 0; i < nags.length; i++) { if (nags[i]) out.push(nags[i]); }
+      if (out.length > 0) san.annotations = out;
     }
     if (comments.length > 0) {
-      const commentText = comments.filter(Boolean).join(' ').replace(/\n/g, '');
-      if (commentText.length > 0) move.comment = commentText;
+      let text = '';
+      for (let i = 0; i < comments.length; i++) {
+        if (comments[i]) text += (text ? ' ' : '') + comments[i];
+      }
+      if (text.length > 0) san.comment = text.replace(/\n/g, '');
     }
-    return move;
+    return san;
   }
 
 NUMBER
