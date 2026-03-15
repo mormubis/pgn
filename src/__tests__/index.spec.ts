@@ -59,6 +59,20 @@ describe('PGN Parser', () => {
     expect(result[0]?.meta['Event']).toBe('Test');
   });
 
+  it('handles escaped quotes in tag values', () => {
+    const pgn = String.raw`[Event "\"Café\""]` + '\n[Result "1-0"]\n\n1. e4 1-0';
+    const result = parse(pgn);
+    expect(result).toHaveLength(1);
+    expect(result[0]?.meta['Event']).toBe('"Café"');
+  });
+
+  it('handles escaped backslashes in tag values', () => {
+    const pgn = String.raw`[Site "A\\B"]` + '\n[Result "1-0"]\n\n1. e4 1-0';
+    const result = parse(pgn);
+    expect(result).toHaveLength(1);
+    expect(result[0]?.meta['Site']).toBe(String.raw`A\B`);
+  });
+
   it('calls onError with parse error information', () => {
     const errors: unknown[] = [];
     // "XBAD" starts at offset 0, line 1, column 1 — gives a concrete anchor
