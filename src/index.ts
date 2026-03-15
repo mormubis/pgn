@@ -176,8 +176,11 @@ export async function* stream(
   // Any remainder in the buffer after all chunks are consumed has no result
   // token — the grammar requires one, so parse() will always return [] for it.
   // Drain the generator to reset buffer/scanOffset state cleanly.
+  // Note: parse() is called without options here so that onError is NOT fired
+  // for a truncated stream — incomplete input at end-of-stream is expected
+  // behaviour, not a parse error.
   for (const gameString of extractGames(true)) {
-    const games = parse(gameString, options);
+    const games = parse(gameString);
     for (const game of games) {
       yield game;
     }
