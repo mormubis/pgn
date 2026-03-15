@@ -66,6 +66,9 @@ const STR_TAGS = [
   'White',
 ] as const;
 
+// Fires onWarning for each STR key absent from a game's meta. Warnings are
+// emitted in alphabetical key order (the order of STR_TAGS above). Position
+// fields are nominal placeholders — a missing tag has no source location.
 function warnMissingSTR(games: PGN[], options: ParseOptions | undefined): void {
   if (!options?.onWarning) {
     return;
