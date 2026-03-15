@@ -115,6 +115,15 @@ describe('stream()', () => {
     expect(games[0]?.meta['Event']).toBe('Sicilian 1-0 Attack');
   });
 
+  it('does not split on a result token inside an escaped quote in a tag value', async () => {
+    // "A \"1-0\" game" — the 1-0 inside the escaped quotes must not be treated
+    // as a game boundary by the stream() state machine.
+    const pgn = '[Event "A \\"1-0\\" game"]\n[Result "1-0"]\n\n1. e4 1-0';
+    const games = await collect(stream(chunksOf(pgn, 5)));
+    expect(games).toHaveLength(1);
+    expect(games[0]?.meta['Event']).toBe('A "1-0" game');
+  });
+
   it('flushes a game whose input has no result token', async () => {
     // Input with no result token — the remainder-flush path in extractGames(true)
     // parse() will return [] for this malformed input, so stream yields nothing

@@ -161,7 +161,10 @@ export async function* stream(
       // State updates only for newly-seen characters
       if (index >= scanOffset) {
         if (inString) {
-          if (ch === '"') {
+          if (ch === '\\') {
+            // Skip the next character — it is escaped (handles \" and \\).
+            index++;
+          } else if (ch === '"') {
             inString = false;
           }
           continue;
@@ -236,13 +239,12 @@ export async function* stream(
   }
 
   // Any remainder in the buffer after all chunks are consumed has no result
-  // token — the grammar requires one, so parse() will always return [] for it.
-  // Drain the generator to reset buffer/scanOffset state cleanly.
-  // Note: parse() is called without options here so that onError is NOT fired
-  // for a truncated stream — incomplete input at end-of-stream is expected
-  // behaviour, not a parse error.
+  // token — the grammar requires one, so parse() will always return [] for it,
+  // meaning onError is never reached for truncated input. options is passed in
+  // full so that onWarning still fires for any valid games that happen to land
+  // in the remainder (e.g. result token at the exact end of the last chunk).
   for (const gameString of extractGames(true)) {
-    const games = parse(gameString);
+    const games = parse(gameString, options);
     for (const game of games) {
       yield game;
     }
