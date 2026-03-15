@@ -257,8 +257,8 @@ COMMENT
   / comment_line
 
 comment_multiline
-  = "{" text:$[^}]* "}"
-  { return text.replace(/[\n\t]/g, ' ').trim(); }
+  = "{" parts:$( [^{}] / "{" [^{}]* "}" )* "}"
+  { return parts.replace(/[\n\t]/g, ' ').trim(); }
 
 comment_line
   = ";" text:$(![\n] .)*

@@ -52,6 +52,20 @@ describe('PGN Parser', () => {
     expect(parse('not valid pgn !!!')).toEqual([]);
   });
 
+  it('parses a comment containing nested braces', () => {
+    const pgn = '1. e4 { see {Fischer} 1972 } e5 1-0';
+    const result = parse(pgn);
+    expect(result).toHaveLength(1);
+    expect(result[0]?.moves[0]?.[1]?.comment).toBe('see {Fischer} 1972');
+  });
+
+  it('continues parsing moves after a nested-brace comment', () => {
+    const pgn = '1. e4 { A {nested} comment } e5 2. Nf3 1-0';
+    const result = parse(pgn);
+    expect(result).toHaveLength(1);
+    expect(result[0]?.moves[1]?.[1]).toMatchObject({ piece: 'N', to: 'f3' });
+  });
+
   it('strips a UTF-8 BOM from the start of input', () => {
     const withBom = '\uFEFF[Event "Test"]\n[Result "1-0"]\n\n1. e4 1-0';
     const result = parse(withBom);
