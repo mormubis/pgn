@@ -37,17 +37,44 @@ interface PGN {
 
 type Variation = MoveList[];
 
+export interface ParseError {
+  column: number;
+  line: number;
+  message: string;
+  offset: number;
+}
+
+export interface ParseOptions {
+  onError?: (error: ParseError) => void;
+}
+
+function toParseError(thrown: unknown): ParseError {
+  if (thrown !== null && typeof thrown === 'object' && 'message' in thrown) {
+    const error = thrown as Record<string, unknown>;
+    const location = error['location'] as Record<string, unknown> | undefined;
+    const start = location?.['start'] as Record<string, unknown> | undefined;
+    return {
+      column: typeof start?.['column'] === 'number' ? start['column'] : 1,
+      line: typeof start?.['line'] === 'number' ? start['line'] : 1,
+      message: String(error['message']),
+      offset: typeof error['offset'] === 'number' ? error['offset'] : 0,
+    };
+  }
+  return { column: 1, line: 1, message: String(thrown), offset: 0 };
+}
+
 /**
  * Parse a PGN string into an array of games
  *
  * @param input
  */
-export default function parse(input: string): PGN[] {
+export default function parse(input: string, options?: ParseOptions): PGN[] {
   const cleaned = input.replaceAll(/^\s+|\s+$/g, '');
 
   try {
     return parser.parse(cleaned) as PGN[];
-  } catch {
+  } catch (error) {
+    options?.onError?.(toParseError(error));
     return [];
   }
 }
@@ -77,8 +104,8 @@ export async function* stream(
     const re = /(?:1-0|0-1|1\/2-1\/2|\*)(?=[ \t\n\r]|$)/g;
     let lastIndex = 0;
 
-    for (let i = scanOffset; i < buffer.length; i++) {
-      const ch = buffer[i];
+    for (let index = scanOffset; index < buffer.length; index++) {
+      const ch = buffer[index];
 
       // State updates for depth and string tracking
       if (inString) {
@@ -106,13 +133,13 @@ export async function* stream(
       // a result token ('1', '0', '*'). This avoids invoking the regex on every
       // depth-0 character — regex is called at most once per candidate.
       if (depth === 0 && (ch === '1' || ch === '0' || ch === '*')) {
-        re.lastIndex = i;
+        re.lastIndex = index;
         const m = re.exec(buffer);
-        if (m && m.index === i) {
-          const end = i + m[0].length;
+        if (m && m.index === index) {
+          const end = index + m[0].length;
           yield buffer.slice(lastIndex, end);
           lastIndex = end;
-          i = end - 1; // outer loop will increment past the consumed token
+          index = end - 1; // outer loop will increment past the consumed token
         }
       }
     }

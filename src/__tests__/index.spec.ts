@@ -51,4 +51,24 @@ describe('PGN Parser', () => {
   it('returns [] for malformed input', () => {
     expect(parse('not valid pgn !!!')).toEqual([]);
   });
+
+  it('calls onError with parse error information', () => {
+    const errors: unknown[] = [];
+    const result = parse('this is not valid pgn', {
+      onError: (error) => errors.push(error),
+    });
+    expect(result).toEqual([]);
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toMatchObject({
+      message: expect.any(String),
+      offset: expect.any(Number),
+      line: expect.any(Number),
+      column: expect.any(Number),
+    });
+  });
+
+  it('returns [] with no error when onError option is omitted', () => {
+    const result = parse('this is not valid pgn');
+    expect(result).toEqual([]);
+  });
 });
