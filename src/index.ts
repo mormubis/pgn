@@ -7,7 +7,7 @@ type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
 type Square = `${File}${Rank}`;
 type Disambiguation = Square | File | Rank;
 
-export type AnnotationColor = 'B' | 'G' | 'R' | 'Y';
+export type AnnotationColor = 'B' | 'C' | 'G' | 'O' | 'R' | 'Y';
 
 export interface Arrow {
   color: AnnotationColor;
@@ -136,7 +136,7 @@ function warnResultMismatch(
   }
 }
 
-const CAL_CSL_RE = /\[%(?:cal|csl)\s+([^[\]]+)\]/gi;
+const CAL_CSL_RE = /\[%(?:cal|csl)\s*([^[\]]*)\]/gi;
 
 const CLK_RE = /\[%clk\s+(\d+):(\d{2}):(\d{2}(?:\.\d+)?)\]/i;
 
@@ -161,7 +161,7 @@ function parseCommentCommands(raw: string): CommentFields {
   text = text.replaceAll(CAL_CSL_RE, (_match, tokens: string) => {
     for (const token of tokens.split(',').map((t) => t.trim())) {
       const color = (token[0]?.toUpperCase() ?? '') as AnnotationColor;
-      if (!color || !/^[BGRY]$/.test(color)) {
+      if (!color || !/^[BCGORY]$/.test(color)) {
         continue;
       }
       const rest = token.slice(1);

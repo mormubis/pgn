@@ -394,4 +394,42 @@ describe('comment commands', () => {
       { color: 'R', from: 'a1', to: 'h1' },
     ]);
   });
+
+  it('parses [%csl] with orange and cyan color codes', () => {
+    const pgn = '1. e4 { [%csl Oe1,Cb1] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.squares).toEqual([
+      { color: 'O', square: 'e1' },
+      { color: 'C', square: 'b1' },
+    ]);
+  });
+
+  it('parses [%cal] with orange and cyan color codes', () => {
+    const pgn = '1. e4 { [%cal Oc1c7,Ch1h7] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'O', from: 'c1', to: 'c7' },
+      { color: 'C', from: 'h1', to: 'h7' },
+    ]);
+  });
+
+  it('strips empty [%csl ] from comment without producing squares', () => {
+    const pgn = '1. e4 { [%csl ][%cal Ye4e8] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.squares).toBeUndefined();
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'Y', from: 'e4', to: 'e8' },
+    ]);
+    expect(result[0]?.moves[0]?.[1]?.comment).toBeUndefined();
+  });
+
+  it('strips empty [%cal ] from comment without producing arrows', () => {
+    const pgn = '1. e4 { [%csl Ge5][%cal ] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.arrows).toBeUndefined();
+    expect(result[0]?.moves[0]?.[1]?.squares).toEqual([
+      { color: 'G', square: 'e5' },
+    ]);
+    expect(result[0]?.moves[0]?.[1]?.comment).toBeUndefined();
+  });
 });
