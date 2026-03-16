@@ -159,9 +159,9 @@ function parseCommentCommands(raw: string): CommentFields {
   const arrows: Arrow[] = [];
   const squares: SquareAnnotation[] = [];
   text = text.replaceAll(CAL_CSL_RE, (_match, tokens: string) => {
-    for (const token of tokens.split(',')) {
-      const color = token[0] as AnnotationColor;
-      if (!color || !/^[BGRY]$/i.test(color)) {
+    for (const token of tokens.split(',').map((t) => t.trim())) {
+      const color = (token[0]?.toUpperCase() ?? '') as AnnotationColor;
+      if (!color || !/^[BGRY]$/.test(color)) {
         continue;
       }
       const rest = token.slice(1);

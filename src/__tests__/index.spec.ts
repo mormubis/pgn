@@ -377,4 +377,21 @@ describe('comment commands', () => {
       { color: 'G', from: 'e2', to: 'e4' },
     ]);
   });
+
+  it('parses [%cal] with lowercase colour code', () => {
+    const pgn = '1. e4 { [%cal ge2e4] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'G', from: 'e2', to: 'e4' },
+    ]);
+  });
+
+  it('parses [%cal] with spaces after commas', () => {
+    const pgn = '1. e4 { [%cal Ge2e4, Ra1h1] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'G', from: 'e2', to: 'e4' },
+      { color: 'R', from: 'a1', to: 'h1' },
+    ]);
+  });
 });
