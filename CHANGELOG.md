@@ -8,6 +8,25 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.9.0] - 2026-03-16
+
+### Added
+
+- `Move` now exposes structured fields parsed from embedded PGN comment
+  commands:
+  - `arrows?: Arrow[]` — from `[%cal ...]` (coloured arrows on board)
+  - `squares?: SquareAnnotation[]` — from `[%csl ...]` (coloured square
+    highlights)
+  - `clock?: number` — from `[%clk ...]` (remaining time in seconds, sub-second
+    precision preserved)
+  - `eval?: Eval` — from `[%eval ...]` (engine evaluation: centipawns or
+    mate-in-N, with optional search depth)
+- New exported types: `AnnotationColor`, `Arrow`, `SquareAnnotation`, `Eval`
+- Command strings are stripped from `move.comment`; unknown `[%...]` commands
+  are left in the comment string unchanged
+- De-facto standard followed:
+  [python-chess](https://python-chess.readthedocs.io/en/latest/pgn.html)
+
 ## [3.8.3] - 2026-03-15
 
 ### Added
@@ -288,7 +307,20 @@ and this project adheres to
 - New grammar supporting the full PGN specification including RAV (recursive
   annotated variations) and NAG (numeric annotation glyphs)
 
-[unreleased]: https://github.com/mormubis/pgn/compare/v3.4.0...HEAD
+[unreleased]: https://github.com/mormubis/pgn/compare/v3.9.0...HEAD
+[3.9.0]: https://github.com/mormubis/pgn/compare/v3.8.3...v3.9.0
+[3.8.3]: https://github.com/mormubis/pgn/compare/v3.8.2...v3.8.3
+[3.8.2]: https://github.com/mormubis/pgn/compare/v3.8.1...v3.8.2
+[3.8.1]: https://github.com/mormubis/pgn/compare/v3.8.0...v3.8.1
+[3.8.0]: https://github.com/mormubis/pgn/compare/v3.7.0...v3.8.0
+[3.7.0]: https://github.com/mormubis/pgn/compare/v3.6.2...v3.7.0
+[3.6.2]: https://github.com/mormubis/pgn/compare/v3.6.1...v3.6.2
+[3.6.1]: https://github.com/mormubis/pgn/compare/v3.6.0...v3.6.1
+[3.6.0]: https://github.com/mormubis/pgn/compare/v3.5.3...v3.6.0
+[3.5.3]: https://github.com/mormubis/pgn/compare/v3.5.2...v3.5.3
+[3.5.2]: https://github.com/mormubis/pgn/compare/v3.5.1...v3.5.2
+[3.5.1]: https://github.com/mormubis/pgn/compare/v3.5.0...v3.5.1
+[3.5.0]: https://github.com/mormubis/pgn/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/mormubis/pgn/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/mormubis/pgn/compare/v3.2.1...v3.3.0
 [3.2.1]: https://github.com/mormubis/pgn/compare/v3.2.0...v3.2.1
