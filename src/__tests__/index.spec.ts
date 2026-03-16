@@ -432,4 +432,81 @@ describe('comment commands', () => {
     ]);
     expect(result[0]?.moves[0]?.[1]?.comment).toBeUndefined();
   });
+
+  // Group 1: Blue color code
+  it('parses [%csl] with all six color codes', () => {
+    const pgn = '1. e4 { [%csl Ye4,Rd4,Ga1,Bh1,Oe1,Cb1] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.squares).toEqual([
+      { color: 'Y', square: 'e4' },
+      { color: 'R', square: 'd4' },
+      { color: 'G', square: 'a1' },
+      { color: 'B', square: 'h1' },
+      { color: 'O', square: 'e1' },
+      { color: 'C', square: 'b1' },
+    ]);
+  });
+
+  it('parses [%cal] with all six color codes', () => {
+    const pgn = '1. e4 { [%cal Ye4e8,Rd4a4,Ga1h8,Bh1c7,Oc1c7,Ch1h7] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'Y', from: 'e4', to: 'e8' },
+      { color: 'R', from: 'd4', to: 'a4' },
+      { color: 'G', from: 'a1', to: 'h8' },
+      { color: 'B', from: 'h1', to: 'c7' },
+      { color: 'O', from: 'c1', to: 'c7' },
+      { color: 'C', from: 'h1', to: 'h7' },
+    ]);
+  });
+
+  // Group 2: Both cal and csl empty simultaneously
+  it('strips both empty [%csl ] and [%cal ] with no output', () => {
+    const pgn = '1. e4 { [%csl ][%cal ] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.squares).toBeUndefined();
+    expect(result[0]?.moves[0]?.[1]?.arrows).toBeUndefined();
+    expect(result[0]?.moves[0]?.[1]?.comment).toBeUndefined();
+  });
+
+  // Group 3: Extra whitespace inside command brackets
+  it('handles extra whitespace inside [%csl] and [%cal] brackets', () => {
+    const pgn = '1. e4 { [%csl   Rd4 ] [%cal   Ye4e8  ,  Gd1d3]  } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.squares).toEqual([
+      { color: 'R', square: 'd4' },
+    ]);
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'Y', from: 'e4', to: 'e8' },
+      { color: 'G', from: 'd1', to: 'd3' },
+    ]);
+    expect(result[0]?.moves[0]?.[1]?.comment).toBeUndefined();
+  });
+
+  // Group 4: Text immediately after ] with no space
+  it('parses command followed immediately by text without leading space', () => {
+    const pgn = '1. e4 { [%cal Ye4e8] comment } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'Y', from: 'e4', to: 'e8' },
+    ]);
+    expect(result[0]?.moves[0]?.[1]?.comment).toBe('comment');
+  });
+
+  // Group 5: Sub-second clock with 1 fractional digit
+  it('parses [%clk] with 1-digit fractional seconds', () => {
+    const pgn = '1. e4 { [%clk 0:00:59.8] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.clock).toBe(59.8);
+  });
+
+  // Group 6: Unknown time commands left in comment
+  it('leaves [%egt], [%emt], [%mct] in comment as unknown commands', () => {
+    const pgn = '1. e4 { [%clk 0:10:10] [%egt 0:10:10] [%emt 0:08:08] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.clock).toBe(610);
+    expect(result[0]?.moves[0]?.[1]?.comment).toBe(
+      '[%egt 0:10:10] [%emt 0:08:08]',
+    );
+  });
 });
