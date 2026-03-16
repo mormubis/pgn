@@ -209,6 +209,10 @@ present) as the authoritative game outcome.
   promotion?:  'R' | 'N' | 'B' | 'Q',
   annotations?: string[],   // e.g. ["!", "$14"]
   comment?:    string,
+  arrows?:     Arrow[],              // from [%cal ...] command
+  squares?:    SquareAnnotation[],   // from [%csl ...] command
+  clock?:      number,               // from [%clk ...] — seconds remaining
+  eval?:       Eval,                 // from [%eval ...] — engine evaluation
   variants?:   MoveList[],  // recursive annotation variations
 }
 ```
@@ -228,6 +232,63 @@ slots can be `undefined` — `whiteMove` when a variation begins on black's turn
   piece: 'N', to: 'f3',
   annotations: ['!', '$14'],
   comment: 'White has a slight advantage'
+}
+```
+
+### Comment annotations
+
+PGN files produced by GUIs and engines embed structured commands inside move
+comments using the `[%cmd ...]` syntax. This library parses the four most common
+commands and exposes them as dedicated fields on `Move`:
+
+| Field     | Type                 | PGN command   | Description                                      |
+| --------- | -------------------- | ------------- | ------------------------------------------------ |
+| `arrows`  | `Arrow[]`            | `[%cal ...]`  | Coloured arrows drawn on the board               |
+| `squares` | `SquareAnnotation[]` | `[%csl ...]`  | Coloured square highlights                       |
+| `clock`   | `number`             | `[%clk ...]`  | Remaining time in seconds (sub-second preserved) |
+| `eval`    | `Eval`               | `[%eval ...]` | Engine evaluation (centipawns or mate-in-N)      |
+
+Command strings are stripped from `move.comment`. Unknown `[%...]` commands are
+left in the comment string unchanged.
+
+#### Types
+
+```typescript
+type AnnotationColor = 'R' | 'G' | 'B' | 'Y'; // Red, Green, Blue, Yellow
+
+interface Arrow {
+  color: AnnotationColor;
+  from: string; // e.g. "e2"
+  to: string; // e.g. "e4"
+}
+
+interface SquareAnnotation {
+  color: AnnotationColor;
+  square: string; // e.g. "e4"
+}
+
+interface Eval {
+  depth?: number; // search depth, if present
+  mate?: number; // mate in N (positive = current side wins)
+  value?: number; // centipawn score (positive = current side advantage)
+}
+```
+
+#### Example
+
+```pgn
+1. e4 { [%cal Ge2e4,Re4e5] [%clk 0:05:00] } e5
+```
+
+```typescript
+{
+  piece: 'P', to: 'e4',
+  comment: '',   // command strings removed; only free text remains
+  arrows: [
+    { color: 'G', from: 'e2', to: 'e4' },
+    { color: 'R', from: 'e4', to: 'e5' },
+  ],
+  clock: 300,    // 5 minutes in seconds
 }
 ```
 
