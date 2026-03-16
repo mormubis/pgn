@@ -255,3 +255,126 @@ describe('PGN Parser', () => {
     });
   });
 });
+
+describe('comment commands', () => {
+  it('parses [%cal] single arrow', () => {
+    const pgn = '1. e4 { [%cal Ge2e4] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'G', from: 'e2', to: 'e4' },
+    ]);
+  });
+
+  it('parses [%cal] multiple arrows with mixed colours', () => {
+    const pgn = '1. e4 { [%cal Ge2e4,Ra1h1,Gb1b8] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'G', from: 'e2', to: 'e4' },
+      { color: 'R', from: 'a1', to: 'h1' },
+      { color: 'G', from: 'b1', to: 'b8' },
+    ]);
+  });
+
+  it('parses [%csl] single square', () => {
+    const pgn = '1. e4 { [%csl Rd4] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.squares).toEqual([
+      { color: 'R', square: 'd4' },
+    ]);
+  });
+
+  it('parses [%csl] multiple squares', () => {
+    const pgn = '1. e4 { [%csl Rd4,Ge5,Yf6] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.squares).toEqual([
+      { color: 'R', square: 'd4' },
+      { color: 'G', square: 'e5' },
+      { color: 'Y', square: 'f6' },
+    ]);
+  });
+
+  it('parses [%csl] and [%cal] in the same comment', () => {
+    const pgn = '1. e4 { [%csl Ga1][%cal Ra1h1,Gb1b8] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.squares).toEqual([
+      { color: 'G', square: 'a1' },
+    ]);
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'R', from: 'a1', to: 'h1' },
+      { color: 'G', from: 'b1', to: 'b8' },
+    ]);
+  });
+
+  it('parses [%clk] to seconds', () => {
+    const pgn = '1. e4 { [%clk 3:25:45] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.clock).toBe(12_345);
+  });
+
+  it('parses [%clk] with sub-second precision', () => {
+    const pgn = '1. e4 { [%clk 0:00:01.234] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.clock).toBe(1.234);
+  });
+
+  it('parses [%eval] centipawn score', () => {
+    const pgn = '1. e4 { [%eval -0.80] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.eval).toEqual({ type: 'cp', value: -0.8 });
+  });
+
+  it('parses [%eval] mate with depth', () => {
+    const pgn = '1. e4 { [%eval #1,5] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.eval).toEqual({
+      type: 'mate',
+      value: 1,
+      depth: 5,
+    });
+  });
+
+  it('parses [%eval] negative mate', () => {
+    const pgn = '1. e4 { [%eval #-2] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.eval).toEqual({ type: 'mate', value: -2 });
+  });
+
+  it('[%eval] centipawn values 199-219 round-trip losslessly', () => {
+    for (let cp = 199; cp <= 219; cp++) {
+      const value = cp / 100;
+      const pgn = `1. e4 { [%eval ${value.toFixed(2)}] } e5 1-0`;
+      const result = parse(pgn);
+      expect(result[0]?.moves[0]?.[1]?.eval).toEqual({ type: 'cp', value });
+    }
+  });
+
+  it('strips commands from comment text', () => {
+    const pgn = '1. e4 { Great move! [%cal Ge2e4] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.comment).toBe('Great move!');
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'G', from: 'e2', to: 'e4' },
+    ]);
+  });
+
+  it('omits comment field when only commands are present', () => {
+    const pgn = '1. e4 { [%clk 1:00:00] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.clock).toBe(3600);
+    expect(result[0]?.moves[0]?.[1]?.comment).toBeUndefined();
+  });
+
+  it('leaves unknown commands in the comment string', () => {
+    const pgn = '1. e4 { foo [%bar 1,2] baz } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.comment).toBe('foo [%bar 1,2] baz');
+  });
+
+  it('leaves malformed [%cal] token in comment and parses valid tokens', () => {
+    const pgn = '1. e4 { [%cal ZZZ,Ge2e4] } e5 1-0';
+    const result = parse(pgn);
+    expect(result[0]?.moves[0]?.[1]?.arrows).toEqual([
+      { color: 'G', from: 'e2', to: 'e4' },
+    ]);
+  });
+});

@@ -291,8 +291,14 @@
                       [
                         10,
                         {
+                          "arrows": [
+                            {
+                              "color": "G",
+                              "from": "e1",
+                              "to": "c1",
+                            },
+                          ],
                           "capture": true,
-                          "comment": "[%cal Ge1c1]",
                           "piece": "N",
                           "to": "f3",
                         },
@@ -451,7 +457,13 @@
                       [
                         9,
                         {
-                          "comment": "[%cal Gd3d4]",
+                          "arrows": [
+                            {
+                              "color": "G",
+                              "from": "d3",
+                              "to": "d4",
+                            },
+                          ],
                           "piece": "Q",
                           "to": "e2",
                         },
@@ -543,8 +555,13 @@
                       [
                         8,
                         {
-                          "comment": "[%csl Rd4]",
                           "piece": "N",
+                          "squares": [
+                            {
+                              "color": "R",
+                              "square": "d4",
+                            },
+                          ],
                           "to": "e2",
                         },
                         {
@@ -1329,7 +1346,13 @@
                               [
                                 8,
                                 {
-                                  "comment": "[%cal Rc1g5]",
+                                  "arrows": [
+                                    {
+                                      "color": "R",
+                                      "from": "c1",
+                                      "to": "g5",
+                                    },
+                                  ],
                                   "piece": "Q",
                                   "to": "g3",
                                 },
@@ -3896,8 +3919,17 @@
                       [
                         9,
                         {
-                          "comment": "[%csl Rb6,Re3]",
                           "piece": "N",
+                          "squares": [
+                            {
+                              "color": "R",
+                              "square": "b6",
+                            },
+                            {
+                              "color": "R",
+                              "square": "e3",
+                            },
+                          ],
                           "to": "c4",
                         },
                         {
@@ -7209,7 +7241,13 @@
               [
                 7,
                 {
-                  "comment": "[%cal Gf2f4]",
+                  "arrows": [
+                    {
+                      "color": "G",
+                      "from": "f2",
+                      "to": "f4",
+                    },
+                  ],
                   "piece": "N",
                   "to": "e2",
                 },
@@ -9192,8 +9230,13 @@
               [
                 11,
                 {
-                  "comment": "[%csl Rd4]",
                   "piece": "B",
+                  "squares": [
+                    {
+                      "color": "R",
+                      "square": "d4",
+                    },
+                  ],
                   "to": "d3",
                 },
                 {
@@ -11456,7 +11499,13 @@
               [
                 7,
                 {
-                  "comment": "[%cal Re5e6]",
+                  "arrows": [
+                    {
+                      "color": "R",
+                      "from": "e5",
+                      "to": "e6",
+                    },
+                  ],
                   "piece": "N",
                   "to": "d2",
                 },
@@ -13757,7 +13806,19 @@
               [
                 9,
                 {
-                  "comment": "[%cal Gf2f5,Ge1g1] with f4 and castling to come.",
+                  "arrows": [
+                    {
+                      "color": "G",
+                      "from": "f2",
+                      "to": "f5",
+                    },
+                    {
+                      "color": "G",
+                      "from": "e1",
+                      "to": "g1",
+                    },
+                  ],
+                  "comment": "with f4 and castling to come.",
                   "piece": "B",
                   "to": "g2",
                 },
