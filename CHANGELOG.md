@@ -8,6 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.9.1] - 2026-03-16
+
+### Fixed
+
+- `AnnotationColor` now includes `'C'` (cyan) and `'O'` (orange) in addition to
+  `'B'`, `'G'`, `'R'`, `'Y'` — matching real-world Lichess and ChessBase
+  exports. Tokens with these colors were previously silently dropped.
+- Empty `[%csl ]` and `[%cal ]` commands (with no token list) are now silently
+  stripped from the comment text instead of leaking through as raw strings.
+
 ## [3.9.0] - 2026-03-16
 
 ### Added
