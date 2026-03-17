@@ -338,6 +338,103 @@ describe('PAWN_PUSH', () => {
   });
 });
 
+// ─── NAG (nag_import) ────────────────────────────────────────────────────────
+
+describe('NAG nag_import', () => {
+  it('parses ! as annotation', () => {
+    expect(white('e4!')).toMatchObject({
+      annotations: ['!'],
+      piece: 'P',
+      to: 'e4',
+    });
+  });
+
+  it('parses ?? as annotation', () => {
+    expect(white('e4??')).toMatchObject({
+      annotations: ['??'],
+      piece: 'P',
+      to: 'e4',
+    });
+  });
+
+  it('parses ± (U+00B1) as annotation', () => {
+    expect(white('e4\u00B1')).toMatchObject({
+      annotations: ['\u00B1'],
+      piece: 'P',
+      to: 'e4',
+    });
+  });
+
+  it('parses multiple NAGs on one move', () => {
+    expect(white('e4!$14')).toMatchObject({
+      annotations: ['!', '14'],
+      piece: 'P',
+      to: 'e4',
+    });
+  });
+});
+
+// ─── COMMENT ─────────────────────────────────────────────────────────────────
+
+describe('COMMENT', () => {
+  it('parses a semicolon comment_line', () => {
+    const games = parse(
+      '[Event "T"]\n[Result "1-0"]\n\n1. e4 ; this is a comment\n1-0',
+    );
+    expect(games[0]?.moves[0]?.[1]).toMatchObject({
+      comment: 'this is a comment',
+      piece: 'P',
+      to: 'e4',
+    });
+  });
+
+  it('joins multiple comment blocks on one move', () => {
+    const games = parse(
+      '[Event "T"]\n[Result "1-0"]\n\n1. e4 { first } { second } 1-0',
+    );
+    expect(games[0]?.moves[0]?.[1]).toMatchObject({
+      comment: 'first second',
+      piece: 'P',
+      to: 'e4',
+    });
+  });
+});
+
+// ─── RAV ─────────────────────────────────────────────────────────────────────
+
+describe('RAV', () => {
+  it('parses a single variation on a move', () => {
+    const games = parse(
+      '[Event "T"]\n[Result "1-0"]\n\n1. e4 (1. d4 d5) e5 1-0',
+    );
+    const variants = games[0]?.moves[0]?.[1]?.variants;
+    expect(variants).toHaveLength(1);
+    expect(variants?.[0]?.[0]?.[1]).toMatchObject({ piece: 'P', to: 'd4' });
+  });
+
+  it('parses a nested RAV (RAV inside a RAV)', () => {
+    const games = parse(
+      '[Event "T"]\n[Result "1-0"]\n\n1. e4 (1. d4 (1. c4 c5) d5) e5 1-0',
+    );
+    const outer = games[0]?.moves[0]?.[1]?.variants?.[0];
+    const inner = outer?.[0]?.[1]?.variants;
+    expect(inner).toHaveLength(1);
+    expect(inner?.[0]?.[0]?.[1]).toMatchObject({ piece: 'P', to: 'c4' });
+  });
+
+  it('parses a comment inside a RAV', () => {
+    const games = parse(
+      '[Event "T"]\n[Result "1-0"]\n\n1. e4 (1. d4 { good move } d5) e5 1-0',
+    );
+    const ravMove = games[0]?.moves[0]?.[1]?.variants?.[0]?.[0]?.[1];
+    expect(ravMove).toMatchObject({
+      comment: 'good move',
+      piece: 'P',
+      to: 'd4',
+    });
+  });
+});
+
 // ─── PAWN_CAPTURE ────────────────────────────────────────────────────────────
 
 describe('PAWN_CAPTURE', () => {

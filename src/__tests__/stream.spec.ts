@@ -229,4 +229,17 @@ describe('stream()', () => {
     expect(games).toHaveLength(1);
     expect(games[0]?.meta['Event']).toBe('B');
   });
+
+  it('forwards onWarning to parse() for each game', async () => {
+    const warnings: string[] = [];
+    // Missing Black tag triggers an STR warning
+    const pgn = '[Event "T"]\n[Result "1-0"]\n\n1. e4 1-0';
+    const games = await collect(
+      stream(fromArray([pgn]), {
+        onWarning: (w) => warnings.push(w.message),
+      }),
+    );
+    expect(games).toHaveLength(1);
+    expect(warnings.some((w) => w.includes('Black'))).toBe(true);
+  });
 });
