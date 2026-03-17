@@ -112,6 +112,27 @@ for await (const game of stream(text)) {
 }
 ```
 
+### `stringify()`
+
+Converts one or more parsed `PGN` objects back into a valid PGN string,
+providing semantic round-trip fidelity.
+
+```typescript
+stringify(input: PGN | PGN[], options?: ParseOptions): string
+```
+
+Reconstructs SAN from `Move` fields, re-serializes annotation commands
+(`[%cal]`, `[%csl]`, `[%clk]`, `[%eval]`) back into comment blocks, and
+preserves RAVs and NAGs. Pass `onWarning` to observe recoverable issues (e.g.
+invalid castling destination, negative clock).
+
+```typescript
+import parse, { stringify } from '@echecs/pgn';
+
+const games = parse(pgnString);
+const output = stringify(games); // valid PGN string
+```
+
 ### Error handling
 
 By default, `parse()` and `stream()` silently return `[]` / skip games on parse
