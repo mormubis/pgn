@@ -3,15 +3,13 @@ import parser from './grammar.cjs';
 import type {
   AnnotationColor,
   Arrow,
-  Disambiguation,
   Eval,
+  Move,
   MoveList,
   PGN,
   ParseError,
   ParseOptions,
-  Piece,
   SquareAnnotation,
-  Variation,
 } from './types.js';
 
 export const STR_TAGS = [
@@ -161,24 +159,6 @@ function parseCommentCommands(raw: string): CommentFields {
   }
 
   return result;
-}
-
-interface Move {
-  annotations?: string[];
-  arrows?: Arrow[];
-  capture?: boolean;
-  castling?: boolean;
-  check?: boolean;
-  checkmate?: boolean;
-  clock?: number;
-  comment?: string;
-  eval?: Eval;
-  from?: Disambiguation;
-  piece: Piece;
-  promotion?: Piece;
-  squares?: SquareAnnotation[];
-  to: string;
-  variants?: Variation;
 }
 
 function processMoveList(moves: MoveList): void {

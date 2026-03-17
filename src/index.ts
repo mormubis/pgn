@@ -9,6 +9,6 @@ export type {
   SquareAnnotation,
 } from './types.js';
 
-export { RESULT_TO_STR, STR_TAGS, default } from './parse.js';
+export { default } from './parse.js';
 
 export { stream } from './stream.js';
