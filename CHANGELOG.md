@@ -8,6 +8,15 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.10.1] - 2026-03-17
+
+### Changed
+
+- Build tool replaced with `tsdown`. The published package now ships a single
+  bundled, minified `dist/index.js` instead of multiple unbundled files.
+  Published package size reduced from ~200KB to ~42KB (79% reduction).
+  `dist/grammar.cjs.map` (84KB) is no longer published. Public API unchanged.
+
 ## [3.10.0] - 2026-03-17
 
 ### Added
