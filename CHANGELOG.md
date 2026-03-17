@@ -348,7 +348,8 @@ and this project adheres to
 - New grammar supporting the full PGN specification including RAV (recursive
   annotated variations) and NAG (numeric annotation glyphs)
 
-[unreleased]: https://github.com/mormubis/pgn/compare/v3.10.0...HEAD
+[unreleased]: https://github.com/mormubis/pgn/compare/v3.10.1...HEAD
+[3.10.1]: https://github.com/mormubis/pgn/compare/v3.10.0...v3.10.1
 [3.10.0]: https://github.com/mormubis/pgn/compare/v3.9.1...v3.10.0
 [3.9.1]: https://github.com/mormubis/pgn/compare/v3.9.0...v3.9.1
 [3.9.0]: https://github.com/mormubis/pgn/compare/v3.8.3...v3.9.0

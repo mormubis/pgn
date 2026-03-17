@@ -96,6 +96,21 @@ describe('PGN Parser', () => {
     expect(result[0]?.meta['Event']).toBe(String.raw`A\"B`);
   });
 
+  it('ignores % escape lines between moves', () => {
+    const pgn = '1. e4\n% this is an escape line\ne5 1-0';
+    const result = parse(pgn);
+    expect(result).toHaveLength(1);
+    expect(result[0]?.moves[0]?.[2]).toMatchObject({ piece: 'P', to: 'e5' });
+  });
+
+  it('ignores % escape lines between games', () => {
+    const pgn = '1. e4 e5 1-0\n% separator line\n1. d4 d5 0-1';
+    const result = parse(pgn);
+    expect(result).toHaveLength(2);
+    expect(result[0]?.result).toBe(1);
+    expect(result[1]?.result).toBe(0);
+  });
+
   it('parses a game with no tags', () => {
     const pgn = '1. e4 e5 2. Nf3 Nc6 1-0';
     const result = parse(pgn);
