@@ -316,15 +316,39 @@ describe('stringify', () => {
   });
 
   describe('round-trip', () => {
-    it('parse → stringify → parse produces equivalent games for basic.pgn', () => {
-      const pgn = readFile('./grammar/basic.pgn');
-      const original = parse(pgn);
-      const roundTripped = parse(stringify(original));
-      expect(roundTripped).toHaveLength(original.length);
-      for (const [index, element] of original.entries()) {
-        expect(roundTripped[index]!.result).toBe(element!.result);
-        expect(roundTripped[index]!.moves).toHaveLength(element!.moves.length);
-      }
-    });
+    const fixtures = [
+      'basic',
+      'benko',
+      'checkmate',
+      'comment',
+      'comments',
+      'games32',
+      'lichess',
+      'long',
+      'multiple-game',
+      'promotion',
+      'single',
+      'twic',
+      'variants',
+    ] as const;
+
+    for (const label of fixtures) {
+      it(
+        `parse → stringify → parse produces equivalent games for ${label}.pgn`,
+        { timeout: 15_000 },
+        () => {
+          const pgn = readFile(`./grammar/${label}.pgn`);
+          const original = parse(pgn);
+          const roundTripped = parse(stringify(original));
+          expect(roundTripped).toHaveLength(original.length);
+          for (const [index, element] of original.entries()) {
+            expect(roundTripped[index]!.result).toBe(element!.result);
+            expect(roundTripped[index]!.moves).toHaveLength(
+              element!.moves.length,
+            );
+          }
+        },
+      );
+    }
   });
 });

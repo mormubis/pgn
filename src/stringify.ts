@@ -198,7 +198,11 @@ function stringifyMoveList(moves: MoveList, options?: ParseOptions): string {
       tokens.push(`${moveNumber}.`, stringifySAN(white, options));
 
       if (white.annotations && white.annotations.length > 0) {
-        tokens.push(white.annotations.map((a) => `$${a}`).join(' '));
+        tokens.push(
+          white.annotations
+            .map((a) => (/^\d+$/.test(a) ? `$${a}` : a))
+            .join(' '),
+        );
       }
 
       const whiteComment = stringifyComment(white, options);
@@ -223,7 +227,11 @@ function stringifyMoveList(moves: MoveList, options?: ParseOptions): string {
       tokens.push(stringifySAN(black, options));
 
       if (black.annotations && black.annotations.length > 0) {
-        tokens.push(black.annotations.map((a) => `$${a}`).join(' '));
+        tokens.push(
+          black.annotations
+            .map((a) => (/^\d+$/.test(a) ? `$${a}` : a))
+            .join(' '),
+        );
       }
 
       const blackComment = stringifyComment(black, options);
