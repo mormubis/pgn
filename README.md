@@ -309,7 +309,7 @@ type Eval =
 ```typescript
 {
   piece: 'P', to: 'e4',
-  comment: '',   // command strings removed; only free text remains
+  // comment is absent — no free text remains after stripping commands
   arrows: [
     { color: 'G', from: 'e2', to: 'e4' },
     { color: 'R', from: 'e4', to: 'e5' },

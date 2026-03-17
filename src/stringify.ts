@@ -195,7 +195,10 @@ function hasAnnotation(move: Move): boolean {
   );
 }
 
-function stringifyMoveList(moves: MoveList, options?: StringifyOptions): string {
+function stringifyMoveList(
+  moves: MoveList,
+  options?: StringifyOptions,
+): string {
   const tokens: string[] = [];
 
   for (const pair of moves) {
@@ -268,7 +271,10 @@ function stringifyOne(game: PGN, options?: StringifyOptions): string {
   return `${header}${movetext}${separator}${result}\n`;
 }
 
-export function stringify(input: PGN | PGN[], options?: StringifyOptions): string {
+export function stringify(
+  input: PGN | PGN[],
+  options?: StringifyOptions,
+): string {
   if (Array.isArray(input)) {
     return input.map((game) => stringifyOne(game, options)).join('\n');
   }
