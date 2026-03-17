@@ -8,6 +8,28 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.10.0] - 2026-03-17
+
+### Added
+
+- `stringify(input: PGN | PGN[], options?: ParseOptions): string` — converts
+  parsed PGN objects back to valid PGN strings (semantic round-trip fidelity).
+  Accepts a single game or an array of games. Reconstructs SAN from `Move`
+  fields, re-serializes annotation commands (`[%cal]`, `[%csl]`, `[%clk]`,
+  `[%eval]`) back into comment blocks, and preserves RAVs and NAGs. Fires
+  `onWarning` for recoverable issues (invalid castling destination, negative
+  clock).
+
+### Changed
+
+- `src/index.ts` refactored into focused internal modules (`src/types.ts`,
+  `src/parse.ts`, `src/stream.ts`, `src/stringify.ts`). Public API unchanged.
+
+### Fixed
+
+- Tagless games with no moves (e.g. `[Result "*"]\n\n*`) now parse correctly.
+  Previously the grammar required at least one move in the movetext.
+
 ## [3.9.1] - 2026-03-16
 
 ### Fixed
@@ -317,7 +339,9 @@ and this project adheres to
 - New grammar supporting the full PGN specification including RAV (recursive
   annotated variations) and NAG (numeric annotation glyphs)
 
-[unreleased]: https://github.com/mormubis/pgn/compare/v3.9.0...HEAD
+[unreleased]: https://github.com/mormubis/pgn/compare/v3.10.0...HEAD
+[3.10.0]: https://github.com/mormubis/pgn/compare/v3.9.1...v3.10.0
+[3.9.1]: https://github.com/mormubis/pgn/compare/v3.9.0...v3.9.1
 [3.9.0]: https://github.com/mormubis/pgn/compare/v3.8.3...v3.9.0
 [3.8.3]: https://github.com/mormubis/pgn/compare/v3.8.2...v3.8.3
 [3.8.2]: https://github.com/mormubis/pgn/compare/v3.8.1...v3.8.2
