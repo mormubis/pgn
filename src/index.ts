@@ -1,81 +1,29 @@
 import parser from './grammar.cjs';
 
-type File = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
-type Piece = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
-type Rank = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
-type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
-type Square = `${File}${Rank}`;
-type Disambiguation = Square | File | Rank;
+import type {
+  AnnotationColor,
+  Arrow,
+  Disambiguation,
+  Eval,
+  MoveList,
+  PGN,
+  ParseError,
+  ParseOptions,
+  Piece,
+  SquareAnnotation,
+  Variation,
+} from './types.js';
 
-export type AnnotationColor = 'B' | 'C' | 'G' | 'O' | 'R' | 'Y';
-
-export interface Arrow {
-  color: AnnotationColor;
-  from: string;
-  to: string;
-}
-
-export interface SquareAnnotation {
-  color: AnnotationColor;
-  square: string;
-}
-
-export type Eval =
-  | { depth?: number; type: 'cp'; value: number }
-  | { depth?: number; type: 'mate'; value: number };
-
-interface Meta {
-  Result?: Result;
-  [key: string]: string | undefined;
-}
-
-interface Move {
-  annotations?: string[];
-  arrows?: Arrow[];
-  capture?: boolean;
-  castling?: boolean;
-  check?: boolean;
-  checkmate?: boolean;
-  clock?: number;
-  comment?: string;
-  eval?: Eval;
-  from?: Disambiguation;
-  piece: Piece;
-  promotion?: Piece;
-  squares?: SquareAnnotation[];
-  to: Square;
-  variants?: Variation;
-}
-
-type MovePair = [number, Move | undefined, Move?];
-type MoveList = MovePair[];
-
-interface PGN {
-  meta: Meta;
-  moves: MoveList;
-  result: 1 | 0 | 0.5 | '?';
-}
-
-type Variation = MoveList[];
-
-export interface ParseError {
-  column: number;
-  line: number;
-  message: string;
-  offset: number;
-}
-
-export interface ParseOptions {
-  onError?: (error: ParseError) => void;
-  onWarning?: (warning: ParseWarning) => void;
-}
-
-export interface ParseWarning {
-  column: number;
-  line: number;
-  message: string;
-  offset: number;
-}
+export type {
+  AnnotationColor,
+  Arrow,
+  Eval,
+  ParseError,
+  ParseOptions,
+  ParseWarning,
+  PGN,
+  SquareAnnotation,
+} from './types.js';
 
 const STR_TAGS = [
   'Black',
@@ -224,6 +172,24 @@ function parseCommentCommands(raw: string): CommentFields {
   }
 
   return result;
+}
+
+interface Move {
+  annotations?: string[];
+  arrows?: Arrow[];
+  capture?: boolean;
+  castling?: boolean;
+  check?: boolean;
+  checkmate?: boolean;
+  clock?: number;
+  comment?: string;
+  eval?: Eval;
+  from?: Disambiguation;
+  piece: Piece;
+  promotion?: Piece;
+  squares?: SquareAnnotation[];
+  to: string;
+  variants?: Variation;
 }
 
 function processMoveList(moves: MoveList): void {
