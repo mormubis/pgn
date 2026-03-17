@@ -1,85 +1,796 @@
-# Specification: Portable Game Notation (PGN)
+# Standard: Portable Game Notation Specification and Implementation Guide
 
-Implements the PGN standard as defined in the
-[PGN Standard (1994)](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm).
+**Source:** http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm
 
----
-
-## Seven Tag Roster (STR)
-
-Every PGN game must contain these seven tags in this order:
-
-| Tag | Description | Default |
-|-----|-------------|---------|
-| `Event` | Tournament or match name | `?` |
-| `Site` | Location | `?` |
-| `Date` | Game date (`YYYY.MM.DD`) | `????.??.??` |
-| `Round` | Round number | `?` |
-| `White` | White player name | `?` |
-| `Black` | Black player name | `?` |
-| `Result` | Game result | `*` |
+Authors: Interested readers of the Internet newsgroup rec.games.chess
+Coordinator: Steven J. Edwards (send comments to sje@world.std.com)
 
 ---
 
-## Result Tokens
+## Colophon
 
-| Token | Meaning |
-|-------|---------|
-| `1-0` | White wins |
-| `0-1` | Black wins |
-| `1/2-1/2` | Draw |
-| `*` | In progress / unknown |
+This text was instrumental in the fast spreading of chess games on the Internet. For the first time, developers of chess software had a reliable, precise and accessible definition of an open format their programs could read and write.
+
+The text is available in its original (ASCII) format on the Internet since it was written in 1994. It was tagged as an XML file, using the Docbook XML DTD, by Andreas Saremba in February 2000.
 
 ---
 
-## Move Notation
+## 0: Preface
 
-Moves use Standard Algebraic Notation (SAN). See `@echecs/san` SPEC.md.
+From the Tower of Babel story:
 
-Move numbers follow the pattern:
-- White move: `1. e4`
-- Black move only: `1... e5` (after a variation)
-- Both: `1. e4 e5`
+> "If now, while they are one people, all speaking the same language, they have started to do this, nothing will later stop them from doing whatever they propose to do."
 
----
-
-## Annotations
-
-### NAG (Numeric Annotation Glyph)
-
-| NAG | Symbol | Meaning |
-|-----|--------|---------|
-| `$1` | `!` | Good move |
-| `$2` | `?` | Mistake |
-| `$3` | `!!` | Brilliant move |
-| `$4` | `??` | Blunder |
-| `$5` | `!?` | Interesting move |
-| `$6` | `?!` | Dubious move |
-| `$10` | `=` | Equal position |
-| `$14` | `⩲` | Slight advantage White |
-| `$15` | `⩱` | Slight advantage Black |
-| `$16` | `±` | Advantage White |
-| `$17` | `∓` | Advantage Black |
-| `$18` | `+−` | Decisive advantage White |
-| `$19` | `−+` | Decisive advantage Black |
-
-### Comments
-
-Enclosed in `{ }`. May span multiple lines.
-
-### Variations
-
-Enclosed in `( )`. May be nested.
+Genesis XI, v.6, _New American Bible_
 
 ---
 
-## Implementation Notes
+## 1: Introduction
 
-- `parse(input, options?)` — default export, returns `PGN[]` (empty array on failure, never throws)
-- `stringify(pgn)` — named export, serialises `PGN[]` back to PGN string
-- Uses a Peggy PEG grammar (`src/grammar.pegjs`) — regenerated via `pnpm grammar:compile`
-- `noImplicitAny` is disabled for Peggy action block interop
+PGN is "Portable Game Notation", a standard designed for the representation of chess game data using ASCII text files. PGN is structured for easy reading and writing by human users and for easy parsing and generation by computer programs. The intent of the definition and propagation of PGN is to facilitate the sharing of public domain chess game data among chessplayers (both organic and otherwise), publishers, and computer chess researchers throughout the world.
 
-## Sources
+PGN is not intended to be a general purpose standard that is suitable for every possible use; no such standard could fill all conceivable requirements. Instead, PGN is proposed as a universal portable representation for data interchange. The idea is to allow the construction of a family of chess applications that can quickly and easily process chess game data using PGN for import and export among themselves.
 
-- [PGN Standard (1994)](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm)
+---
+
+## 2: Chess data representation
+
+### 2.1: Data interchange incompatibility
+
+The reasons for format incompatibility are easy to understand. In fact, most of them are correlated with the same problems that have already been seen with commercial software offerings for other domains such as word processing, spreadsheets, fonts, and graphics.
+
+### 2.2: Specification goals
+
+A specification for a portable game notation must observe the lessons of history and be able to handle probable needs of the future. The design criteria for PGN were selected to meet these needs. These criteria include:
+
+1. The details of the system must be publicly available and free of unnecessary complexity.
+2. The details of the system must be non-proprietary so that users and software developers are unrestricted by concerns about infringing on intellectual property rights.
+3. The system must work for a variety of programs. The format should be such that it can be used by chess database programs, chess publishing programs, chess server programs, and chessplaying programs without being unnecessarily specific to any particular application class.
+4. The system must be easily expandable and scalable.
+5. The system must be international.
+6. Finally, the system should handle the same kinds and amounts of data that are already handled by existing chess software and by print media.
+
+### 2.3: A sample PGN game
+
+Although its description may seem rather lengthy, PGN is actually fairly simple. A sample PGN game follows; it has most of the important features described in later sections of this document.
+
+```
+[Event "F/S Return Match"]
+[Site "Belgrade, Serbia JUG"]
+[Date "1992.11.04"]
+[Round "29"]
+[White "Fischer, Robert J."]
+[Black "Spassky, Boris V."]
+[Result "1/2-1/2"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3
+O-O 9. h3 Nb8 10. d4 Nbd7 11. c4 c6 12. cxb5 axb5 13. Nc3 Bb7 14. Bg5 b4 15.
+Nb1 h6 16. Bh4 c5 17. dxe5 Nxe4 18. Bxe7 Qxe7 19. exd6 Qf6 20. Nbd2 Nxd6 21.
+Nc4 Nxc4 22. Bxc4 Nb6 23. Ne5 Rae8 24. Bxf7+ Rxf7 25. Nxf7 Rxe1+ 26. Qxe1 Kxf7
+27. Qe3 Qg5 28. Qxg5 hxg5 29. b3 Ke6 30. a3 Kd6 31. axb4 cxb4 32. Ra5 Nd5 33.
+f3 Bc8 34. Kf2 Bf5 35. Ra7 g6 36. Ra6+ Kc5 37. Ke1 Nf4 38. g3 Nxh3 39. Kd2 Kb5
+40. Rd6 Kc5 41. Ra6 Nf2 42. g4 Bd3 43. Re6 1/2-1/2
+```
+
+---
+
+## 3: Formats: import and export
+
+There are two formats in the PGN specification. These are the "import" format and the "export" format. These are the two different ways of formatting the same PGN data according to its source.
+
+### 3.1: Import format allows for manually prepared data
+
+The import format is rather flexible and is used to describe data that may have been prepared by hand, much like a source file for a high level programming language.
+
+### 3.2: Export format used for program generated output
+
+The export format is rather strict and is used to describe data that is usually prepared under program control.
+
+#### 3.2.1: Byte equivalence
+
+For a given PGN data file, export format representations generated by different PGN programs on the same computing system should be exactly equivalent, byte for byte.
+
+#### 3.2.2: Archival storage and the newline character
+
+Export format should also be used for archival storage. The archival representation of a newline is the ASCII control character LF (line feed, decimal value 10, hexadecimal value 0x0a).
+
+#### 3.2.3: Speed of processing
+
+Several parts of the export format deal with exact descriptions of line and field justification that are absent from the import format details.
+
+#### 3.2.4: Reduced export format
+
+A PGN game represented using export format is said to be in "reduced export format" if all of the following hold: 1) it has no commentary, 2) it has only the standard seven tag roster identification information ("STR", see below), 3) it has no recursive annotation variations ("RAV", see below), and 4) it has no numeric annotation glyphs ("NAG", see below).
+
+---
+
+## 4: Lexicographical issues
+
+PGN data is composed of characters; non-overlapping contiguous sequences of characters form lexical tokens.
+
+### 4.1: Character codes
+
+PGN data is represented using a subset of the eight bit ISO 8859/1 (Latin 1) character set. ISO 8859/1 includes the standard seven bit ASCII character set for the 32 control character code values from zero to 31. The 95 printing character code values from 32 to 126 are also equivalent to seven bit ASCII usage.
+
+Only four of the ASCII control characters are permitted in PGN import format; these are the horizontal and vertical tabs along with the linefeed and carriage return codes.
+
+### 4.2: Tab characters
+
+Tab characters, both horizontal and vertical, are not permitted in the export format. Also, tab characters may not appear inside of string data.
+
+### 4.3: Line lengths
+
+PGN data are organized as simple text lines without any special bytes or markers for secondary record structure. Import format PGN text lines are limited to having a maximum of 255 characters per line including the newline character. Lines with 80 or more printing characters are strongly discouraged.
+
+---
+
+## 5: Commentary
+
+Comment text may appear in PGN data. There are two kinds of comments. The first kind is the "rest of line" comment; this comment type starts with a semicolon character and continues to the end of the line. The second kind starts with a left brace character and continues to the next right brace character. Comments cannot appear inside any token.
+
+Brace comments do not nest; a left brace character appearing in a brace comment loses its special meaning and is ignored.
+
+---
+
+## 6: Escape mechanism
+
+There is a special escape mechanism for PGN data. This mechanism is triggered by a percent sign character ("%") appearing in the first column of a line; the data on the rest of the line is ignored by publicly available PGN scanning software.
+
+---
+
+## 7: Tokens
+
+PGN character data is organized as tokens. A token is a contiguous sequence of characters that represents a basic semantic unit.
+
+A string token is a sequence of zero or more printing characters delimited by a pair of quote characters (ASCII decimal value 34, hexadecimal value 0x22). An empty string is represented by two adjacent quotes. A quote inside a string is represented by the backslash immediately followed by a quote. A backslash inside a string is represented by two adjacent backslashes. Currently, a string is limited to a maximum of 255 characters of data.
+
+An integer token is a sequence of one or more decimal digit characters.
+
+A period character (".") is a token by itself. It is used for move number indications.
+
+An asterisk character ("*") is a token by itself. It is used as one of the possible game termination markers.
+
+The left and right bracket characters ("[" and "]") are tokens. They are used to delimit tag pairs.
+
+The left and right parenthesis characters ("(" and ")") are tokens. They are used to delimit Recursive Annotation Variations.
+
+The left and right angle bracket characters ("<" and ">") are tokens. They are reserved for future expansion.
+
+A Numeric Annotation Glyph ("NAG") is a token; it is composed of a dollar sign character ("$") immediately followed by one or more digit characters.
+
+A symbol token starts with a letter or digit character and is immediately followed by a sequence of zero or more symbol continuation characters. These continuation characters are letter characters ("A-Za-z"), digit characters ("0-9"), the underscore ("_"), the plus sign ("+"), the octothorpe sign ("#"), the equal sign ("="), the colon (":"), and the hyphen ("-"). Currently, a symbol is limited to a maximum of 255 characters in length.
+
+---
+
+## 8: Parsing games
+
+A PGN database file is a sequential collection of zero or more PGN games. An empty file is a valid, although somewhat uninformative, PGN database.
+
+A PGN game is composed of two sections. The first is the tag pair section and the second is the movetext section.
+
+### 8.1: Tag pair section
+
+The tag pair section is composed of a series of zero or more tag pairs.
+
+A tag pair is composed of four consecutive tokens: a left bracket token, a symbol token, a string token, and a right bracket token. The symbol token is the tag name and the string token is the tag value associated with the tag name.
+
+A further restriction on tag names is that they are composed exclusively of letters, digits, and the underscore character.
+
+For PGN export format, there are no white space characters between the left bracket and the tag name, there are no white space characters between the tag value and the right bracket, and there is a single space character between the tag name and the tag value.
+
+Tag names, like all symbols, are case sensitive. All tag names used for archival storage begin with an upper case letter.
+
+Export format requires each tag pair to appear left justified on a line by itself; a single empty line follows the last tag pair.
+
+#### 8.1.1: Seven Tag Roster
+
+There is a set of tags defined for mandatory use for archival storage of PGN data. This is the STR (Seven Tag Roster). The interpretation of these tags is fixed as is the order in which they appear.
+
+The seven tag names of the STR are (in order):
+
+1. Event (the name of the tournament or match event)
+2. Site (the location of the event)
+3. Date (the starting date of the game)
+4. Round (the playing round ordinal of the game)
+5. White (the player of the white pieces)
+6. Black (the player of the black pieces)
+7. Result (the result of the game)
+
+For PGN export format, a single blank line appears after the last of the tag pairs to conclude the tag pair section.
+
+##### 8.1.1.1: The Event tag
+
+The Event tag value should be reasonably descriptive. If the name of the event is unknown, a single question mark should appear as the tag value.
+
+Examples:
+```
+[Event "FIDE World Championship"]
+[Event "Moscow City Championship"]
+[Event "Casual Game"]
+```
+
+##### 8.1.1.2: The Site tag
+
+The Site tag value should include city and region names along with a standard name for the country. The use of the IOC three letter names is suggested. If the site of the event is unknown, a single question mark should appear as the tag value.
+
+Examples:
+```
+[Site "New York City, NY USA"]
+[Site "St. Petersburg RUS"]
+[Site "Riga LAT"]
+```
+
+##### 8.1.1.3: The Date tag
+
+The Date tag value gives the starting date for the game. The date is given with respect to the local time of the site given in the Event tag. The Date tag value field always uses a standard ten character format: "YYYY.MM.DD". If any of the digit fields are not known, then question marks are used in place of the digits.
+
+Examples:
+```
+[Date "1992.08.31"]
+[Date "1993.??.??"]
+[Date "2001.01.01"]
+```
+
+##### 8.1.1.4: The Round tag
+
+The Round tag value gives the playing round for the game. If the use of a round number is inappropriate, then the field should be a single hyphen character. If the round is unknown, a single question mark should appear as the tag value.
+
+Examples:
+```
+[Round "1"]
+[Round "3.1"]
+[Round "4.1.2"]
+```
+
+##### 8.1.1.5: The White tag
+
+The White tag value is the name of the player or players of the white pieces. The names are given as they would appear in a telephone directory. The family or last name appears first. If a first name or first initial is available, it is separated from the family name by a comma and a space.
+
+Examples:
+```
+[White "Tal, Mikhail N."]
+[White "van der Wiel, Johan"]
+[White "Fine, R."]
+```
+
+##### 8.1.1.6: The Black tag
+
+The Black tag value is the name of the player or players of the black pieces. The names are given here as they are for the White tag value.
+
+Examples:
+```
+[Black "Lasker, Emmanuel"]
+[Black "Smyslov, Vasily V."]
+```
+
+##### 8.1.1.7: The Result tag
+
+The Result field value is the result of the game. It is always exactly the same as the game termination marker that concludes the associated movetext. It is always one of four possible values: "1-0" (White wins), "0-1" (Black wins), "1/2-1/2" (drawn game), and "*" (game still in progress, game abandoned, or result otherwise unknown). Note that the digit zero is used in both of the first two cases; not the letter "O".
+
+Examples:
+```
+[Result "0-1"]
+[Result "1-0"]
+[Result "1/2-1/2"]
+[Result "*"]
+```
+
+### 8.2: Movetext section
+
+The movetext section is composed of chess moves, move number indications, optional annotations, and a single concluding game termination marker.
+
+Because illegal moves are not real chess moves, they are not permitted in PGN movetext.
+
+#### 8.2.1: Movetext line justification
+
+In PGN export format, tokens in the movetext are placed left justified on successive text lines each of which has less than 80 printing characters. A single space character appears between any two adjacent symbol tokens on the same line in the movetext. A single empty line follows the last line of data to conclude the movetext section.
+
+Neither the first or the last character on an export format PGN line is a space.
+
+#### 8.2.2: Movetext move number indications
+
+A move number indication is composed of one or more adjacent digits (an integer token) followed by zero or more periods. The integer portion of the indication gives the move number of the immediately following white move (if present) and also the immediately following black move (if present).
+
+##### 8.2.2.1: Import format move number indications
+
+PGN import format does not require move number indications. It does not prohibit superfluous move number indications anywhere in the movetext as long as the move numbers are correct.
+
+##### 8.2.2.2: Export format move number indications
+
+There are two export format move number indication formats: a white move number indication is formed from the integer giving the fullmove number with a single period character appended. A black move number indication is formed from the integer giving the fullmove number with three period characters appended.
+
+All white move elements have a preceding move number indication. A black move element has a preceding move number indication only in two cases: first, if there is intervening annotation or commentary between the black move and the previous white move; and second, if there is no previous white move in the special case where a game starts from a position where Black is the active player.
+
+#### 8.2.3: Movetext SAN (Standard Algebraic Notation)
+
+SAN (Standard Algebraic Notation) is a representation standard for chess moves using the ASCII Latin alphabet.
+
+##### 8.2.3.1: Square identification
+
+SAN identifies each of the sixty four squares on the chessboard with a unique two character name. The first character of a square identifier is the file of the square; a file is a column of eight squares designated by a single lower case letter from "a" (leftmost or queenside) up to and including "h" (rightmost or kingside). The second character of a square identifier is the rank of the square; a rank is a row of eight squares designated by a single digit from "1" (bottom side [White's first rank]) up to and including "8" (top side [Black's first rank]).
+
+##### 8.2.3.2: Piece identification
+
+SAN identifies each piece by a single upper case letter. The standard English values: pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q", and king = "K".
+
+The letter code for a pawn is not used for SAN moves in PGN export format movetext.
+
+##### 8.2.3.3: Basic SAN move construction
+
+A basic SAN move is given by listing the moving piece letter (omitted for pawns) followed by the destination square. Capture moves are denoted by the lower case letter "x" immediately prior to the destination square; pawn captures include the file letter of the originating square of the capturing pawn immediately prior to the "x" character.
+
+SAN kingside castling is indicated by the sequence "O-O"; queenside castling is indicated by the sequence "O-O-O". Note that the upper case letter "O" is used, not the digit zero.
+
+En passant captures do not have any special notation; they are formed as if the captured pawn were on the capturing pawn's destination square. Pawn promotions are denoted by the equal sign "=" immediately following the destination square with a promoted piece letter (indicating one of knight, bishop, rook, or queen) immediately following the equal sign.
+
+##### 8.2.3.4: Disambiguation
+
+In the case of ambiguities (multiple pieces of the same type moving to the same square), the first appropriate disambiguating step of the three following steps is taken:
+
+- First, if the moving pieces can be distinguished by their originating files, the originating file letter of the moving piece is inserted immediately after the moving piece letter.
+- Second (when the first step fails), if the moving pieces can be distinguished by their originating ranks, the originating rank digit of the moving piece is inserted immediately after the moving piece letter.
+- Third (when both the first and the second steps fail), the two character square coordinate of the originating square of the moving piece is inserted immediately after the moving piece letter.
+
+##### 8.2.3.5: Check and checkmate indication characters
+
+If the move is a checking move, the plus sign "+" is appended as a suffix to the basic SAN move notation; if the move is a checkmating move, the octothorpe sign "#" is appended instead.
+
+Neither the appearance nor the absence of either a check or checkmating indicator is used for disambiguation purposes.
+
+There are no special markings used for double checks or discovered checks.
+
+There are no special markings used for drawing moves.
+
+##### 8.2.3.6: SAN move length
+
+SAN moves can be as short as two characters (e.g., "d4"), or as long as seven characters (e.g., "Qa6xb7#", "fxg1=Q+"). The average SAN move length seen in realistic games is probably just fractionally longer than three characters.
+
+##### 8.2.3.7: Import and export SAN
+
+PGN export format always uses the above canonical SAN to represent moves in the movetext section of a PGN game. Import format is somewhat more relaxed and it makes allowances for moves that do not conform exactly to the canonical format.
+
+##### 8.2.3.8: SAN move suffix annotations
+
+Import format PGN allows for the use of traditional suffix annotations for moves. There are exactly six such annotations available: "!", "?", "!!", "!?", "?!", and "??". At most one such suffix annotation may appear per move, and if present, it is always the last part of the move symbol.
+
+When exported, a move suffix annotation is translated into the corresponding Numeric Annotation Glyph as described in a later section of this document.
+
+#### 8.2.4: Movetext NAG (Numeric Annotation Glyph)
+
+An NAG (Numeric Annotation Glyph) is a movetext element that is used to indicate a simple annotation in a language independent manner. An NAG is formed from a dollar sign ("$") with a non-negative decimal integer suffix. The non-negative integer must be from zero to 255 in value.
+
+#### 8.2.5: Movetext RAV (Recursive Annotation Variation)
+
+An RAV (Recursive Annotation Variation) is a sequence of movetext containing one or more moves enclosed in parentheses. An RAV is used to represent an alternative variation. The alternate move sequence given by an RAV is one that may be legally played by first unplaying the move that appears immediately prior to the RAV. Because the RAV is a recursive construct, it may be nested.
+
+#### 8.2.6: Game Termination Markers
+
+Each movetext section has exactly one game termination marker; the marker always occurs as the last element in the movetext. The game termination marker is a symbol that is one of the following four values: "1-0" (White wins), "0-1" (Black wins), "1/2-1/2" (drawn game), and "*" (game in progress, result unknown, or game abandoned). Note that the digit zero is used in the above; not the upper case letter "O". The game termination marker appearing in the movetext of a game must match the value of the game's Result tag pair.
+
+---
+
+## 9: Supplemental tag names
+
+The following tag names and their associated semantics are recommended for use for information not contained in the Seven Tag Roster.
+
+### 9.1: Player related information
+
+#### 9.1.1: Tags: WhiteTitle, BlackTitle
+
+These use string values such as "FM", "IM", and "GM"; these tags are used only for the standard abbreviations for FIDE titles. A value of "-" is used for an untitled player.
+
+#### 9.1.2: Tags: WhiteElo, BlackElo
+
+These tags use integer values; these are used for FIDE Elo ratings. A value of "-" is used for an unrated player.
+
+#### 9.1.3: Tags: WhiteUSCF, BlackUSCF
+
+These tags use integer values; these are used for USCF ratings.
+
+#### 9.1.4: Tags: WhiteNA, BlackNA
+
+These tags use string values; these are the e-mail or network addresses of the players. A value of "-" is used for a player without an electronic address.
+
+#### 9.1.5: Tags: WhiteType, BlackType
+
+These tags use string values; these describe the player types. The value "human" should be used for a person while the value "program" should be used for algorithmic (computer) players.
+
+### 9.2: Event related information
+
+#### 9.2.1: Tag: EventDate
+
+This uses a date value, similar to the Date tag field, that gives the starting date of the Event.
+
+#### 9.2.2: Tag: EventSponsor
+
+This uses a string value giving the name of the sponsor of the event.
+
+#### 9.2.3: Tag: Section
+
+This uses a string; this is used for the playing section of a tournament (e.g., "Open" or "Reserve").
+
+#### 9.2.4: Tag: Stage
+
+This uses a string; this is used for the stage of a multistage event (e.g., "Preliminary" or "Semifinal").
+
+#### 9.2.5: Tag: Board
+
+This uses an integer; this identifies the board number in a team event and also in a simultaneous exhibition.
+
+### 9.3: Opening information (locale specific)
+
+#### 9.3.1: Tag: Opening
+
+This uses a string; this is used for the traditional opening name.
+
+#### 9.3.2: Tag: Variation
+
+This uses a string; this is used to further refine the Opening tag.
+
+#### 9.3.3: Tag: SubVariation
+
+This uses a string; this is used to further refine the Variation tag.
+
+### 9.4: Opening information (third party vendors)
+
+#### 9.4.1: Tag: ECO
+
+This uses a string of either the form "XDD" or the form "XDD/DD" where the "X" is a letter from "A" to "E" and the "D" positions are digits; this is used for an opening designation from the five volume _Encyclopedia of Chess Openings_.
+
+#### 9.4.2: Tag: NIC
+
+This uses a string; this is used for an opening designation from the _New in Chess_ database.
+
+### 9.5: Time and date related information
+
+#### 9.5.1: Tag: Time
+
+This uses a time-of-day value in the form "HH:MM:SS"; similar to the Date tag except that it denotes the local clock time of the start of the game.
+
+#### 9.5.2: Tag: UTCTime
+
+This tag is similar to the Time tag except that the time is given according to the Universal Coordinated Time standard.
+
+#### 9.5.3: Tag: UTCDate
+
+This tag is similar to the Date tag except that the date is given according to the Universal Coordinated Time standard.
+
+### 9.6: Time control
+
+#### 9.6.1: Tag: TimeControl
+
+This uses a list of one or more time control fields. Each field contains a descriptor for each time control period; if more than one descriptor is present then they are separated by the colon character (":"). The descriptors appear in the order in which they are used in the game. The last field appearing is considered to be implicitly repeated for further control periods as needed.
+
+There are six kinds of TimeControl fields:
+
+- "?" — time control mode is unknown.
+- "-" — no time control mode in use.
+- Two positive integers separated by "/" — number of moves in period / number of seconds in period (e.g., "40/9000" for 40 moves in 2½ hours).
+- Single integer — "sudden death" period giving the number of seconds.
+- Two positive integers separated by "+" — minimum seconds plus extra seconds per move (e.g., "4500+60" for 90 minutes plus 1 minute per move).
+- Asterisk followed by a positive integer — "sandclock" control.
+
+### 9.7: Alternative starting positions
+
+#### 9.7.1: Tag: SetUp
+
+This tag takes an integer that denotes the "set-up" status of the game. A value of "0" indicates that the game has started from the usual initial array. A value of "1" indicates that the game started from a set-up position; this position is given in the "FEN" tag pair.
+
+#### 9.7.2: Tag: FEN
+
+This tag uses a string that gives the Forsyth-Edwards Notation for the starting position used in the game. If a SetUp tag appears with a tag value of "1", the FEN tag pair is also required.
+
+### 9.8: Game conclusion
+
+#### 9.8.1: Tag: Termination
+
+This takes a string that describes the reason for the conclusion of the game.
+
+Strings that may appear as Termination tag values:
+
+- "abandoned": abandoned game.
+- "adjudication": result due to third party adjudication process.
+- "death": losing player called to greater things.
+- "emergency": game concluded due to unforeseen circumstances.
+- "normal": game terminated in a normal fashion.
+- "rules infraction": administrative forfeit.
+- "time forfeit": loss due to losing player's failure to meet time control requirements.
+- "unterminated": game not terminated.
+
+### 9.9: Miscellaneous
+
+#### 9.9.1: Tag: Annotator
+
+This tag uses a name or names in the format of the player name tags; this identifies the annotator or annotators of the game.
+
+#### 9.9.2: Tag: Mode
+
+This uses a string that gives the playing mode of the game. Examples: "OTB" (over the board), "PM" (paper mail), "EM" (electronic mail), "ICS" (Internet Chess Server), and "TC" (general telecommunication).
+
+#### 9.9.3: Tag: PlyCount
+
+This tag takes a single integer that gives the number of ply (moves) in the game.
+
+---
+
+## 10: Numeric Annotation Glyphs
+
+NAG zero is used for a null annotation; it is provided for the convenience of software designers as a placeholder value and should probably not be used in external PGN data.
+
+- NAGs with values from 1 to 9 annotate the move just played.
+- NAGs with values from 10 to 135 modify the current position.
+- NAGs with values from 136 to 139 describe time pressure.
+- Other NAG values are reserved for future definition.
+
+| NAG | Interpretation |
+|-----|----------------|
+| 0   | null annotation |
+| 1   | good move (traditional "!") |
+| 2   | poor move (traditional "?") |
+| 3   | very good move (traditional "!!") |
+| 4   | very poor move (traditional "??") |
+| 5   | speculative move (traditional "!?") |
+| 6   | questionable move (traditional "?!") |
+| 7   | forced move (all others lose quickly) |
+| 8   | singular move (no reasonable alternatives) |
+| 9   | worst move |
+| 10  | drawish position |
+| 11  | equal chances, quiet position |
+| 12  | equal chances, active position |
+| 13  | unclear position |
+| 14  | White has a slight advantage |
+| 15  | Black has a slight advantage |
+| 16  | White has a moderate advantage |
+| 17  | Black has a moderate advantage |
+| 18  | White has a decisive advantage |
+| 19  | Black has a decisive advantage |
+| 20  | White has a crushing advantage (Black should resign) |
+| 21  | Black has a crushing advantage (White should resign) |
+| 22  | White is in zugzwang |
+| 23  | Black is in zugzwang |
+| 24  | White has a slight space advantage |
+| 25  | Black has a slight space advantage |
+| 26  | White has a moderate space advantage |
+| 27  | Black has a moderate space advantage |
+| 28  | White has a decisive space advantage |
+| 29  | Black has a decisive space advantage |
+| 30  | White has a slight time (development) advantage |
+| 31  | Black has a slight time (development) advantage |
+| 32  | White has a moderate time (development) advantage |
+| 33  | Black has a moderate time (development) advantage |
+| 34  | White has a decisive time (development) advantage |
+| 35  | Black has a decisive time (development) advantage |
+| 36  | White has the initiative |
+| 37  | Black has the initiative |
+| 38  | White has a lasting initiative |
+| 39  | Black has a lasting initiative |
+| 40  | White has the attack |
+| 41  | Black has the attack |
+| 42  | White has insufficient compensation for material deficit |
+| 43  | Black has insufficient compensation for material deficit |
+| 44  | White has sufficient compensation for material deficit |
+| 45  | Black has sufficient compensation for material deficit |
+| 46  | White has more than adequate compensation for material deficit |
+| 47  | Black has more than adequate compensation for material deficit |
+| 48  | White has a slight center control advantage |
+| 49  | Black has a slight center control advantage |
+| 50  | White has a moderate center control advantage |
+| 51  | Black has a moderate center control advantage |
+| 52  | White has a decisive center control advantage |
+| 53  | Black has a decisive center control advantage |
+| 54  | White has a slight kingside control advantage |
+| 55  | Black has a slight kingside control advantage |
+| 56  | White has a moderate kingside control advantage |
+| 57  | Black has a moderate kingside control advantage |
+| 58  | White has a decisive kingside control advantage |
+| 59  | Black has a decisive kingside control advantage |
+| 60  | White has a slight queenside control advantage |
+| 61  | Black has a slight queenside control advantage |
+| 62  | White has a moderate queenside control advantage |
+| 63  | Black has a moderate queenside control advantage |
+| 64  | White has a decisive queenside control advantage |
+| 65  | Black has a decisive queenside control advantage |
+| 66  | White has a vulnerable first rank |
+| 67  | Black has a vulnerable first rank |
+| 68  | White has a well protected first rank |
+| 69  | Black has a well protected first rank |
+| 70  | White has a poorly protected king |
+| 71  | Black has a poorly protected king |
+| 72  | White has a well protected king |
+| 73  | Black has a well protected king |
+| 74  | White has a poorly placed king |
+| 75  | Black has a poorly placed king |
+| 76  | White has a well placed king |
+| 77  | Black has a well placed king |
+| 78  | White has a very weak pawn structure |
+| 79  | Black has a very weak pawn structure |
+| 80  | White has a moderately weak pawn structure |
+| 81  | Black has a moderately weak pawn structure |
+| 82  | White has a moderately strong pawn structure |
+| 83  | Black has a moderately strong pawn structure |
+| 84  | White has a very strong pawn structure |
+| 85  | Black has a very strong pawn structure |
+| 86  | White has poor knight placement |
+| 87  | Black has poor knight placement |
+| 88  | White has good knight placement |
+| 89  | Black has good knight placement |
+| 90  | White has poor bishop placement |
+| 91  | Black has poor bishop placement |
+| 92  | White has good bishop placement |
+| 93  | Black has good bishop placement |
+| 98  | White has poor queen placement |
+| 99  | Black has poor queen placement |
+| 100 | White has good queen placement |
+| 101 | Black has good queen placement |
+| 102 | White has poor piece coordination |
+| 103 | Black has poor piece coordination |
+| 104 | White has good piece coordination |
+| 105 | Black has good piece coordination |
+| 106 | White has played the opening very poorly |
+| 107 | Black has played the opening very poorly |
+| 108 | White has played the opening poorly |
+| 109 | Black has played the opening poorly |
+| 110 | White has played the opening well |
+| 111 | Black has played the opening well |
+| 112 | White has played the opening very well |
+| 113 | Black has played the opening very well |
+| 114 | White has played the middlegame very poorly |
+| 115 | Black has played the middlegame very poorly |
+| 116 | White has played the middlegame poorly |
+| 117 | Black has played the middlegame poorly |
+| 118 | White has played the middlegame well |
+| 119 | Black has played the middlegame well |
+| 120 | White has played the middlegame very well |
+| 121 | Black has played the middlegame very well |
+| 122 | White has played the ending very poorly |
+| 123 | Black has played the ending very poorly |
+| 124 | White has played the ending poorly |
+| 125 | Black has played the ending poorly |
+| 126 | White has played the ending well |
+| 127 | Black has played the ending well |
+| 128 | White has played the ending very well |
+| 129 | Black has played the ending very well |
+| 130 | White has slight counterplay |
+| 131 | Black has slight counterplay |
+| 132 | White has moderate counterplay |
+| 133 | Black has moderate counterplay |
+| 134 | White has decisive counterplay |
+| 135 | Black has decisive counterplay |
+| 136 | White has moderate time control pressure |
+| 137 | Black has moderate time control pressure |
+| 138 | White has severe time control pressure |
+| 139 | Black has severe time control pressure |
+
+---
+
+## 11: File names and directories
+
+### 11.1: File name suffix for PGN data
+
+The use of the file suffix ".pgn" is encouraged for ASCII text files containing PGN data.
+
+### 11.2: File name formation for PGN data for a specific player
+
+PGN games for a specific player should have a file name consisting of the player's last name followed by the ".pgn" suffix.
+
+### 11.3: File name formation for PGN data for a specific event
+
+PGN games for a specific event should have a file name consisting of the event's name followed by the ".pgn" suffix.
+
+### 11.4: File name formation for PGN data for chronologically ordered games
+
+A file containing all the PGN games for a given year would have an eight character name in the format "YYYY.pgn". A file containing PGN data for a given month would have a ten character name in the format "YYYYMM.pgn". Finally, a file for PGN games for a single day would have a twelve character name in the format "YYYYMMDD.pgn".
+
+---
+
+## 12: PGN collating sequence
+
+There is a standard sorting order for PGN games within a file based on eight keys: the seven tag values of the STR and also the movetext itself.
+
+- The first (primary key) is the Date tag. Earlier dated games appear prior to games played at a later date.
+- The second key is the Event tag, sorted in ascending ASCII order.
+- The third key is the Site tag, sorted in ascending ASCII order.
+- The fourth key is the Round tag, sorted in ascending numeric order.
+- The fifth key is the White tag, sorted in ascending ASCII order.
+- The sixth key is the Black tag, sorted in ascending ASCII order.
+- The seventh key is the Result tag, sorted in ascending ASCII order.
+- The eighth key is the movetext itself, sorted in ascending ASCII order.
+
+---
+
+## 16: Additional chess data standards
+
+### 16.1: FEN
+
+FEN is "Forsyth-Edwards Notation"; it is a standard for describing chess positions using the ASCII character set.
+
+A single FEN record uses one text line of variable length composed of six data fields. The first four fields of the FEN specification are the same as the first four fields of the EPD specification.
+
+A text file composed exclusively of FEN data records should have a file name with the suffix ".fen".
+
+#### 16.1.3: Data fields
+
+##### 16.1.3.1: Piece placement data
+
+The first field represents the placement of the pieces on the board. The board contents are specified starting with the eighth rank and ending with the first rank. For each rank, the squares are specified from file a to file h. White pieces are identified by uppercase SAN piece letters ("PNBRQK") and black pieces are identified by lowercase SAN piece letters ("pnbrqk"). Empty squares are represented by the digits one through eight. A solidus character "/" is used to separate data of adjacent ranks.
+
+##### 16.1.3.2: Active color
+
+The second field represents the active color. A lower case "w" is used if White is to move; a lower case "b" is used if Black is the active player.
+
+##### 16.1.3.3: Castling availability
+
+The third field represents castling availability. If there is no castling availability for either side, the single character symbol "-" is used. Otherwise, a combination of from one to four characters are present: "K" (White kingside), "Q" (White queenside), "k" (Black kingside), "q" (Black queenside).
+
+##### 16.1.3.4: En passant target square
+
+The fourth field is the en passant target square. If there is no en passant target square then the single character symbol "-" appears. If there is an en passant target square then it is represented by a lowercase file character immediately followed by a rank digit.
+
+An en passant target square is given if and only if the last move was a pawn advance of two squares.
+
+##### 16.1.3.5: Halfmove clock
+
+The fifth field is a nonnegative integer representing the halfmove clock. This number is the count of halfmoves (or ply) since the last pawn advance or capturing move. This value is used for the fifty move draw rule.
+
+##### 16.1.3.6: Fullmove number
+
+The sixth and last field is a positive integer that gives the fullmove number. This will have the value "1" for the first move of a game for both White and Black. It is incremented by one immediately after each move by Black.
+
+#### 16.1.4: Examples
+
+```
+rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+```
+
+After 1. e4:
+```
+rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1
+```
+
+After 1. ... c5:
+```
+rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2
+```
+
+After 2. Nf3:
+```
+rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2
+```
+
+---
+
+## 18: Formal syntax
+
+```
+<PGN-database> ::= <PGN-game> <PGN-database>
+                   <empty>
+
+<PGN-game> ::= <tag-section> <movetext-section>
+
+<tag-section> ::= <tag-pair> <tag-section>
+                  <empty>
+
+<tag-pair> ::= [ <tag-name> <tag-value> ]
+
+<tag-name> ::= <identifier>
+
+<tag-value> ::= <string>
+
+<movetext-section> ::= <element-sequence> <game-termination>
+
+<element-sequence> ::= <element> <element-sequence>
+                       <recursive-variation> <element-sequence>
+                       <empty>
+
+<element> ::= <move-number-indication>
+              <SAN-move>
+              <numeric-annotation-glyph>
+
+<recursive-variation> ::= ( <element-sequence> )
+
+<game-termination> ::= 1-0
+                       0-1
+                       1/2-1/2
+                       *
+<empty> ::=
+```
