@@ -93,8 +93,8 @@ DATABASE
 // ─── GAME ────────────────────────────────────────────────────────────────────
 
 GAME
-  = tags:TAGS _ moves:MOVES _ result:RESULT
-  { return { meta: tags, moves: pairMoves(moves), result: mapResult(result) }; }
+  = tags:TAGS _ moves:(m:MOVES _ { return m; })? result:RESULT
+  { return { meta: tags, moves: pairMoves(moves ?? []), result: mapResult(result) }; }
 
 // ─── TAGS ────────────────────────────────────────────────────────────────────
 

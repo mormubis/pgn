@@ -12,3 +12,5 @@ export type {
 export { default } from './parse.js';
 
 export { stream } from './stream.js';
+
+export { stringify } from './stringify.js';
