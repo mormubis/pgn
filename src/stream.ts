@@ -39,7 +39,8 @@ async function* readableStreamToIterable(
  *   (Node.js readable stream, fetch body piped through TextDecoderStream, etc.)
  * @param options - Optional. Pass `onError` to observe parse failures instead of
  *   silently skipping malformed games. Not called for truncated streams (input
- *   ending without a result token).
+ *   ending without a result token). Pass `onWarning` to observe spec-compliance
+ *   issues (missing STR tags, move number mismatches, etc.).
  */
 export async function* stream(
   input: AsyncIterable<string> | StringReadableStream,
