@@ -1,3 +1,5 @@
+import { RESULT_TO_STR } from './parse.js';
+
 import type { Eval, Meta, Move, MoveList, PGN, ParseOptions } from './types.js';
 
 const STR_TAG_ORDER = [
@@ -12,13 +14,6 @@ const STR_TAG_ORDER = [
 
 const KINGSIDE_SQUARES = new Set(['g1', 'g8']);
 const QUEENSIDE_SQUARES = new Set(['c1', 'c8']);
-
-const RESULT_TO_MARKER: Readonly<Record<string, string>> = {
-  '0': '0-1',
-  '0.5': '1/2-1/2',
-  '1': '1-0',
-  '?': '*',
-};
 
 // ─── Tags ────────────────────────────────────────────────────────────────────
 
@@ -252,7 +247,7 @@ function stringifyMoveList(moves: MoveList, options?: ParseOptions): string {
 function stringifyOne(game: PGN, options?: ParseOptions): string {
   const tags = stringifyTags(game.meta);
   const movetext = stringifyMoveList(game.moves, options);
-  const result = RESULT_TO_MARKER[String(game.result)] ?? '*';
+  const result = RESULT_TO_STR[String(game.result)] ?? '*';
   const header = tags.length > 0 ? tags + '\n\n' : '';
   const separator = movetext.length > 0 ? ' ' : '';
   return `${header}${movetext}${separator}${result}\n`;
