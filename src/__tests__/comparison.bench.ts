@@ -1,3 +1,12 @@
+// Package size comparison (as of 2026-03-17, measured with `npm pack --dry-run`):
+//
+// | Package                  | Pack size | Unpacked |
+// |--------------------------|-----------|----------|
+// | @echecs/pgn              |    42 KB  |  195 KB  |
+// | pgn-parser               |    99 KB  |  606 KB  |
+// | @mliebelt/pgn-parser     |   148 KB  |  595 KB  |
+// | chess.js                 |   150 KB  |  724 KB  |
+
 import { parseGame, parseGames } from '@mliebelt/pgn-parser';
 import { Chess } from 'chess.js';
 import { readFileSync } from 'node:fs';

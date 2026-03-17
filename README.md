@@ -5,13 +5,20 @@
 [![Coverage](https://codecov.io/gh/mormubis/pgn/branch/main/graph/badge.svg)](https://codecov.io/gh/mormubis/pgn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**PGN** is a fast TypeScript parser for
+**PGN** is a fast, lightweight TypeScript parser for
 [Portable Game Notation](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm)
 — the standard format for recording chess games.
 
 It parses PGN input into structured move objects with decomposed SAN, paired
 white/black moves, and full support for annotations and variations. Zero runtime
-dependencies.
+dependencies. The smallest PGN parser on npm.
+
+| Package                | Pack size | Unpacked   |
+| ---------------------- | --------- | ---------- |
+| **`@echecs/pgn`**      | **42 KB** | **195 KB** |
+| `pgn-parser`           | 99 KB     | 606 KB     |
+| `@mliebelt/pgn-parser` | 148 KB    | 595 KB     |
+| `chess.js`             | 150 KB    | 724 KB     |
 
 ## Why this library?
 
@@ -275,7 +282,7 @@ left in the comment string unchanged.
 #### Types
 
 ```typescript
-type AnnotationColor = 'R' | 'G' | 'B' | 'Y'; // Red, Green, Blue, Yellow
+type AnnotationColor = 'B' | 'C' | 'G' | 'O' | 'R' | 'Y'; // Blue, Cyan, Green, Orange, Red, Yellow
 
 interface Arrow {
   color: AnnotationColor;
@@ -288,11 +295,9 @@ interface SquareAnnotation {
   square: string; // e.g. "e4"
 }
 
-interface Eval {
-  depth?: number; // search depth, if present
-  mate?: number; // mate in N (positive = current side wins)
-  value?: number; // centipawn score (positive = current side advantage)
-}
+type Eval =
+  | { type: 'cp'; value: number; depth?: number } // centipawn score
+  | { type: 'mate'; value: number; depth?: number }; // mate in N
 ```
 
 #### Example
