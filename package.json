@@ -3,7 +3,7 @@
   "bugs": {
     "url": "https://github.com/mormubis/pgn/issues"
   },
-  "description": "PGN is a parser that is part of the ECHECS project, designed to interpret the PGN (Portable Game Notation) specification.",
+  "description": "Parse PGN (Portable Game Notation) chess games into structured JavaScript objects. Zero dependencies, strict TypeScript, no-throw API.",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@mliebelt/pgn-parser": "^1.4.15",
@@ -45,8 +45,14 @@
   "keywords": [
     "chess",
     "fide",
+    "game",
+    "no-dependencies",
+    "notation",
     "parser",
-    "pgn"
+    "pgn",
+    "pgn-parser",
+    "portable game notation",
+    "typescript"
   ],
   "license": "MIT",
   "main": "dist/index.js",
