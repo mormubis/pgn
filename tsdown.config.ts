@@ -6,5 +6,6 @@ export default defineConfig({
   format: 'esm',
   minify: true,
   platform: 'neutral',
-  sourcemap: true,
+  outDir: 'dist',
+  sourcemap: 'hidden',
 });
