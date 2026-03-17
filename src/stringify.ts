@@ -1,6 +1,13 @@
 import { RESULT_TO_STR } from './parse.js';
 
-import type { Eval, Meta, Move, MoveList, PGN, ParseOptions } from './types.js';
+import type {
+  Eval,
+  Meta,
+  Move,
+  MoveList,
+  PGN,
+  StringifyOptions,
+} from './types.js';
 
 const STR_TAG_ORDER = [
   'Event',
@@ -52,7 +59,7 @@ function applyIndicators(san: string, move: Move): string {
   return san;
 }
 
-function stringifySAN(move: Move, options?: ParseOptions): string {
+function stringifySAN(move: Move, options?: StringifyOptions): string {
   if (move.castling) {
     if (KINGSIDE_SQUARES.has(move.to)) {
       return applyIndicators('O-O', move);
@@ -132,7 +139,7 @@ function stringifyEval(evaluation: Eval): string {
   return `[%eval ${evaluation.value.toFixed(2)}${depth}]`;
 }
 
-function stringifyComment(move: Move, options?: ParseOptions): string {
+function stringifyComment(move: Move, options?: StringifyOptions): string {
   const parts: string[] = [];
 
   if (move.arrows && move.arrows.length > 0) {
@@ -188,7 +195,7 @@ function hasAnnotation(move: Move): boolean {
   );
 }
 
-function stringifyMoveList(moves: MoveList, options?: ParseOptions): string {
+function stringifyMoveList(moves: MoveList, options?: StringifyOptions): string {
   const tokens: string[] = [];
 
   for (const pair of moves) {
@@ -252,7 +259,7 @@ function stringifyMoveList(moves: MoveList, options?: ParseOptions): string {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-function stringifyOne(game: PGN, options?: ParseOptions): string {
+function stringifyOne(game: PGN, options?: StringifyOptions): string {
   const tags = stringifyTags(game.meta);
   const movetext = stringifyMoveList(game.moves, options);
   const result = RESULT_TO_STR[String(game.result)] ?? '*';
@@ -261,7 +268,7 @@ function stringifyOne(game: PGN, options?: ParseOptions): string {
   return `${header}${movetext}${separator}${result}\n`;
 }
 
-export function stringify(input: PGN | PGN[], options?: ParseOptions): string {
+export function stringify(input: PGN | PGN[], options?: StringifyOptions): string {
   if (Array.isArray(input)) {
     return input.map((game) => stringifyOne(game, options)).join('\n');
   }

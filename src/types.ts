@@ -63,9 +63,12 @@ export interface ParseError {
   offset: number;
 }
 
-export interface ParseOptions {
-  onError?: (error: ParseError) => void;
+export interface StringifyOptions {
   onWarning?: (warning: ParseWarning) => void;
+}
+
+export interface ParseOptions extends StringifyOptions {
+  onError?: (error: ParseError) => void;
 }
 
 export interface ParseWarning {

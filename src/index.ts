@@ -10,6 +10,7 @@ export type {
   ParseOptions,
   ParseWarning,
   PGN,
+  StringifyOptions,
   Piece,
   Result,
   SquareAnnotation,
