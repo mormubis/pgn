@@ -65,7 +65,7 @@
   "scripts": {
     "bench": "vitest bench --run",
     "build": "pnpm run build:grammar && pnpm run build:entry",
-    "build:entry": "tsc --project tsconfig.build.json",
+    "build:entry": "tsdown",
     "build:grammar": "pnpm run grammar:compile",
     "format": "pnpm run format:ci --write",
     "format:ci": "prettier -l \"**/*.+(css|js|json|jsx|md|mjs|mts|ts|tsx|yml|yaml)\"",
