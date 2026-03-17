@@ -205,8 +205,8 @@ describe('stream()', () => {
   it('accepts a Web Streams ReadableStream<string> with multiple chunks', async () => {
     const rs = new ReadableStream<string>({
       start(controller) {
-        for (let i = 0; i < twoGames.length; i += 5) {
-          controller.enqueue(twoGames.slice(i, i + 5));
+        for (let index = 0; index < twoGames.length; index += 5) {
+          controller.enqueue(twoGames.slice(index, index + 5));
         }
         controller.close();
       },
