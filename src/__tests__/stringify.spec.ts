@@ -290,6 +290,31 @@ describe('stringify', () => {
     });
   });
 
+  describe('clock serialization edge cases', () => {
+    it('serializes clock with fractional seconds and non-zero minutes', () => {
+      // 100.1 seconds = 0:01:40.1
+      const [game] = parse('1. e4 { [%clk 0:00:01.5] } e5 1-0');
+      game!.moves[0]![1]!.clock = 100.1;
+      expect(stringify(game!)).toContain('[%clk 0:01:40.1]');
+    });
+
+    it('serializes clock near hour boundary with fractional seconds', () => {
+      // 3599.9 seconds = 0:59:59.9
+      const [game] = parse('1. e4 { [%clk 0:00:01.5] } e5 1-0');
+      game!.moves[0]![1]!.clock = 3599.9;
+      expect(stringify(game!)).toContain('[%clk 0:59:59.9]');
+    });
+
+    it('serializes no-moves game without leading space before result', () => {
+      const pgn = '[Result "*"]\n\n*';
+      const [game] = parse(pgn);
+      const output = stringify(game!);
+      // Result marker should not be preceded by a space when there are no moves
+      expect(output).toContain('[Result "*"]\n\n*\n');
+      expect(output).not.toContain(' *\n');
+    });
+  });
+
   describe('round-trip', () => {
     it('parse → stringify → parse produces equivalent games for basic.pgn', () => {
       const pgn = readFile('./grammar/basic.pgn');

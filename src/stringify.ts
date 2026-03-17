@@ -111,20 +111,18 @@ function stringifySAN(move: Move, options?: ParseOptions): string {
 // ─── Comment commands ─────────────────────────────────────────────────────────
 
 function secondsToClk(seconds: number): string {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
-  // Pad to at least 2 chars; preserve sub-second precision
-  let sString: string;
-  if (Number.isInteger(s)) {
-    sString = String(Math.round(s)).padStart(2, '0');
-  } else {
-    const raw = String(s);
-    const dotIndex = raw.indexOf('.');
-    const wholePart = dotIndex === -1 ? raw : raw.slice(0, dotIndex);
-    const fracPart = dotIndex === -1 ? '0' : raw.slice(dotIndex + 1);
-    sString = wholePart.padStart(2, '0') + '.' + fracPart;
-  }
+  const totalMs = Math.round(seconds * 1000);
+  const h = Math.floor(totalMs / 3_600_000);
+  const m = Math.floor((totalMs % 3_600_000) / 60_000);
+  const sMs = totalMs % 60_000;
+  const sWhole = Math.floor(sMs / 1000);
+  const sFrac = sMs % 1000;
+
+  const sString =
+    sFrac === 0
+      ? String(sWhole).padStart(2, '0')
+      : `${String(sWhole).padStart(2, '0')}.${String(sFrac).replace(/0+$/, '')}`;
+
   return `${String(h)}:${String(m).padStart(2, '0')}:${sString}`;
 }
 
@@ -256,7 +254,8 @@ function stringifyOne(game: PGN, options?: ParseOptions): string {
   const movetext = stringifyMoveList(game.moves, options);
   const result = RESULT_TO_MARKER[String(game.result)] ?? '*';
   const header = tags.length > 0 ? tags + '\n\n' : '';
-  return `${header}${movetext} ${result}\n`;
+  const separator = movetext.length > 0 ? ' ' : '';
+  return `${header}${movetext}${separator}${result}\n`;
 }
 
 export function stringify(input: PGN | PGN[], options?: ParseOptions): string {
