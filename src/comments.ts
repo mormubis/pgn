@@ -24,6 +24,10 @@ interface CommentFields {
   squares?: SquareAnnotation[];
 }
 
+function removeMatch(text: string, match: RegExpExecArray): string {
+  return text.slice(0, match.index) + text.slice(match.index + match[0].length);
+}
+
 function parseCommentCommands(raw: string): CommentFields {
   if (!raw.includes('[%')) {
     return { comment: raw };
@@ -72,7 +76,7 @@ function parseCommentCommands(raw: string): CommentFields {
     const m = Number.parseInt(mString, 10);
     const s = Number.parseFloat(sString);
     result.clock = h * 3600 + m * 60 + s;
-    text = text.replace(CLK_RE, '');
+    text = removeMatch(text, clkMatch);
   }
 
   // [%eval]
@@ -95,7 +99,7 @@ function parseCommentCommands(raw: string): CommentFields {
         value: Number.parseFloat(evalMatch[2]),
       };
     }
-    text = text.replace(EVAL_RE, '');
+    text = removeMatch(text, evalMatch);
   }
 
   // Clean up remaining text
@@ -107,6 +111,53 @@ function parseCommentCommands(raw: string): CommentFields {
   return result;
 }
 
+// Build a new Move object by merging the original move with extracted comment
+// fields. Avoids mutating the grammar-produced object (which would cause V8
+// hidden-class transitions from `delete`).
+function applyCommentFields(move: Move, fields: CommentFields): Move {
+  const out: Move = { piece: move.piece, to: move.to };
+  if (move.from !== undefined) {
+    out.from = move.from;
+  }
+  if (move.capture !== undefined) {
+    out.capture = move.capture;
+  }
+  if (move.castling !== undefined) {
+    out.castling = move.castling;
+  }
+  if (move.check !== undefined) {
+    out.check = move.check;
+  }
+  if (move.checkmate !== undefined) {
+    out.checkmate = move.checkmate;
+  }
+  if (move.promotion !== undefined) {
+    out.promotion = move.promotion;
+  }
+  if (move.annotations !== undefined) {
+    out.annotations = move.annotations;
+  }
+  if (fields.arrows !== undefined) {
+    out.arrows = fields.arrows;
+  }
+  if (fields.squares !== undefined) {
+    out.squares = fields.squares;
+  }
+  if (fields.clock !== undefined) {
+    out.clock = fields.clock;
+  }
+  if (fields.eval !== undefined) {
+    out.eval = fields.eval;
+  }
+  if (fields.comment !== undefined) {
+    out.comment = fields.comment;
+  }
+  if (move.variants !== undefined) {
+    out.variants = move.variants;
+  }
+  return out;
+}
+
 function processMoveList(moves: MoveList): void {
   for (const pair of moves) {
     for (let index = 1; index <= 2; index++) {
@@ -114,22 +165,7 @@ function processMoveList(moves: MoveList): void {
       if (move !== undefined) {
         if (move.comment !== undefined) {
           const fields = parseCommentCommands(move.comment);
-          delete (move as Partial<Move>).comment;
-          if (fields.arrows !== undefined) {
-            move.arrows = fields.arrows;
-          }
-          if (fields.clock !== undefined) {
-            move.clock = fields.clock;
-          }
-          if (fields.eval !== undefined) {
-            move.eval = fields.eval;
-          }
-          if (fields.squares !== undefined) {
-            move.squares = fields.squares;
-          }
-          if (fields.comment !== undefined) {
-            move.comment = fields.comment;
-          }
+          pair[index] = applyCommentFields(move, fields);
         }
         if (move.variants !== undefined) {
           for (const variation of move.variants) {
