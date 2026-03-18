@@ -58,6 +58,7 @@
   "license": "MIT",
   "main": "dist/index.js",
   "name": "@echecs/pgn",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/mormubis/pgn.git"

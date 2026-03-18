@@ -7,18 +7,53 @@ the `@echecs/pgn` repository.
 
 ## Project Overview
 
-`@echecs/pgn` is a PGN (Portable Game Notation) chess parser. It uses a
-[Peggy](https://peggyjs.org/) PEG parser compiled from `src/grammar.pegjs`. The
-public API is a single default export: `parse(input: string): PGN[]`.
+`@echecs/pgn` is a PGN (Portable Game Notation) chess parser and serializer. It
+uses a [Peggy](https://peggyjs.org/) PEG parser compiled from
+`src/grammar.pegjs`. The public API exports three functions:
+
+- `parse(input: string, options?: ParseOptions): PGN[]` — parse PGN into
+  structured objects
+- `stringify(input: PGN | PGN[], options?: StringifyOptions): string` —
+  serialize back to valid PGN
+- `stream()` — **deprecated**, use `parse()` instead
+
+---
+
+## Similar Libraries
+
+Use these to cross-check output when testing:
+
+- [`pgn-parser`](https://www.npmjs.com/package/pgn-parser) — PEG.js-based PGN
+  parser with JS data structure output.
+- [`chess.js`](https://www.npmjs.com/package/chess.js) — includes PGN
+  parsing/serialisation as part of its full chess engine.
+- [`chessops`](https://www.npmjs.com/package/chessops) — TypeScript library with
+  async streaming PGN parser and game tree model.
+- [`@chess-fu/pgn-parser`](https://www.npmjs.com/package/@chess-fu/pgn-parser) —
+  PGN parser with SAN/LAN support.
+
+---
 
 Key source files:
 
 | File                                | Role                                                      |
 | ----------------------------------- | --------------------------------------------------------- |
-| `src/index.ts`                      | Public `parse()` entry point and TypeScript types         |
+| `src/index.ts`                      | Public API barrel — re-exports functions and types        |
+| `src/types.ts`                      | All TypeScript type definitions                           |
+| `src/parse.ts`                      | `parse()` entry point + error conversion                  |
+| `src/stringify.ts`                  | `stringify()` — comment serialization + move list         |
+| `src/stream.ts`                     | `stream()` — **deprecated** streaming parser              |
 | `src/grammar.pegjs`                 | Peggy grammar source — **edit this, not the `.cjs`**      |
 | `src/grammar.cjs`                   | **Generated** — compiled from `grammar.pegjs`, gitignored |
+| `src/comments.ts`                   | Comment command parsing (`[%cal]`, `[%clk]`, `[%eval]`)   |
+| `src/constants.ts`                  | Shared constants (`RESULT_TO_STR`, `STR_TAGS`)            |
+| `src/warnings.ts`                   | Warning helpers (missing STR tags, result mismatch)       |
+| `src/san.ts`                        | SAN notation reconstruction for `stringify()`             |
+| `src/tags.ts`                       | Tag serialization for `stringify()`                       |
 | `src/__tests__/index.spec.ts`       | Snapshot test suite (13 fixtures)                         |
+| `src/__tests__/san.spec.ts`         | SAN notation, NAGs, comments, RAVs                        |
+| `src/__tests__/stream.spec.ts`      | Streaming API tests                                       |
+| `src/__tests__/stringify.spec.ts`   | Stringify + round-trip tests                              |
 | `src/__tests__/index.bench.ts`      | Self-benchmarks                                           |
 | `src/__tests__/comparison.bench.ts` | Cross-parser comparison benchmarks                        |
 | `src/__tests__/grammar/`            | PGN fixture files used by tests                           |
@@ -167,7 +202,17 @@ const move = { piece: 'P', to: 'd5', capture: true };
 ### Error Handling
 
 - `parse()` returns `[]` on any parse failure — it never throws to callers.
-  Errors are caught and silenced in `src/index.ts`.
+  Errors are caught and silenced in `src/parse.ts`.
+
+---
+
+## Validation
+
+Input validation is mostly provided by TypeScript's strict type system at
+compile time. There is no runtime validation library — the type signatures
+enforce correct usage. Do not add runtime type-checking guards (e.g. `typeof`
+checks, assertion functions) unless there is an explicit trust boundary. The
+Peggy grammar handles syntactic validation of PGN input at parse time.
 
 ---
 
@@ -182,18 +227,67 @@ const move = { piece: 'P', to: 'd5', capture: true };
 
 ---
 
-## Release Process
+## Release Protocol
 
-Releases are automated via GitHub Actions on pushes to `main`:
+Step-by-step process for releasing a new version. CI auto-publishes to npm when
+`version` in `package.json` changes on `main`.
 
-1. The workflow checks whether `version` in `package.json` changed.
-2. If changed, it runs format → lint → test, then publishes to npm.
-3. **Bump version before committing:**
+1. **Verify the package is clean:**
+
+   ```bash
+   pnpm lint && pnpm test && pnpm build
+   ```
+
+   Do not proceed if any step fails.
+
+2. **Decide the semver level:**
+   - `patch` — bug fixes, internal refactors with no API change
+   - `minor` — new features, new exports, non-breaking additions
+   - `major` — breaking changes to the public API
+
+3. **Update `CHANGELOG.md`** following
+   [Keep a Changelog](https://keepachangelog.com) format:
+
+   ```markdown
+   ## [x.y.z] - YYYY-MM-DD
+
+   ### Added
+
+   - …
+
+   ### Changed
+
+   - …
+
+   ### Fixed
+
+   - …
+
+   ### Removed
+
+   - …
+   ```
+
+   Include only sections that apply. Use past tense.
+
+4. **Update `README.md`** if the release introduces new public API, changes
+   usage examples, or deprecates/removes existing features.
+
+5. **Bump the version:**
+
    ```bash
    npm version <major|minor|patch> --no-git-tag-version
    ```
 
-Husky hooks enforce quality locally:
+6. **Commit and push:**
 
-- **pre-commit**: `lint-staged` (prettier + eslint --fix on staged files)
-- **pre-push**: format, lint, test (full suite)
+   ```bash
+   git add package.json CHANGELOG.md README.md
+   git commit -m "release: @echecs/pgn@x.y.z"
+   git push
+   ```
+
+7. **CI takes over:** GitHub Actions detects the version bump, runs format →
+   lint → test, and publishes to npm.
+
+Do not manually publish with `npm publish`.
