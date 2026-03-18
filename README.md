@@ -125,13 +125,14 @@ Converts one or more parsed `PGN` objects back into a valid PGN string,
 providing semantic round-trip fidelity.
 
 ```typescript
-stringify(input: PGN | PGN[], options?: ParseOptions): string
+stringify(input: PGN | PGN[], options?: StringifyOptions): string
 ```
 
 Reconstructs SAN from `Move` fields, re-serializes annotation commands
 (`[%cal]`, `[%csl]`, `[%clk]`, `[%eval]`) back into comment blocks, and
 preserves RAVs and NAGs. Pass `onWarning` to observe recoverable issues (e.g.
-invalid castling destination, negative clock).
+invalid castling destination, negative clock). `StringifyOptions` is a subset of
+`ParseOptions` — `onError` is not accepted since `stringify` never fails hard.
 
 ```typescript
 import parse, { stringify } from '@echecs/pgn';
@@ -258,7 +259,7 @@ slots can be `undefined` — `whiteMove` when a variation begins on black's turn
 ```typescript
 {
   piece: 'N', to: 'f3',
-  annotations: ['!', '$14'],
+  annotations: ['!', '14'],  // numeric NAGs stored without '$' prefix
   comment: 'White has a slight advantage'
 }
 ```
@@ -334,6 +335,31 @@ branches:
     [ [5, undefined, { piece: 'B', to: 'e7' }], [6, { piece: 'P', to: 'd4' }] ]
   ]
 }
+```
+
+## Exported types
+
+All public types are exported as named type exports:
+
+```typescript
+import type {
+  AnnotationColor, // 'B' | 'C' | 'G' | 'O' | 'R' | 'Y'
+  Arrow, // { color, from, to }
+  Eval, // { type: 'cp' | 'mate', value, depth? }
+  Meta, // { [key: string]: string | undefined }
+  Move, // single parsed move object
+  MoveList, // MovePair[]
+  MovePair, // [number, Move | undefined, Move?]
+  ParseError, // { message, offset, line, column }
+  ParseOptions, // { onError?, onWarning? }
+  ParseWarning, // { message, offset, line, column }
+  PGN, // { meta, moves, result }
+  Piece, // 'P' | 'R' | 'N' | 'B' | 'Q' | 'K'
+  Result, // '1-0' | '0-1' | '1/2-1/2' | '?'
+  SquareAnnotation, // { color, square }
+  StringifyOptions, // { onWarning? }
+  Variation, // MoveList[]
+} from '@echecs/pgn';
 ```
 
 ## Contributing

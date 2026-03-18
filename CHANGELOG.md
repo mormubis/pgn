@@ -8,6 +8,28 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- `StringifyOptions` type exported — a focused subset of `ParseOptions`
+  containing only `onWarning`. `stringify()` now accepts `StringifyOptions`
+  instead of the broader `ParseOptions` (backwards compatible — any
+  `ParseOptions` value is still valid).
+- New exported types: `Meta`, `Move`, `MoveList`, `MovePair`, `Variation`,
+  `Piece`, `Result`. Consumers can now type variables holding parsed game data
+  without workarounds.
+
+### Fixed
+
+- `parse()` now uses `input.trim()` instead of
+  `input.replaceAll(/^\s+|\s+$/g, '')` — semantically identical, cleaner.
+- `%`-prefixed escape lines (`ESCAPE` rule per PGN spec §6) are now explicitly
+  tested — both between moves and between games.
+- `stream()` JSDoc clarified: `onWarning` is forwarded to `parse()` for each
+  game, not only `onError`.
+- Removed leftover `debug-variants.spec.ts` placeholder test file.
+- CHANGELOG comparison links updated: `[3.10.1]` entry added, `[unreleased]` now
+  points to `v3.10.1`.
+
 ## [3.10.1] - 2026-03-17
 
 ### Changed
@@ -21,7 +43,7 @@ and this project adheres to
 
 ### Added
 
-- `stringify(input: PGN | PGN[], options?: ParseOptions): string` — converts
+- `stringify(input: PGN | PGN[], options?: StringifyOptions): string` — converts
   parsed PGN objects back to valid PGN strings (semantic round-trip fidelity).
   Accepts a single game or an array of games. Reconstructs SAN from `Move`
   fields, re-serializes annotation commands (`[%cal]`, `[%csl]`, `[%clk]`,
