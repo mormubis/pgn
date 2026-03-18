@@ -88,6 +88,10 @@ interface CommentFields {
 }
 
 function parseCommentCommands(raw: string): CommentFields {
+  if (!raw.includes('[%')) {
+    return { comment: raw };
+  }
+
   const result: CommentFields = {};
   let text = raw;
 
