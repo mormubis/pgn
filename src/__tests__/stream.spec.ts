@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { stream } from '../index.js';
 
@@ -44,6 +44,17 @@ const twoGames = `[Event "Game 1"]
 1. d4 0-1`;
 
 describe('stream()', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('emits a deprecation warning on first call', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    await collect(stream(chunksOf(singleGame, 1024)));
+    expect(spy).toHaveBeenCalledWith(expect.stringContaining('deprecated'));
+  });
+
   it('yields one game from a single-game input', async () => {
     const games = await collect(stream(chunksOf(singleGame, 1024)));
     expect(games).toHaveLength(1);

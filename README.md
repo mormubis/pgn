@@ -38,9 +38,8 @@ opening book, or game viewer, you need more:
 - **NAG support** — symbolic (`!`, `?`, `!!`, `??`, `!?`, `?!`) and numeric
   (`$1`–`$255`) annotations are surfaced as an `annotations` array. Essential
   for Lichess and ChessBase exports.
-- **Multi-game files** — parse entire PGN databases in one call, or stream them
-  game-by-game with `stream()` for memory-efficient processing of large files.
-  Tested on files with 3 500+ games.
+- **Multi-game files** — parse entire PGN databases in one call. Tested on files
+  with 3 500+ games.
 - **Fast** — built on a [Peggy](https://peggyjs.org/) PEG parser. Throughput is
   within 1.1–1.2x of the fastest parsers on npm, which do far less work per move
   (see [BENCHMARK_RESULTS.md](./BENCHMARK_RESULTS.md)).
@@ -84,40 +83,11 @@ file.
 parse(input: string, options?: ParseOptions): PGN[]
 ```
 
-### `stream()`
+### ~~`stream()`~~ (deprecated)
 
-Takes any `AsyncIterable<string>` or Web Streams `ReadableStream<string>` and
-yields one `PGN` object per game. Memory usage stays proportional to one game at
-a time, making it suitable for large databases read from disk or a network
-stream.
-
-```typescript
-stream(input: AsyncIterable<string> | ReadableStream<string>, options?: ParseOptions): AsyncGenerator<PGN>
-```
-
-**Node.js (file):**
-
-```typescript
-import { createReadStream } from 'node:fs';
-import { stream } from '@echecs/pgn';
-
-const chunks = createReadStream('database.pgn', { encoding: 'utf8' });
-for await (const game of stream(chunks)) {
-  console.log(game.meta.White, 'vs', game.meta.Black);
-}
-```
-
-**Browser / edge (fetch):**
-
-```typescript
-import { stream } from '@echecs/pgn';
-
-const response = await fetch('database.pgn');
-const text = response.body.pipeThrough(new TextDecoderStream());
-for await (const game of stream(text)) {
-  console.log(game.meta.White, 'vs', game.meta.Black);
-}
-```
+> **Deprecated.** Use `parse()` instead — it already handles multi-game input.
+> `stream()` will be removed in the next major version. It emits a
+> `console.warn` on first call.
 
 ### `stringify()`
 
@@ -141,25 +111,10 @@ const games = parse(pgnString);
 const output = stringify(games); // valid PGN string
 ```
 
-**Streaming output:** There is no `stringifyStream()` export — it is not needed.
-Since `stringify()` accepts a single `PGN`, you can stream output yourself in
-one line:
-
-```typescript
-import { stream, stringify } from '@echecs/pgn';
-
-const chunks = createReadStream('input.pgn', { encoding: 'utf8' });
-for await (const game of stream(chunks)) {
-  process.stdout.write(stringify(game));
-}
-```
-
-This yields one serialized game at a time without buffering the full output.
-
 ### Error handling
 
-By default, `parse()` and `stream()` silently return `[]` / skip games on parse
-failure. Pass an `onError` callback to observe failures:
+By default, `parse()` silently returns `[]` on parse failure. Pass an `onError`
+callback to observe failures:
 
 ```typescript
 import parse, { type ParseError } from '@echecs/pgn';
@@ -173,14 +128,6 @@ const games = parse(input, {
 });
 ```
 
-The same option is accepted by `stream()`:
-
-```typescript
-for await (const game of stream(chunks, { onError: console.error })) {
-  // …
-}
-```
-
 `onError` receives a `ParseError` with:
 
 | Field     | Type     | Description                                |
@@ -189,10 +136,6 @@ for await (const game of stream(chunks, { onError: console.error })) {
 | `offset`  | `number` | Character offset in the input (0-based)    |
 | `line`    | `number` | 1-based line number                        |
 | `column`  | `number` | 1-based column number                      |
-
-> **Note:** `onError` is not called when a stream ends without a result token
-> (truncated input). Incomplete input at end-of-stream is treated as expected
-> behaviour, not a parse error.
 
 ### Warnings
 
@@ -223,7 +166,7 @@ Currently fires for:
 - Duplicate tag names — `line` and `column` point to the opening `[` of the
   duplicate tag
 
-The same option is accepted by `stream()`.
+The same option is accepted by `stringify()`.
 
 ### PGN object
 

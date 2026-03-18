@@ -35,6 +35,27 @@ describe('stringify', () => {
       expect(lines[8]).toBe('[Zebra "last"]');
     });
 
+    it('escapes quotes and backslashes in tag values', () => {
+      const pgn =
+        String.raw`[Event "\"Café\""]` + '\n[Result "1-0"]\n\n1. e4 1-0';
+      const [game] = parse(pgn);
+      const output = stringify(game!);
+      expect(output).toContain(String.raw`[Event "\"Café\""]`);
+      // round-trip: the re-parsed tag value must match the original
+      const [roundTripped] = parse(output);
+      expect(roundTripped!.meta['Event']).toBe(game!.meta['Event']);
+    });
+
+    it('escapes a backslash in tag values', () => {
+      const pgn = '[Event "a\\\\b"]\n[Result "1-0"]\n\n1. e4 1-0';
+      const [game] = parse(pgn);
+      // After parsing, the value is a\b (unescaped).
+      // stringify must re-escape the backslash so the output is valid PGN.
+      expect(game!.meta['Event']).toBe(String.raw`a\b`);
+      const output = stringify(game!);
+      expect(output).toContain(String.raw`[Event "a\\b"]`);
+    });
+
     it('omits tags with undefined values', () => {
       const pgn = '1. e4 1-0';
       const result = parse(pgn);

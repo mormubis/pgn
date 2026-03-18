@@ -1,33 +1,33 @@
-export type File = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
-export type Piece = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
-export type Rank = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
-export type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
-export type Square = `${File}${Rank}`;
-export type Disambiguation = Square | File | Rank;
+type File = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
+type Piece = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
+type Rank = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
+type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
+type Square = `${File}${Rank}`;
+type Disambiguation = Square | File | Rank;
 
-export type AnnotationColor = 'B' | 'C' | 'G' | 'O' | 'R' | 'Y';
+type AnnotationColor = 'B' | 'C' | 'G' | 'O' | 'R' | 'Y';
 
-export interface Arrow {
+interface Arrow {
   color: AnnotationColor;
   from: Square;
   to: Square;
 }
 
-export interface SquareAnnotation {
+interface SquareAnnotation {
   color: AnnotationColor;
   square: Square;
 }
 
-export type Eval =
+type Eval =
   | { depth?: number; type: 'cp'; value: number }
   | { depth?: number; type: 'mate'; value: number };
 
-export interface Meta {
+interface Meta {
   Result?: Result;
   [key: string]: string | undefined;
 }
 
-export interface Move {
+interface Move {
   annotations?: string[];
   arrows?: Arrow[];
   capture?: boolean;
@@ -45,35 +45,58 @@ export interface Move {
   variants?: Variation;
 }
 
-export type MovePair = [number, Move | undefined, Move?];
-export type MoveList = MovePair[];
+type MovePair = [number, Move | undefined, Move?];
+type MoveList = MovePair[];
 
-export interface PGN {
+interface PGN {
   meta: Meta;
   moves: MoveList;
   result: 1 | 0 | 0.5 | '?';
 }
 
-export type Variation = MoveList[];
+type Variation = MoveList[];
 
-export interface ParseError {
+interface ParseError {
   column: number;
   line: number;
   message: string;
   offset: number;
 }
 
-export interface StringifyOptions {
+interface StringifyOptions {
   onWarning?: (warning: ParseWarning) => void;
 }
 
-export interface ParseOptions extends StringifyOptions {
+interface ParseOptions extends StringifyOptions {
   onError?: (error: ParseError) => void;
 }
 
-export interface ParseWarning {
+interface ParseWarning {
   column: number;
   line: number;
   message: string;
   offset: number;
 }
+
+export type {
+  AnnotationColor,
+  Arrow,
+  Disambiguation,
+  Eval,
+  File,
+  Meta,
+  Move,
+  MoveList,
+  MovePair,
+  ParseError,
+  ParseOptions,
+  ParseWarning,
+  PGN,
+  Piece,
+  Rank,
+  Result,
+  Square,
+  SquareAnnotation,
+  StringifyOptions,
+  Variation,
+};

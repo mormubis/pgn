@@ -1,7 +1,9 @@
 export type {
   AnnotationColor,
   Arrow,
+  Disambiguation,
   Eval,
+  File,
   Meta,
   Move,
   MoveList,
@@ -10,10 +12,12 @@ export type {
   ParseOptions,
   ParseWarning,
   PGN,
-  StringifyOptions,
   Piece,
+  Rank,
   Result,
+  Square,
   SquareAnnotation,
+  StringifyOptions,
   Variation,
 } from './types.js';
 

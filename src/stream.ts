@@ -31,9 +31,14 @@ async function* readableStreamToIterable(
   }
 }
 
+let _warned = false;
+
 /**
  * Stream-parse a PGN AsyncIterable or Web Streams ReadableStream, yielding
  * one PGN object per game. Memory usage stays proportional to one game at a time.
+ *
+ * @deprecated Use `parse()` instead, which already handles multi-game input.
+ *   `stream()` will be removed in the next major version.
  *
  * @param input - Any AsyncIterable<string> or ReadableStream<string>
  *   (Node.js readable stream, fetch body piped through TextDecoderStream, etc.)
@@ -46,6 +51,14 @@ export async function* stream(
   input: AsyncIterable<string> | StringReadableStream,
   options?: ParseOptions,
 ): AsyncGenerator<PGN> {
+  if (!_warned) {
+    _warned = true;
+    // eslint-disable-next-line no-console
+    console.warn(
+      '@echecs/pgn: stream() is deprecated. Use parse() instead. stream() will be removed in the next major version.',
+    );
+  }
+
   if ('getReader' in input) {
     yield* stream(readableStreamToIterable(input), options);
     return;

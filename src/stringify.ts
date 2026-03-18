@@ -1,114 +1,8 @@
-import { RESULT_TO_STR } from './parse.js';
+import { RESULT_TO_STR } from './constants.js';
+import { stringifySAN } from './san.js';
+import { stringifyTags } from './tags.js';
 
-import type {
-  Eval,
-  Meta,
-  Move,
-  MoveList,
-  PGN,
-  StringifyOptions,
-} from './types.js';
-
-const STR_TAG_ORDER = [
-  'Event',
-  'Site',
-  'Date',
-  'Round',
-  'White',
-  'Black',
-  'Result',
-] as const;
-
-const KINGSIDE_SQUARES = new Set(['g1', 'g8']);
-const QUEENSIDE_SQUARES = new Set(['c1', 'c8']);
-
-// ─── Tags ────────────────────────────────────────────────────────────────────
-
-function stringifyTags(meta: Meta): string {
-  const lines: string[] = [];
-  const stringSet = new Set<string>(STR_TAG_ORDER);
-
-  for (const key of STR_TAG_ORDER) {
-    const value = meta[key];
-    if (value !== undefined) {
-      lines.push(`[${key} "${value}"]`);
-    }
-  }
-
-  for (const key of Object.keys(meta).toSorted()) {
-    if (!stringSet.has(key)) {
-      const value = meta[key];
-      if (value !== undefined) {
-        lines.push(`[${key} "${value}"]`);
-      }
-    }
-  }
-
-  return lines.join('\n');
-}
-
-// ─── SAN ─────────────────────────────────────────────────────────────────────
-
-function applyIndicators(san: string, move: Move): string {
-  if (move.checkmate) {
-    return san + '#';
-  }
-  if (move.check) {
-    return san + '+';
-  }
-  return san;
-}
-
-function stringifySAN(move: Move, options?: StringifyOptions): string {
-  if (move.castling) {
-    if (KINGSIDE_SQUARES.has(move.to)) {
-      return applyIndicators('O-O', move);
-    }
-    if (QUEENSIDE_SQUARES.has(move.to)) {
-      return applyIndicators('O-O-O', move);
-    }
-    options?.onWarning?.({
-      column: 1,
-      line: 1,
-      message: `Invalid castling destination: ${move.to}`,
-      offset: 0,
-    });
-    return '';
-  }
-
-  let san = '';
-
-  if (move.piece === 'P') {
-    if (move.capture) {
-      san += (move.from ?? '') + 'x' + move.to;
-    } else {
-      if (!move.to) {
-        options?.onWarning?.({
-          column: 1,
-          line: 1,
-          message: 'Pawn move missing destination square',
-          offset: 0,
-        });
-        return '';
-      }
-      san += move.to;
-    }
-    if (move.promotion !== undefined) {
-      san += '=' + move.promotion;
-    }
-  } else {
-    san += move.piece;
-    if (move.from !== undefined) {
-      san += move.from;
-    }
-    if (move.capture) {
-      san += 'x';
-    }
-    san += move.to;
-  }
-
-  return applyIndicators(san, move);
-}
+import type { Eval, Move, MoveList, PGN, StringifyOptions } from './types.js';
 
 // ─── Comment commands ─────────────────────────────────────────────────────────
 
@@ -271,12 +165,11 @@ function stringifyOne(game: PGN, options?: StringifyOptions): string {
   return `${header}${movetext}${separator}${result}\n`;
 }
 
-export function stringify(
-  input: PGN | PGN[],
-  options?: StringifyOptions,
-): string {
+function stringify(input: PGN | PGN[], options?: StringifyOptions): string {
   if (Array.isArray(input)) {
     return input.map((game) => stringifyOne(game, options)).join('\n');
   }
   return stringifyOne(input, options);
 }
+
+export { stringify };
