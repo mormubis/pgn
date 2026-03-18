@@ -141,6 +141,21 @@ const games = parse(pgnString);
 const output = stringify(games); // valid PGN string
 ```
 
+**Streaming output:** There is no `stringifyStream()` export — it is not needed.
+Since `stringify()` accepts a single `PGN`, you can stream output yourself in
+one line:
+
+```typescript
+import { stream, stringify } from '@echecs/pgn';
+
+const chunks = createReadStream('input.pgn', { encoding: 'utf8' });
+for await (const game of stream(chunks)) {
+  process.stdout.write(stringify(game));
+}
+```
+
+This yields one serialized game at a time without buffering the full output.
+
 ### Error handling
 
 By default, `parse()` and `stream()` silently return `[]` / skip games on parse
