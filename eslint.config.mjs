@@ -6,6 +6,7 @@ import unicorn from 'eslint-plugin-unicorn';
 import * as typescript from 'typescript-eslint';
 
 export default typescript.config(
+  { ignores: ['tsdown.config.ts'] },
   eslint.configs.recommended,
   prettier,
   ...typescript.configs.strict,
