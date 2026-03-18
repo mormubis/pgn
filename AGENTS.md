@@ -32,7 +32,7 @@ Use **pnpm** exclusively (no npm/yarn).
 ### Build
 
 ```bash
-pnpm build              # compile grammar + emit dist/ via tsc
+pnpm build              # compile grammar + bundle dist/ via tsdown
 pnpm grammar:compile    # peggy --format commonjs -o src/grammar.cjs src/grammar.pegjs
 ```
 
