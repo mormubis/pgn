@@ -8,6 +8,28 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.12.0] - 2026-03-18
+
+### Fixed
+
+- `stringify()` now escapes `\` and `"` in tag values. Previously, tag values
+  containing these characters produced invalid PGN that could not be re-parsed
+  (round-trip bug).
+
+### Deprecated
+
+- `stream()` is deprecated. Use `parse()` instead — it already handles
+  multi-game input. `stream()` now emits a one-time `console.warn` on first call
+  and will be removed in the next major version.
+
+### Changed
+
+- Internal refactoring: `parse.ts` and `stringify.ts` split into focused modules
+  (`constants.ts`, `warnings.ts`, `comments.ts`, `san.ts`, `tags.ts`). No public
+  API changes.
+- Removed unreachable runtime guard on `move.to` in SAN serialization —
+  `move.to: Square` is required by the type system.
+
 ## [3.11.0] - 2026-03-18
 
 ### Added
