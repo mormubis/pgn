@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.11.0] - 2026-03-18
+
 ### Added
 
 - `StringifyOptions` type exported — a focused subset of `ParseOptions`
@@ -26,9 +28,6 @@ and this project adheres to
   tested — both between moves and between games.
 - `stream()` JSDoc clarified: `onWarning` is forwarded to `parse()` for each
   game, not only `onError`.
-- Removed leftover `debug-variants.spec.ts` placeholder test file.
-- CHANGELOG comparison links updated: `[3.10.1]` entry added, `[unreleased]` now
-  points to `v3.10.1`.
 
 ## [3.10.1] - 2026-03-17
 
@@ -370,7 +369,8 @@ and this project adheres to
 - New grammar supporting the full PGN specification including RAV (recursive
   annotated variations) and NAG (numeric annotation glyphs)
 
-[unreleased]: https://github.com/mormubis/pgn/compare/v3.10.1...HEAD
+[unreleased]: https://github.com/mormubis/pgn/compare/v3.11.0...HEAD
+[3.11.0]: https://github.com/mormubis/pgn/compare/v3.10.1...v3.11.0
 [3.10.1]: https://github.com/mormubis/pgn/compare/v3.10.0...v3.10.1
 [3.10.0]: https://github.com/mormubis/pgn/compare/v3.9.1...v3.10.0
 [3.9.1]: https://github.com/mormubis/pgn/compare/v3.9.0...v3.9.1

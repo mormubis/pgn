@@ -89,5 +89,5 @@
   },
   "type": "module",
   "types": "dist/index.d.ts",
-  "version": "3.10.1"
+  "version": "3.11.0"
 }
