@@ -9,10 +9,11 @@ import type {
   PGN,
   ParseError,
   ParseOptions,
+  Square,
   SquareAnnotation,
 } from './types.js';
 
-export const STR_TAGS = [
+const STR_TAGS = [
   'Black',
   'Date',
   'Event',
@@ -43,7 +44,7 @@ function warnMissingSTR(games: PGN[], options: ParseOptions | undefined): void {
   }
 }
 
-export const RESULT_TO_STR: Readonly<Record<string, string>> = {
+const RESULT_TO_STR: Readonly<Record<string, string>> = {
   '0': '0-1',
   '0.5': '1/2-1/2',
   '1': '1-0',
@@ -101,9 +102,13 @@ function parseCommentCommands(raw: string): CommentFields {
       }
       const rest = token.slice(1);
       if (rest.length === 2) {
-        squares.push({ color, square: rest });
+        squares.push({ color, square: rest as Square });
       } else if (rest.length === 4) {
-        arrows.push({ color, from: rest.slice(0, 2), to: rest.slice(2) });
+        arrows.push({
+          color,
+          from: rest.slice(0, 2) as Square,
+          to: rest.slice(2) as Square,
+        });
       }
       // malformed token — skip silently
     }
@@ -221,7 +226,7 @@ function toParseError(thrown: unknown): ParseError {
  *
  * @param input
  */
-export default function parse(input: string, options?: ParseOptions): PGN[] {
+function parse(input: string, options?: ParseOptions): PGN[] {
   const cleaned = input.replace(/^\uFEFF/, '').trim();
 
   try {
@@ -237,3 +242,6 @@ export default function parse(input: string, options?: ParseOptions): PGN[] {
     return [];
   }
 }
+
+export { RESULT_TO_STR, STR_TAGS };
+export default parse;

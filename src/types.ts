@@ -9,13 +9,13 @@ export type AnnotationColor = 'B' | 'C' | 'G' | 'O' | 'R' | 'Y';
 
 export interface Arrow {
   color: AnnotationColor;
-  from: string;
-  to: string;
+  from: Square;
+  to: Square;
 }
 
 export interface SquareAnnotation {
   color: AnnotationColor;
-  square: string;
+  square: Square;
 }
 
 export type Eval =
