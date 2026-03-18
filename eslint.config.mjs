@@ -25,6 +25,10 @@ export default typescript.config(
     rules: {
       'curly': ['error', 'all'],
       'eqeqeq': 'error',
+      'import-x/exports-last': 'error',
+      'import-x/first': 'error',
+      'import-x/newline-after-import': 'error',
+      'import-x/no-duplicates': 'error',
       'import-x/order': [
         'error',
         {
