@@ -8,7 +8,6 @@ import * as typescript from 'typescript-eslint';
 export default typescript.config(
   { ignores: ['tsdown.config.ts'] },
   eslint.configs.recommended,
-  prettier,
   ...typescript.configs.strict,
   ...typescript.configs.stylistic,
   importing.flatConfigs.recommended,
@@ -27,6 +26,7 @@ export default typescript.config(
       'eqeqeq': 'error',
       'import-x/exports-last': 'error',
       'import-x/first': 'error',
+      'import-x/group-exports': 'error',
       'import-x/newline-after-import': 'error',
       'import-x/no-duplicates': 'error',
       'import-x/order': [
@@ -107,4 +107,5 @@ export default typescript.config(
       'vitest/valid-title': 'off',
     },
   },
+  prettier,
 );
