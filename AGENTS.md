@@ -138,7 +138,8 @@ Prettier runs automatically on commit via `lint-staged`.
 
 ### Imports
 
-- Use **ESM** (`import`/`export`). The package is `"type": "module"`.
+- **ESM-only** — the package ships only ESM. Do not add a CJS build.
+  `grammar.cjs` is an internal Peggy artefact, not a published entry point.
 - Always include `.js` extensions on relative imports (NodeNext resolution).
 - Import order enforced by `eslint-plugin-import-x` — violation is an error:
   1. Built-ins and external packages
