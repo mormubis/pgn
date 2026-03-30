@@ -3,6 +3,9 @@
 This file documents conventions, commands, and guidelines for agents working in
 the `@echecs/pgn` repository.
 
+**Backlog:** See [`BACKLOG.md`](BACKLOG.md) for pending work items. Update it
+after completing any work.
+
 ---
 
 ## Project Overview
