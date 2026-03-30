@@ -1,5 +1,5 @@
 type File = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
-type Piece = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
+type PieceChar = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
 type Rank = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
 type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
 type Square = `${File}${Rank}`;
@@ -38,8 +38,8 @@ interface Move {
   comment?: string;
   eval?: Eval;
   from?: Disambiguation;
-  piece: Piece;
-  promotion?: Piece;
+  piece: PieceChar;
+  promotion?: PieceChar;
   squares?: SquareAnnotation[];
   to: Square;
   variants?: Variation;
@@ -92,7 +92,7 @@ export type {
   ParseOptions,
   ParseWarning,
   PGN,
-  Piece,
+  PieceChar,
   Rank,
   Result,
   Square,

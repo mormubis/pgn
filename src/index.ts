@@ -12,7 +12,7 @@ export type {
   ParseOptions,
   ParseWarning,
   PGN,
-  Piece,
+  PieceChar,
   Rank,
   Result,
   Square,
