@@ -6,6 +6,7 @@
 
 # Generated
 /src/grammar.cjs
+*.tsbuildinfo
 
 # Node
 /node_modules/

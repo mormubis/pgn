@@ -65,7 +65,7 @@ export default typescript.config(
     files: ['**/*.{mts,ts,tsx}'],
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.json'],
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -79,7 +79,6 @@ export default typescript.config(
       'import-x/resolver': {
         typescript: {
           alwaysTryTypes: true,
-          project: ['./tsconfig.json'],
         },
       },
     },

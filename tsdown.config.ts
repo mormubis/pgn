@@ -8,4 +8,5 @@ export default defineConfig({
   platform: 'neutral',
   outDir: 'dist',
   sourcemap: 'hidden',
+  tsconfig: 'tsconfig.src.json',
 });

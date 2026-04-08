@@ -75,7 +75,7 @@
     "lint": "pnpm run lint:style && pnpm run lint:types",
     "lint:ci": "pnpm run lint:style --max-warnings 0 && pnpm run lint:types",
     "lint:style": "eslint \"src/**/*.{ts,tsx}\" \"*.mjs\" --fix",
-    "lint:types": "tsc --noEmit --project tsconfig.json",
+    "lint:types": "tsc --noEmit --project tsconfig.src.json && tsc --noEmit --project tsconfig.test.json",
     "prepare": "husky && pnpm run build",
     "test": "pnpm grammar:compile && vitest run",
     "test:coverage": "pnpm run test --coverage",
