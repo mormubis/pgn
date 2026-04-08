@@ -291,6 +291,9 @@ Step-by-step process for releasing a new version. CI auto-publishes to npm when
    git push
    ```
 
+   **The push is mandatory.** The release workflow only triggers on push to
+   `main`. A commit without a push means the release never happens.
+
 7. **CI takes over:** GitHub Actions detects the version bump, runs format →
    lint → test, and publishes to npm.
 
