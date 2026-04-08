@@ -68,7 +68,9 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: 🏷️ Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ needs.check.outputs.version }}
-          generate_release_notes: true
+        run: |
+          VERSION="${{ needs.check.outputs.version }}"
+          NOTES=$(awk -v ver="$VERSION" '/^## /{if(found)exit;v=$2;gsub(/[\[\]]/,"",v);if(v==ver){found=1;next}}found{print}' CHANGELOG.md)
+          gh release create "v${VERSION}" --title "v${VERSION}" --notes "${NOTES}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
