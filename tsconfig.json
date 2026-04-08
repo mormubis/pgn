@@ -5,6 +5,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "lib": ["ESNext"],
+    "types": ["node"],
     "module": "NodeNext",
     "moduleDetection": "force",
     "noImplicitAny": false,
