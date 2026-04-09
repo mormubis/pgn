@@ -3,7 +3,7 @@
   "bugs": {
     "url": "https://github.com/mormubis/pgn/issues"
   },
-  "description": "Parse PGN (Portable Game Notation) chess games into structured JavaScript objects. Zero dependencies, strict TypeScript, no-throw API.",
+  "description": "Parse and stringify PGN (Portable Game Notation) chess games. Zero dependencies, strict TypeScript, no-throw parse API.",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@mliebelt/pgn-parser": "^1.4.15",
@@ -45,7 +45,6 @@
   "homepage": "https://github.com/mormubis/pgn#readme",
   "keywords": [
     "chess",
-    "fide",
     "game",
     "no-dependencies",
     "notation",
@@ -53,6 +52,7 @@
     "pgn",
     "pgn-parser",
     "portable game notation",
+    "serializer",
     "typescript"
   ],
   "license": "MIT",
@@ -90,5 +90,5 @@
   },
   "type": "module",
   "types": "dist/index.d.ts",
-  "version": "3.12.1"
+  "version": "3.12.2"
 }

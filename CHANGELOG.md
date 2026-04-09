@@ -8,6 +8,14 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [3.12.2] - 2026-04-09
+
+### Changed
+
+- updated description to mention stringify
+- removed inaccurate `fide` keyword
+- added `serializer` keyword
+
 ## [3.12.1] - 2026-04-09
 
 ### Fixed
@@ -402,7 +410,8 @@ and this project adheres to
 - New grammar supporting the full PGN specification including RAV (recursive
   annotated variations) and NAG (numeric annotation glyphs)
 
-[unreleased]: https://github.com/mormubis/pgn/compare/v3.12.1...HEAD
+[unreleased]: https://github.com/mormubis/pgn/compare/v3.12.2...HEAD
+[3.12.2]: https://github.com/mormubis/pgn/compare/v3.12.1...v3.12.2
 [3.12.1]: https://github.com/mormubis/pgn/compare/v3.12.0...v3.12.1
 [3.12.0]: https://github.com/mormubis/pgn/compare/v3.11.0...v3.12.0
 [3.11.0]: https://github.com/mormubis/pgn/compare/v3.10.1...v3.11.0
