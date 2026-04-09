@@ -185,14 +185,14 @@ present) as the authoritative game outcome.
 
 ```typescript
 {
-  piece:       'P' | 'R' | 'N' | 'B' | 'Q' | 'K', // always present
-  to:          string,       // destination square, e.g. "e4"
-  from?:       string,       // disambiguation: file "e", rank "2", or square "e2"
-  capture?:    true,
-  castling?:   true,
-  check?:      true,
-  checkmate?:  true,
-  promotion?:  'R' | 'N' | 'B' | 'Q',
+  piece:       PieceChar,    // always present; 'P' | 'R' | 'N' | 'B' | 'Q' | 'K'
+  to:          Square,       // destination square, e.g. "e4"
+  from?:       Disambiguation, // file "e", rank "2", or square "e2"
+  capture?:    boolean,
+  castling?:   boolean,
+  check?:      boolean,
+  checkmate?:  boolean,
+  promotion?:  PieceChar,
   annotations?: string[],   // e.g. ["!", "$14"]
   comment?:    string,
   arrows?:     Arrow[],              // from [%cal ...] command
@@ -244,13 +244,13 @@ type AnnotationColor = 'B' | 'C' | 'G' | 'O' | 'R' | 'Y'; // Blue, Cyan, Green, 
 
 interface Arrow {
   color: AnnotationColor;
-  from: string; // e.g. "e2"
-  to: string; // e.g. "e4"
+  from: Square; // e.g. "e2"
+  to: Square; // e.g. "e4"
 }
 
 interface SquareAnnotation {
   color: AnnotationColor;
-  square: string; // e.g. "e4"
+  square: Square; // e.g. "e4"
 }
 
 type Eval =
@@ -302,7 +302,9 @@ All public types are exported as named type exports:
 import type {
   AnnotationColor, // 'B' | 'C' | 'G' | 'O' | 'R' | 'Y'
   Arrow, // { color, from, to }
+  Disambiguation, // Square | File | Rank
   Eval, // { type: 'cp' | 'mate', value, depth? }
+  File, // 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h'
   Meta, // { [key: string]: string | undefined }
   Move, // single parsed move object
   MoveList, // MovePair[]
@@ -311,8 +313,10 @@ import type {
   ParseOptions, // { onError?, onWarning? }
   ParseWarning, // { message, offset, line, column }
   PGN, // { meta, moves, result }
-  Piece, // 'P' | 'R' | 'N' | 'B' | 'Q' | 'K'
+  PieceChar, // 'P' | 'R' | 'N' | 'B' | 'Q' | 'K'
+  Rank, // '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8'
   Result, // '1-0' | '0-1' | '1/2-1/2' | '?'
+  Square, // `${File}${Rank}`, e.g. "e4"
   SquareAnnotation, // { color, square }
   StringifyOptions, // { onWarning? }
   Variation, // MoveList[]
