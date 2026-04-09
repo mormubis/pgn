@@ -3,6 +3,9 @@
 This file documents conventions, commands, and guidelines for agents working in
 the `@echecs/pgn` repository.
 
+**See also:** [`REFERENCES.md`](REFERENCES.md) |
+[`COMPARISON.md`](COMPARISON.md) | [`SPEC.md`](SPEC.md)
+
 **Backlog:** tracked in [GitHub Issues](https://github.com/mormubis/pgn/issues).
 
 ---
@@ -18,21 +21,6 @@ uses a [Peggy](https://peggyjs.org/) PEG parser compiled from
 - `stringify(input: PGN | PGN[], options?: StringifyOptions): string` —
   serialize back to valid PGN
 - `stream()` — **deprecated**, use `parse()` instead
-
----
-
-## Similar Libraries
-
-Use these to cross-check output when testing:
-
-- [`pgn-parser`](https://www.npmjs.com/package/pgn-parser) — PEG.js-based PGN
-  parser with JS data structure output.
-- [`chess.js`](https://www.npmjs.com/package/chess.js) — includes PGN
-  parsing/serialisation as part of its full chess engine.
-- [`chessops`](https://www.npmjs.com/package/chessops) — TypeScript library with
-  async streaming PGN parser and game tree model.
-- [`@chess-fu/pgn-parser`](https://www.npmjs.com/package/@chess-fu/pgn-parser) —
-  PGN parser with SAN/LAN support.
 
 ---
 
@@ -127,88 +115,6 @@ Whenever `src/grammar.pegjs` is modified:
 
 ---
 
-## Code Style
-
-### Formatting (Prettier)
-
-- Single quotes for strings
-- Trailing commas everywhere (`trailingComma: 'all'`)
-- `quoteProps: 'consistent'`
-- Prose wrapping always in markdown
-
-Prettier runs automatically on commit via `lint-staged`.
-
-### Imports
-
-- **ESM-only** — the package ships only ESM. Do not add a CJS build.
-  `grammar.cjs` is an internal Peggy artefact, not a published entry point.
-- Always include `.js` extensions on relative imports (NodeNext resolution).
-- Import order enforced by `eslint-plugin-import-x` — violation is an error:
-  1. Built-ins and external packages
-  2. Internal aliases (`@/**`)
-  3. Parent and sibling paths
-  4. Type-only imports
-  - Each group separated by a blank line.
-- Named imports must be sorted alphabetically (`sort-imports` rule).
-- Use `import type` for type-only imports — mixing type/value in one import
-  statement is an error (`@typescript-eslint/consistent-type-imports`).
-
-```typescript
-// Correct
-import { readFileSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
-
-import parse from '../index.js';
-
-// Wrong — missing 'type', wrong extension, mixed type/value
-import { Parser, type Grammar } from './grammar';
-```
-
-### TypeScript
-
-- **Strict mode** on: `strict`, `noUncheckedIndexedAccess`,
-  `noImplicitOverride`.
-- `noImplicitAny` is **off** — relaxed for Peggy action block interop.
-- All exported functions must have explicit return types
-  (`@typescript-eslint/explicit-module-boundary-types` is an error).
-- Prefer `interface` for object shapes, `type` for unions/aliases.
-- Avoid `!` non-null assertions; use explicit narrowing or optional chaining
-  (`@typescript-eslint/no-non-null-assertion` is a warning).
-- `@ts-expect-error` is acceptable only at Peggy grammar interop boundaries.
-
-### Naming Conventions
-
-- **Files**: `camelCase.ts` for source, `kebab-case.pgn` for fixtures.
-- **Types / Interfaces**: `PascalCase`.
-- **Variables and functions**: `camelCase`.
-- **Grammar rule names**: `SCREAMING_SNAKE_CASE`.
-- **Object keys**: sorted alphabetically — `sort-keys` is an error in source,
-  relaxed in tests.
-
-```typescript
-// Correct — keys sorted
-const move = { capture: true, from: 'e', piece: 'P', to: 'd5' };
-
-// Wrong — unsorted
-const move = { piece: 'P', to: 'd5', capture: true };
-```
-
-### Other Rules
-
-- `curly: 'all'` — always use braces, even for single-line `if` bodies.
-- `eqeqeq` — use `===` / `!==`, never `==`.
-- No `console.log` (`no-console` is a warning). Use `console.warn` only for
-  expected diagnostic output (e.g. move number mismatches in the grammar).
-- The parser is fully **synchronous** — do not introduce `async`/`await`
-  anywhere in `src/index.ts` or `src/grammar.pegjs`.
-
-### Error Handling
-
-- `parse()` returns `[]` on any parse failure — it never throws to callers.
-  Errors are caught and silenced in `src/parse.ts`.
-
----
-
 ## Validation
 
 Input validation is mostly provided by TypeScript's strict type system at
@@ -216,17 +122,6 @@ compile time. There is no runtime validation library — the type signatures
 enforce correct usage. Do not add runtime type-checking guards (e.g. `typeof`
 checks, assertion functions) unless there is an explicit trust boundary. The
 Peggy grammar handles syntactic validation of PGN input at parse time.
-
----
-
-## Testing Conventions
-
-- Tests use **vitest** with file snapshots (`toMatchFileSnapshot`).
-- Each of the 13 PGN fixtures has one snapshot file in
-  `src/__tests__/__snapshots__/`.
-- A 15-second per-test timeout accommodates `long.pgn` (~3 500 games).
-- Benchmarks (`*.bench.ts`) are never run in CI.
-- `sort-keys` and `no-console` are relaxed inside `__tests__/`.
 
 ---
 
