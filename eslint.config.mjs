@@ -73,6 +73,24 @@ export default typescript.config(
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'error',
+      '@typescript-eslint/member-ordering': [
+        'error',
+        {
+          default: {
+            memberTypes: [
+              '#private-field',
+              'public-readonly-field',
+              'public-field',
+              'constructor',
+              '#private-get',
+              'public-get',
+              '#private-method',
+              ['public-static-method', 'public-method'],
+            ],
+            order: 'alphabetically',
+          },
+        },
+      ],
       '@typescript-eslint/no-non-null-assertion': 'warn',
     },
     settings: {
