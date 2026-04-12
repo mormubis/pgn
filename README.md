@@ -1,7 +1,7 @@
 # PGN
 
 [![npm](https://img.shields.io/npm/v/@echecs/pgn)](https://www.npmjs.com/package/@echecs/pgn)
-[![Coverage](https://codecov.io/gh/mormubis/pgn/branch/main/graph/badge.svg)](https://codecov.io/gh/mormubis/pgn)
+[![Coverage](https://codecov.io/gh/echecsjs/pgn/branch/main/graph/badge.svg)](https://codecov.io/gh/echecsjs/pgn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **PGN** is a fast, lightweight TypeScript parser for

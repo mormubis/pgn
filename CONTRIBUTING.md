@@ -10,7 +10,7 @@ Thank you for your interest in contributing to `@echecs/pgn`.
 ## Setup
 
 ```bash
-git clone git@github.com:mormubis/pgn.git
+git clone git@github.com:echecsjs/pgn.git
 cd pgn
 pnpm install
 ```
@@ -51,7 +51,7 @@ pnpm build
 
 ## Reporting Bugs
 
-Open an issue at https://github.com/mormubis/pgn/issues and include:
+Open an issue at https://github.com/echecsjs/pgn/issues and include:
 
 - A minimal reproducible example
 - Expected vs. actual behaviour

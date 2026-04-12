@@ -13,7 +13,7 @@ Only the latest version of `@echecs/pgn` receives security updates.
 Please **do not** open a public GitHub issue for security vulnerabilities.
 
 Instead, report them privately via
-[GitHub Security Advisories](https://github.com/mormubis/pgn/security/advisories/new).
+[GitHub Security Advisories](https://github.com/echecsjs/pgn/security/advisories/new).
 
 You can also reach the maintainer directly at **adrian@delarosab.me**.
 

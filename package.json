@@ -1,7 +1,7 @@
 {
   "author": "Adrian de la Rosa <adrian@delarosab.me>",
   "bugs": {
-    "url": "https://github.com/mormubis/pgn/issues"
+    "url": "https://github.com/echecsjs/pgn/issues"
   },
   "description": "Parse and stringify PGN (Portable Game Notation) chess games. Zero dependencies, strict TypeScript, no-throw parse API.",
   "devDependencies": {
@@ -42,7 +42,7 @@
     "README.md",
     "CHANGELOG.md"
   ],
-  "homepage": "https://github.com/mormubis/pgn#readme",
+  "homepage": "https://github.com/echecsjs/pgn#readme",
   "keywords": [
     "chess",
     "game",
@@ -61,7 +61,7 @@
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/mormubis/pgn.git"
+    "url": "https://github.com/echecsjs/pgn.git"
   },
   "scripts": {
     "bench": "vitest bench --run",

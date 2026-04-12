@@ -6,7 +6,7 @@ the `@echecs/pgn` repository.
 **See also:** [`REFERENCES.md`](REFERENCES.md) |
 [`COMPARISON.md`](COMPARISON.md) | [`SPEC.md`](SPEC.md)
 
-**Backlog:** tracked in [GitHub Issues](https://github.com/mormubis/pgn/issues).
+**Backlog:** tracked in [GitHub Issues](https://github.com/echecsjs/pgn/issues).
 
 ---
 
