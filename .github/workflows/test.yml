@@ -4,37 +4,7 @@ on:
   pull_request:
   workflow_call:
 
-concurrency:
-  group: test-${{ github.head_ref || github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  default:
-    name: 🧪 Test
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Checkout code
-        uses: actions/checkout@v4
-
-      - name: 📦 Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: latest
-
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-          node-version: 'node'
-
-      - name: 📥 Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: 🧪 Test
-        run: pnpm run test:coverage
-
-      - name: 📊 Upload coverage
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
+  test:
+    uses: echecsjs/.github/.github/workflows/test.yml@main
+    secrets: inherit
