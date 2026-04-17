@@ -177,18 +177,21 @@ Step-by-step process for releasing a new version. CI auto-publishes to npm when
    npm version <major|minor|patch> --no-git-tag-version
    ```
 
-6. **Commit and push:**
+6. **Open a release PR:**
 
    ```bash
+   git checkout -b release/x.y.z
    git add package.json CHANGELOG.md README.md
    git commit -m "release: @echecs/pgn@x.y.z"
-   git push
+   git push -u origin release/x.y.z
+   gh pr create --title "release: @echecs/pgn@x.y.z" --body "<description>"
    ```
 
-   **The push is mandatory.** The release workflow only triggers on push to
-   `main`. A commit without a push means the release never happens.
+   Wait for CI (format, lint, test) to pass on the PR before merging.
 
-7. **CI takes over:** GitHub Actions detects the version bump, runs format →
-   lint → test, and publishes to npm.
+7. **Merge the PR:** Once CI is green, merge (squash) into `main`. The release
+   workflow detects the version bump, publishes to npm, and creates a GitHub
+   Release with a git tag.
 
-Do not manually publish with `npm publish`.
+Do not manually publish with `npm publish`. Do not create git tags manually —
+the release workflow handles tagging.
