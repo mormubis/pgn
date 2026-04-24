@@ -23,6 +23,7 @@
     "pgn-parser": "^2.2.1",
     "prettier": "^3.8.1",
     "tsdown": "^0.21.4",
+    "typedoc": "^0.28.17",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.57.0",
     "vitest": "^4.1.0"
@@ -66,6 +67,7 @@
   "scripts": {
     "bench": "vitest bench --run",
     "build": "pnpm run build:grammar && pnpm run build:entry",
+    "docs": "typedoc",
     "build:entry": "tsdown",
     "build:grammar": "pnpm run grammar:compile",
     "format": "pnpm run format:ci --write",
