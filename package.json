@@ -59,6 +59,7 @@
   "license": "MIT",
   "main": "dist/index.js",
   "name": "@echecs/pgn",
+  "packageManager": "pnpm@10.33.0",
   "sideEffects": false,
   "repository": {
     "type": "git",
