@@ -63,7 +63,10 @@ describe('PGN Parser', () => {
     const pgn = '1. e4 { A {nested} comment } e5 2. Nf3 1-0';
     const result = parse(pgn);
     expect(result).toHaveLength(1);
-    expect(result[0]?.moves[1]?.[1]).toMatchObject({ piece: 'N', to: 'f3' });
+    expect(result[0]?.moves[1]?.[1]).toMatchObject({
+      piece: 'knight',
+      to: 'f3',
+    });
   });
 
   it('strips a UTF-8 BOM from the start of input', () => {
@@ -100,7 +103,7 @@ describe('PGN Parser', () => {
     const pgn = '1. e4\n% this is an escape line\ne5 1-0';
     const result = parse(pgn);
     expect(result).toHaveLength(1);
-    expect(result[0]?.moves[0]?.[2]).toMatchObject({ piece: 'P', to: 'e5' });
+    expect(result[0]?.moves[0]?.[2]).toMatchObject({ piece: 'pawn', to: 'e5' });
   });
 
   it('ignores % escape lines between games', () => {
