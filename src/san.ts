@@ -1,7 +1,20 @@
-import type { Move, StringifyOptions } from './types.js';
+import type { Move } from './types.js';
 
-const KINGSIDE_SQUARES = new Set(['g1', 'g8']);
-const QUEENSIDE_SQUARES = new Set(['c1', 'c8']);
+const PIECE_TO_LETTER: Record<string, string> = {
+  bishop: 'B',
+  king: 'K',
+  knight: 'N',
+  pawn: '',
+  queen: 'Q',
+  rook: 'R',
+};
+
+const PROMOTION_TO_LETTER: Record<string, string> = {
+  bishop: 'B',
+  knight: 'N',
+  queen: 'Q',
+  rook: 'R',
+};
 
 function applyIndicators(san: string, move: Move): string {
   if (move.checkmate) {
@@ -13,32 +26,23 @@ function applyIndicators(san: string, move: Move): string {
   return san;
 }
 
-function stringifySAN(move: Move, options?: StringifyOptions): string {
+function stringifySAN(move: Move): string {
   if (move.castling) {
-    if (KINGSIDE_SQUARES.has(move.to)) {
-      return applyIndicators('O-O', move);
-    }
-    if (QUEENSIDE_SQUARES.has(move.to)) {
+    if (move.long) {
       return applyIndicators('O-O-O', move);
     }
-    options?.onWarning?.({
-      column: 1,
-      line: 1,
-      message: `Invalid castling destination: ${move.to}`,
-      offset: 0,
-    });
-    return '';
+    return applyIndicators('O-O', move);
   }
 
   let san = '';
 
-  if (move.piece === 'P') {
+  if (move.piece === 'pawn') {
     san += move.capture ? (move.from ?? '') + 'x' + move.to : move.to;
     if (move.promotion !== undefined) {
-      san += '=' + move.promotion;
+      san += '=' + PROMOTION_TO_LETTER[move.promotion];
     }
   } else {
-    san += move.piece;
+    san += PIECE_TO_LETTER[move.piece];
     if (move.from !== undefined) {
       san += move.from;
     }
