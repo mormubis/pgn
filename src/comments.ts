@@ -111,29 +111,18 @@ function parseCommentCommands(raw: string): CommentFields {
   return result;
 }
 
-// Build a new Move object by merging the original move with extracted comment
-// fields. Avoids mutating the grammar-produced object (which would cause V8
-// hidden-class transitions from `delete`).
 function applyCommentFields(move: Move, fields: CommentFields): Move {
-  const out: Move = { piece: move.piece, to: move.to };
-  if (move.from !== undefined) {
-    out.from = move.from;
-  }
-  if (move.capture !== undefined) {
-    out.capture = move.capture;
-  }
-  if (move.castling !== undefined) {
-    out.castling = move.castling;
-  }
-  if (move.check !== undefined) {
-    out.check = move.check;
-  }
-  if (move.checkmate !== undefined) {
-    out.checkmate = move.checkmate;
-  }
-  if (move.promotion !== undefined) {
-    out.promotion = move.promotion;
-  }
+  const out: Move = {
+    capture: move.capture,
+    castling: move.castling,
+    check: move.check,
+    checkmate: move.checkmate,
+    from: move.from,
+    long: move.long,
+    piece: move.piece,
+    promotion: move.promotion,
+    to: move.to,
+  };
   if (move.annotations !== undefined) {
     out.annotations = move.annotations;
   }
