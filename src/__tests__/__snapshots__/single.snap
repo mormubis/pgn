@@ -15,7 +15,14 @@
       [
         1,
         {
-          "piece": "P",
+          "capture": false,
+          "castling": false,
+          "check": false,
+          "checkmate": false,
+          "from": undefined,
+          "long": false,
+          "piece": "pawn",
+          "promotion": undefined,
           "to": "b3",
         },
       ],
