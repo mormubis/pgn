@@ -8,6 +8,33 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-04-27
+
+### Changed
+
+- `Move` now extends `SAN` from `@echecs/san` — all SAN fields are always
+  present (no more optional `capture`, `check`, `checkmate`)
+- `piece` values changed from uppercase chars to full words (`'P'` -> `'pawn'`,
+  `'N'` -> `'knight'`, `'B'` -> `'bishop'`, `'R'` -> `'rook'`, `'Q'` ->
+  `'queen'`, `'K'` -> `'king'`)
+- `promotion` values changed from uppercase chars to full words (`'queen'`,
+  `'rook'`, `'bishop'`, `'knight'`)
+- `castling` changed from optional boolean to required boolean, with new `long`
+  boolean field replacing destination-based detection
+- `capture`, `check`, `checkmate` changed from optional to always present
+  (default `false`)
+- `to` is `undefined` for castling moves (destination square resolved
+  internally)
+
+### Added
+
+- re-exports `Piece`, `PromotionPiece`, `SAN`, `Disambiguation`, `File`, `Rank`,
+  `Square` from `@echecs/san`
+
+### Removed
+
+- `PieceChar` type (replaced by `Piece` from `@echecs/san`)
+
 ## [3.12.2] - 2026-04-09
 
 ### Changed
@@ -410,8 +437,9 @@ and this project adheres to
 - New grammar supporting the full PGN specification including RAV (recursive
   annotated variations) and NAG (numeric annotation glyphs)
 
-[unreleased]: https://github.com/mormubis/pgn/compare/v3.12.2...HEAD
-[3.12.2]: https://github.com/mormubis/pgn/compare/v3.12.1...v3.12.2
+[unreleased]: https://github.com/echecsjs/pgn/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/echecsjs/pgn/compare/v3.12.2...v4.0.0
+[3.12.2]: https://github.com/echecsjs/pgn/compare/v3.12.1...v3.12.2
 [3.12.1]: https://github.com/mormubis/pgn/compare/v3.12.0...v3.12.1
 [3.12.0]: https://github.com/mormubis/pgn/compare/v3.11.0...v3.12.0
 [3.11.0]: https://github.com/mormubis/pgn/compare/v3.10.1...v3.11.0
