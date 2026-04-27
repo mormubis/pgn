@@ -68,7 +68,7 @@ const games = parse(`
 `);
 
 console.log(games[0].moves[0]);
-// [1, { piece: 'P', to: 'e4' }, { piece: 'P', to: 'e5' }]
+// [1, { piece: 'pawn', to: 'e4', capture: false, ... }, { piece: 'pawn', to: 'e5', capture: false, ... }]
 ```
 
 ## Usage
@@ -183,16 +183,23 @@ present) as the authoritative game outcome.
 
 ### Move object
 
+`Move` extends `SAN` from [`@echecs/san`](https://github.com/echecsjs/san) — all
+SAN fields are always present.
+
 ```typescript
 {
-  piece:       PieceChar,    // always present; 'P' | 'R' | 'N' | 'B' | 'Q' | 'K'
-  to:          Square,       // destination square, e.g. "e4"
-  from?:       Disambiguation, // file "e", rank "2", or square "e2"
-  capture?:    boolean,
-  castling?:   boolean,
-  check?:      boolean,
-  checkmate?:  boolean,
-  promotion?:  PieceChar,
+  // SAN fields (always present)
+  piece:       Piece,        // 'pawn' | 'knight' | 'bishop' | 'rook' | 'queen' | 'king'
+  to:          Square | undefined, // destination square, e.g. "e4"; undefined for castling
+  from:        Disambiguation | undefined, // file "e", rank "2", or square "e2"
+  capture:     boolean,
+  castling:    boolean,
+  check:       boolean,
+  checkmate:   boolean,
+  long:        boolean,      // queenside castling
+  promotion:   PromotionPiece | undefined, // 'queen' | 'rook' | 'bishop' | 'knight'
+
+  // PGN-specific fields (optional)
   annotations?: string[],   // e.g. ["!", "$14"]
   comment?:    string,
   arrows?:     Arrow[],              // from [%cal ...] command
@@ -215,7 +222,9 @@ slots can be `undefined` — `whiteMove` when a variation begins on black's turn
 
 ```typescript
 {
-  piece: 'N', to: 'f3',
+  piece: 'knight', to: 'f3', capture: false, castling: false,
+  check: false, checkmate: false, long: false,
+  from: undefined, promotion: undefined,
   annotations: ['!', '14'],  // numeric NAGs stored without '$' prefix
   comment: 'White has a slight advantage'
 }
@@ -266,7 +275,9 @@ type Eval =
 
 ```typescript
 {
-  piece: 'P', to: 'e4',
+  piece: 'pawn', to: 'e4', capture: false, castling: false,
+  check: false, checkmate: false, long: false,
+  from: undefined, promotion: undefined,
   // comment is absent — no free text remains after stripping commands
   arrows: [
     { color: 'G', from: 'e2', to: 'e4' },
@@ -287,9 +298,11 @@ branches:
 
 ```typescript
 {
-  piece: 'B', to: 'a5',
+  piece: 'bishop', to: 'a5', capture: false, castling: false,
+  check: false, checkmate: false, long: false,
+  from: undefined, promotion: undefined,
   variants: [
-    [ [5, undefined, { piece: 'B', to: 'e7' }], [6, { piece: 'P', to: 'd4' }] ]
+    [ [5, undefined, { piece: 'bishop', to: 'e7', ... }], [6, { piece: 'pawn', to: 'd4', ... }] ]
   ]
 }
 ```
@@ -306,16 +319,18 @@ import type {
   Eval, // { type: 'cp' | 'mate', value, depth? }
   File, // 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h'
   Meta, // { [key: string]: string | undefined }
-  Move, // single parsed move object
+  Move, // single parsed move object (extends SAN)
   MoveList, // MovePair[]
   MovePair, // [number, Move | undefined, Move?]
   ParseError, // { message, offset, line, column }
   ParseOptions, // { onError?, onWarning? }
   ParseWarning, // { message, offset, line, column }
   PGN, // { meta, moves, result }
-  PieceChar, // 'P' | 'R' | 'N' | 'B' | 'Q' | 'K'
+  Piece, // 'pawn' | 'knight' | 'bishop' | 'rook' | 'queen' | 'king'
+  PromotionPiece, // 'knight' | 'bishop' | 'rook' | 'queen'
   Rank, // '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8'
   Result, // '1-0' | '0-1' | '1/2-1/2' | '?'
+  SAN, // base SAN interface from @echecs/san
   Square, // `${File}${Rank}`, e.g. "e4"
   SquareAnnotation, // { color, square }
   StringifyOptions, // { onWarning? }
