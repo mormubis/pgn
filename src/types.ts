@@ -1,12 +1,4 @@
-import type {
-  
-  
-  
-  
-  
-  SAN,
-  Square,
-} from '@echecs/san';
+import type { SAN, Square } from '@echecs/san';
 
 type AnnotationColor = 'B' | 'C' | 'G' | 'O' | 'R' | 'Y';
 type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
@@ -77,9 +69,7 @@ interface ParseWarning {
 export type {
   AnnotationColor,
   Arrow,
-  
   Eval,
-  
   Meta,
   Move,
   MoveList,
@@ -88,15 +78,18 @@ export type {
   ParseOptions,
   ParseWarning,
   PGN,
-  
-  
-  
   Result,
-  
-  
   SquareAnnotation,
   StringifyOptions,
   Variation,
 };
 
-export {type Disambiguation, type File, type Piece, type PromotionPiece, type Rank, type SAN, type Square} from '@echecs/san';
+export {
+  type Disambiguation,
+  type File,
+  type Piece,
+  type PromotionPiece,
+  type Rank,
+  type SAN,
+  type Square,
+} from '@echecs/san';
