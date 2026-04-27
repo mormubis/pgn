@@ -99,7 +99,7 @@ function stringifyMoveList(
     const [moveNumber, white, black] = pair;
 
     if (white !== undefined) {
-      tokens.push(`${moveNumber}.`, stringifySAN(white, options));
+      tokens.push(`${moveNumber}.`, stringifySAN(white));
 
       if (white.annotations && white.annotations.length > 0) {
         tokens.push(
@@ -128,7 +128,7 @@ function stringifyMoveList(
         tokens.push(`${moveNumber}...`);
       }
 
-      tokens.push(stringifySAN(black, options));
+      tokens.push(stringifySAN(black));
 
       if (black.annotations && black.annotations.length > 0) {
         tokens.push(

@@ -1,11 +1,7 @@
-type File = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
-type PieceChar = 'B' | 'K' | 'N' | 'P' | 'Q' | 'R';
-type Rank = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
-type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
-type Square = `${File}${Rank}`;
-type Disambiguation = Square | File | Rank;
+import type { SAN, Square } from '@echecs/san';
 
 type AnnotationColor = 'B' | 'C' | 'G' | 'O' | 'R' | 'Y';
+type Result = '1-0' | '0-1' | '1/2-1/2' | '?';
 
 interface Arrow {
   color: AnnotationColor;
@@ -27,21 +23,13 @@ interface Meta {
   [key: string]: string | undefined;
 }
 
-interface Move {
+interface Move extends SAN {
   annotations?: string[];
   arrows?: Arrow[];
-  capture?: boolean;
-  castling?: boolean;
-  check?: boolean;
-  checkmate?: boolean;
   clock?: number;
   comment?: string;
   eval?: Eval;
-  from?: Disambiguation;
-  piece: PieceChar;
-  promotion?: PieceChar;
   squares?: SquareAnnotation[];
-  to: Square;
   variants?: Variation;
 }
 
@@ -81,9 +69,7 @@ interface ParseWarning {
 export type {
   AnnotationColor,
   Arrow,
-  Disambiguation,
   Eval,
-  File,
   Meta,
   Move,
   MoveList,
@@ -92,11 +78,18 @@ export type {
   ParseOptions,
   ParseWarning,
   PGN,
-  PieceChar,
-  Rank,
   Result,
-  Square,
   SquareAnnotation,
   StringifyOptions,
   Variation,
 };
+
+export {
+  type Disambiguation,
+  type File,
+  type Piece,
+  type PromotionPiece,
+  type Rank,
+  type SAN,
+  type Square,
+} from '@echecs/san';

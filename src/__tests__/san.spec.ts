@@ -32,17 +32,19 @@ describe('CASTLING', () => {
   it('O-O (white) → kingside, to g1', () => {
     expect(white('O-O')).toMatchObject({
       castling: true,
-      piece: 'K',
+      check: false,
+      checkmate: false,
+      long: false,
+      piece: 'king',
       to: 'g1',
     });
-    expect(white('O-O')).not.toHaveProperty('check');
-    expect(white('O-O')).not.toHaveProperty('checkmate');
   });
 
   it('O-O-O (white) → queenside, to c1', () => {
     expect(white('O-O-O')).toMatchObject({
       castling: true,
-      piece: 'K',
+      long: true,
+      piece: 'king',
       to: 'c1',
     });
   });
@@ -50,7 +52,8 @@ describe('CASTLING', () => {
   it('O-O (black) → kingside, to g8', () => {
     expect(black('O-O')).toMatchObject({
       castling: true,
-      piece: 'K',
+      long: false,
+      piece: 'king',
       to: 'g8',
     });
   });
@@ -58,7 +61,8 @@ describe('CASTLING', () => {
   it('O-O-O (black) → queenside, to c8', () => {
     expect(black('O-O-O')).toMatchObject({
       castling: true,
-      piece: 'K',
+      long: true,
+      piece: 'king',
       to: 'c8',
     });
   });
@@ -67,18 +71,18 @@ describe('CASTLING', () => {
     expect(white('O-O+')).toMatchObject({
       castling: true,
       check: true,
+      checkmate: false,
       to: 'g1',
     });
-    expect(white('O-O+')).not.toHaveProperty('checkmate');
   });
 
   it('O-O# → checkmate: true', () => {
     expect(white('O-O#')).toMatchObject({
       castling: true,
+      check: false,
       checkmate: true,
       to: 'g1',
     });
-    expect(white('O-O#')).not.toHaveProperty('check');
   });
 
   it('O-O-O+ → check: true', () => {
@@ -102,30 +106,48 @@ describe('CASTLING', () => {
 
 describe('PIECE_MOVE', () => {
   it('simple: Nf3', () => {
-    expect(white('Nf3')).toEqual({ piece: 'N', to: 'f3' });
+    expect(white('Nf3')).toMatchObject({
+      capture: false,
+      castling: false,
+      check: false,
+      checkmate: false,
+      from: undefined,
+      long: false,
+      piece: 'knight',
+      promotion: undefined,
+      to: 'f3',
+    });
   });
 
   it('simple + check: Qh5+', () => {
-    expect(white('Qh5+')).toMatchObject({ check: true, piece: 'Q', to: 'h5' });
+    expect(white('Qh5+')).toMatchObject({
+      check: true,
+      piece: 'queen',
+      to: 'h5',
+    });
   });
 
   it('simple + checkmate: Qf8#', () => {
     expect(white('Qf8#')).toMatchObject({
       checkmate: true,
-      piece: 'Q',
+      piece: 'queen',
       to: 'f8',
     });
   });
 
   it('simple capture: Nxe4', () => {
-    expect(white('Nxe4')).toEqual({ capture: true, piece: 'N', to: 'e4' });
+    expect(white('Nxe4')).toMatchObject({
+      capture: true,
+      piece: 'knight',
+      to: 'e4',
+    });
   });
 
   it('simple capture + check: Bxf7+', () => {
     expect(white('Bxf7+')).toMatchObject({
       capture: true,
       check: true,
-      piece: 'B',
+      piece: 'bishop',
       to: 'f7',
     });
   });
@@ -134,20 +156,24 @@ describe('PIECE_MOVE', () => {
     expect(white('Qxf7#')).toMatchObject({
       capture: true,
       checkmate: true,
-      piece: 'Q',
+      piece: 'queen',
       to: 'f7',
     });
   });
 
   it('file disambig, no capture: Nbd7', () => {
-    expect(white('Nbd7')).toEqual({ from: 'b', piece: 'N', to: 'd7' });
+    expect(white('Nbd7')).toMatchObject({
+      from: 'b',
+      piece: 'knight',
+      to: 'd7',
+    });
   });
 
   it('file disambig, no capture + check: Rag7+', () => {
     expect(white('Rag7+')).toMatchObject({
       check: true,
       from: 'a',
-      piece: 'R',
+      piece: 'rook',
       to: 'g7',
     });
   });
@@ -156,16 +182,16 @@ describe('PIECE_MOVE', () => {
     expect(white('Rag2#')).toMatchObject({
       checkmate: true,
       from: 'a',
-      piece: 'R',
+      piece: 'rook',
       to: 'g2',
     });
   });
 
   it('file disambig + capture: Nbxd4', () => {
-    expect(white('Nbxd4')).toEqual({
+    expect(white('Nbxd4')).toMatchObject({
       capture: true,
       from: 'b',
-      piece: 'N',
+      piece: 'knight',
       to: 'd4',
     });
   });
@@ -175,7 +201,7 @@ describe('PIECE_MOVE', () => {
       capture: true,
       check: true,
       from: 'e',
-      piece: 'R',
+      piece: 'rook',
       to: 'f2',
     });
   });
@@ -185,29 +211,33 @@ describe('PIECE_MOVE', () => {
       capture: true,
       checkmate: true,
       from: 'e',
-      piece: 'Q',
+      piece: 'queen',
       to: 'g6',
     });
   });
 
   it('rank disambig, no capture: N5c3', () => {
-    expect(white('N5c3')).toEqual({ from: '5', piece: 'N', to: 'c3' });
+    expect(white('N5c3')).toMatchObject({
+      from: '5',
+      piece: 'knight',
+      to: 'c3',
+    });
   });
 
   it('rank disambig, no capture + check: R2f3+', () => {
     expect(white('R2f3+')).toMatchObject({
       check: true,
       from: '2',
-      piece: 'R',
+      piece: 'rook',
       to: 'f3',
     });
   });
 
   it('rank disambig + capture: R8xa4', () => {
-    expect(white('R8xa4')).toEqual({
+    expect(white('R8xa4')).toMatchObject({
       capture: true,
       from: '8',
-      piece: 'R',
+      piece: 'rook',
       to: 'a4',
     });
   });
@@ -217,29 +247,33 @@ describe('PIECE_MOVE', () => {
       capture: true,
       check: true,
       from: '8',
-      piece: 'R',
+      piece: 'rook',
       to: 'f2',
     });
   });
 
   it('full-square disambig, no capture: Rd1d2', () => {
-    expect(white('Rd1d2')).toEqual({ from: 'd1', piece: 'R', to: 'd2' });
+    expect(white('Rd1d2')).toMatchObject({
+      from: 'd1',
+      piece: 'rook',
+      to: 'd2',
+    });
   });
 
   it('full-square disambig, no capture + check: Rd1f1+', () => {
     expect(white('Rd1f1+')).toMatchObject({
       check: true,
       from: 'd1',
-      piece: 'R',
+      piece: 'rook',
       to: 'f1',
     });
   });
 
   it('full-square disambig + capture: Qd1xe4', () => {
-    expect(white('Qd1xe4')).toEqual({
+    expect(white('Qd1xe4')).toMatchObject({
       capture: true,
       from: 'd1',
-      piece: 'Q',
+      piece: 'queen',
       to: 'e4',
     });
   });
@@ -249,7 +283,7 @@ describe('PIECE_MOVE', () => {
       capture: true,
       check: true,
       from: 'd1',
-      piece: 'Q',
+      piece: 'queen',
       to: 'f3',
     });
   });
@@ -267,30 +301,48 @@ it('rejects promotion on a non-pawn capture: Nxf3=Q', () => {
 
 describe('PAWN_PUSH', () => {
   it('plain: e4', () => {
-    expect(white('e4')).toEqual({ piece: 'P', to: 'e4' });
+    expect(white('e4')).toMatchObject({
+      capture: false,
+      castling: false,
+      check: false,
+      checkmate: false,
+      from: undefined,
+      long: false,
+      piece: 'pawn',
+      promotion: undefined,
+      to: 'e4',
+    });
   });
 
   it('with check: h5+', () => {
-    expect(white('h5+')).toMatchObject({ check: true, piece: 'P', to: 'h5' });
+    expect(white('h5+')).toMatchObject({
+      check: true,
+      piece: 'pawn',
+      to: 'h5',
+    });
   });
 
   it('with checkmate: e6#', () => {
     expect(white('e6#')).toMatchObject({
       checkmate: true,
-      piece: 'P',
+      piece: 'pawn',
       to: 'e6',
     });
   });
 
   it('promotion =Q: d8=Q', () => {
-    expect(white('d8=Q')).toEqual({ piece: 'P', promotion: 'Q', to: 'd8' });
+    expect(white('d8=Q')).toMatchObject({
+      piece: 'pawn',
+      promotion: 'queen',
+      to: 'd8',
+    });
   });
 
   it('promotion =Q + check: b8=Q+', () => {
     expect(white('b8=Q+')).toMatchObject({
       check: true,
-      piece: 'P',
-      promotion: 'Q',
+      piece: 'pawn',
+      promotion: 'queen',
       to: 'b8',
     });
   });
@@ -298,32 +350,32 @@ describe('PAWN_PUSH', () => {
   it('promotion =Q + checkmate: a1=Q#', () => {
     expect(white('a1=Q#')).toMatchObject({
       checkmate: true,
-      piece: 'P',
-      promotion: 'Q',
+      piece: 'pawn',
+      promotion: 'queen',
       to: 'a1',
     });
   });
 
   it('underpromotion =N: a8=N', () => {
     expect(white('a8=N')).toMatchObject({
-      piece: 'P',
-      promotion: 'N',
+      piece: 'pawn',
+      promotion: 'knight',
       to: 'a8',
     });
   });
 
   it('underpromotion =R: g1=R', () => {
     expect(white('g1=R')).toMatchObject({
-      piece: 'P',
-      promotion: 'R',
+      piece: 'pawn',
+      promotion: 'rook',
       to: 'g1',
     });
   });
 
   it('underpromotion =B: h8=B', () => {
     expect(white('h8=B')).toMatchObject({
-      piece: 'P',
-      promotion: 'B',
+      piece: 'pawn',
+      promotion: 'bishop',
       to: 'h8',
     });
   });
@@ -331,8 +383,8 @@ describe('PAWN_PUSH', () => {
   it('underpromotion =N + check: f1=N+', () => {
     expect(white('f1=N+')).toMatchObject({
       check: true,
-      piece: 'P',
-      promotion: 'N',
+      piece: 'pawn',
+      promotion: 'knight',
       to: 'f1',
     });
   });
@@ -344,7 +396,7 @@ describe('NAG nag_import', () => {
   it('parses ! as annotation', () => {
     expect(white('e4!')).toMatchObject({
       annotations: ['!'],
-      piece: 'P',
+      piece: 'pawn',
       to: 'e4',
     });
   });
@@ -352,7 +404,7 @@ describe('NAG nag_import', () => {
   it('parses ?? as annotation', () => {
     expect(white('e4??')).toMatchObject({
       annotations: ['??'],
-      piece: 'P',
+      piece: 'pawn',
       to: 'e4',
     });
   });
@@ -360,7 +412,7 @@ describe('NAG nag_import', () => {
   it('parses ± (U+00B1) as annotation', () => {
     expect(white('e4\u00B1')).toMatchObject({
       annotations: ['\u00B1'],
-      piece: 'P',
+      piece: 'pawn',
       to: 'e4',
     });
   });
@@ -368,7 +420,7 @@ describe('NAG nag_import', () => {
   it('parses multiple NAGs on one move', () => {
     expect(white('e4!$14')).toMatchObject({
       annotations: ['!', '14'],
-      piece: 'P',
+      piece: 'pawn',
       to: 'e4',
     });
   });
@@ -383,7 +435,7 @@ describe('COMMENT', () => {
     );
     expect(games[0]?.moves[0]?.[1]).toMatchObject({
       comment: 'this is a comment',
-      piece: 'P',
+      piece: 'pawn',
       to: 'e4',
     });
   });
@@ -394,7 +446,7 @@ describe('COMMENT', () => {
     );
     expect(games[0]?.moves[0]?.[1]).toMatchObject({
       comment: 'first second',
-      piece: 'P',
+      piece: 'pawn',
       to: 'e4',
     });
   });
@@ -409,7 +461,7 @@ describe('RAV', () => {
     );
     const variants = games[0]?.moves[0]?.[1]?.variants;
     expect(variants).toHaveLength(1);
-    expect(variants?.[0]?.[0]?.[1]).toMatchObject({ piece: 'P', to: 'd4' });
+    expect(variants?.[0]?.[0]?.[1]).toMatchObject({ piece: 'pawn', to: 'd4' });
   });
 
   it('parses a nested RAV (RAV inside a RAV)', () => {
@@ -419,7 +471,7 @@ describe('RAV', () => {
     const outer = games[0]?.moves[0]?.[1]?.variants?.[0];
     const inner = outer?.[0]?.[1]?.variants;
     expect(inner).toHaveLength(1);
-    expect(inner?.[0]?.[0]?.[1]).toMatchObject({ piece: 'P', to: 'c4' });
+    expect(inner?.[0]?.[0]?.[1]).toMatchObject({ piece: 'pawn', to: 'c4' });
   });
 
   it('parses a comment inside a RAV', () => {
@@ -429,7 +481,7 @@ describe('RAV', () => {
     const ravMove = games[0]?.moves[0]?.[1]?.variants?.[0]?.[0]?.[1];
     expect(ravMove).toMatchObject({
       comment: 'good move',
-      piece: 'P',
+      piece: 'pawn',
       to: 'd4',
     });
   });
@@ -439,10 +491,10 @@ describe('RAV', () => {
 
 describe('PAWN_CAPTURE', () => {
   it('plain: cxd4', () => {
-    expect(white('cxd4')).toEqual({
+    expect(white('cxd4')).toMatchObject({
       capture: true,
       from: 'c',
-      piece: 'P',
+      piece: 'pawn',
       to: 'd4',
     });
   });
@@ -452,7 +504,7 @@ describe('PAWN_CAPTURE', () => {
       capture: true,
       check: true,
       from: 'f',
-      piece: 'P',
+      piece: 'pawn',
       to: 'g2',
     });
   });
@@ -462,17 +514,17 @@ describe('PAWN_CAPTURE', () => {
       capture: true,
       checkmate: true,
       from: 'e',
-      piece: 'P',
+      piece: 'pawn',
       to: 'd6',
     });
   });
 
   it('with promotion =Q: fxe8=Q', () => {
-    expect(white('fxe8=Q')).toEqual({
+    expect(white('fxe8=Q')).toMatchObject({
       capture: true,
       from: 'f',
-      piece: 'P',
-      promotion: 'Q',
+      piece: 'pawn',
+      promotion: 'queen',
       to: 'e8',
     });
   });
@@ -482,8 +534,8 @@ describe('PAWN_CAPTURE', () => {
       capture: true,
       check: true,
       from: 'e',
-      piece: 'P',
-      promotion: 'Q',
+      piece: 'pawn',
+      promotion: 'queen',
       to: 'f8',
     });
   });
@@ -493,8 +545,8 @@ describe('PAWN_CAPTURE', () => {
       capture: true,
       checkmate: true,
       from: 'e',
-      piece: 'P',
-      promotion: 'Q',
+      piece: 'pawn',
+      promotion: 'queen',
       to: 'f8',
     });
   });
@@ -504,8 +556,8 @@ describe('PAWN_CAPTURE', () => {
       capture: true,
       check: true,
       from: 'e',
-      piece: 'P',
-      promotion: 'N',
+      piece: 'pawn',
+      promotion: 'knight',
       to: 'f8',
     });
   });

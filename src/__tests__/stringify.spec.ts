@@ -278,16 +278,15 @@ describe('stringify', () => {
   });
 
   describe('warnings', () => {
-    it('fires onWarning for bad castling destination', () => {
-      const warnings: string[] = [];
+    it('serializes castling based on long flag, ignoring to square', () => {
       const [game] = parse('1. e4 e5 1-0');
       const move = game!.moves[0]![1]!;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (move as any).castling = true;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (move as any).to = 'e4';
-      stringify(game!, { onWarning: (w) => warnings.push(w.message) });
-      expect(warnings.length).toBeGreaterThan(0);
+      (move as any).long = true;
+      const output = stringify(game!);
+      expect(output).toContain('O-O-O');
     });
 
     it('fires onWarning for negative clock and clamps output to 0:00:00', () => {

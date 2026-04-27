@@ -3,8 +3,11 @@
   // Holds the user-supplied onWarning callback (or null when not provided).
   let _warn = null;
 
+  const PIECE = { B: 'bishop', K: 'king', N: 'knight', P: 'pawn', Q: 'queen', R: 'rook' };
+  const PROMO = { B: 'bishop', N: 'knight', Q: 'queen', R: 'rook' };
+
   function applyIndicators(result, promo, ind) {
-    if (promo)       result.promotion = promo;
+    if (promo)       result.promotion = PROMO[promo];
     if (ind === '+') result.check     = true;
     if (ind === '#') result.checkmate = true;
     return result;
@@ -13,7 +16,6 @@
   function pairMoves(moves, start) {
     start = start ?? 0;
     if (moves.length === 0) { return []; }
-    // half = first pair index in the full game; pairIdx below is relative to it
     const half = start >> 1;
     const acc = new Array(Math.ceil((moves.length + (start & 1)) / 2));
     for (let i = 0; i < moves.length; i++) {
@@ -26,13 +28,8 @@
         acc[pairIdx] = [moveNum, undefined];
       }
 
-      // Read internal bookkeeping fields off the raw grammar object.
-      // We never put them on the output — building an explicit clean object
-      // keeps V8 hidden classes consistent across all moves in the array,
-      // avoiding megamorphic deoptimisation from `delete`.
       const raw = moves[i];
       const number = raw.number;
-      const long   = raw.long;
 
       if (_warn && number !== undefined && number !== moveNum) {
         _warn({
@@ -43,17 +40,24 @@
         });
       }
 
-      // Build the clean output object — only public Move fields.
-      const move = { piece: raw.piece, to: raw.to };
-      if (raw.from      !== undefined) { move.from      = raw.from; }
-      if (raw.capture   !== undefined) { move.capture   = raw.capture; }
-      if (raw.castling  !== undefined) {
-        move.castling = raw.castling;
-        move.to = isWhite ? (long ? 'c1' : 'g1') : (long ? 'c8' : 'g8');
+      // Build the clean output object — all SAN fields are required.
+      const move = {
+        capture: raw.capture ?? false,
+        castling: raw.castling ?? false,
+        check: raw.check ?? false,
+        checkmate: raw.checkmate ?? false,
+        from: raw.from,
+        long: raw.long ?? false,
+        piece: raw.piece,
+        promotion: raw.promotion,
+        to: raw.to,
+      };
+
+      // Resolve castling destination square.
+      if (move.castling) {
+        move.to = isWhite ? (move.long ? 'c1' : 'g1') : (move.long ? 'c8' : 'g8');
       }
-      if (raw.check     !== undefined) { move.check     = raw.check; }
-      if (raw.checkmate !== undefined) { move.checkmate = raw.checkmate; }
-      if (raw.promotion !== undefined) { move.promotion = raw.promotion; }
+
       if (raw.annotations !== undefined) { move.annotations = raw.annotations; }
       if (raw.comment   !== undefined) { move.comment   = raw.comment; }
       if (raw.variants  !== undefined) {
@@ -187,43 +191,43 @@ SAN
 
 CASTLING
   = "O-O-O" ind:$[+#]?
-  { return applyIndicators({ castling: true, long: true, piece: 'K', to: 'O-O-O' }, undefined, ind); }
+  { return applyIndicators({ castling: true, long: true, piece: 'king', to: undefined }, undefined, ind); }
   / "O-O" ind:$[+#]?
-  { return applyIndicators({ castling: true, long: false, piece: 'K', to: 'O-O' }, undefined, ind); }
+  { return applyIndicators({ castling: true, long: false, piece: 'king', to: undefined }, undefined, ind); }
 
 PIECE_MOVE
   // Full-square disambig + capture: Qd1xe4
   = piece:$[KQBNPR] df:$[a-h] dr:$[1-8] "x" file:$[a-h] rank:$[1-8] ind:$[+#]?
-  { return applyIndicators({ capture: true, from: df + dr, piece, to: file + rank }, undefined, ind); }
+  { return applyIndicators({ capture: true, from: df + dr, piece: PIECE[piece], to: file + rank }, undefined, ind); }
   // Full-square disambig, no capture: Qd1e4
   / piece:$[KQBNPR] df:$[a-h] dr:$[1-8] file:$[a-h] rank:$[1-8] ind:$[+#]?
-  { return applyIndicators({ from: df + dr, piece, to: file + rank }, undefined, ind); }
+  { return applyIndicators({ from: df + dr, piece: PIECE[piece], to: file + rank }, undefined, ind); }
   // File disambig + capture: Naxb4
   / piece:$[KQBNPR] df:$[a-h] "x" file:$[a-h] rank:$[1-8] ind:$[+#]?
-  { return applyIndicators({ capture: true, from: df, piece, to: file + rank }, undefined, ind); }
+  { return applyIndicators({ capture: true, from: df, piece: PIECE[piece], to: file + rank }, undefined, ind); }
   // Rank disambig + capture: N1xf3
   / piece:$[KQBNPR] dr:$[1-8] "x" file:$[a-h] rank:$[1-8] ind:$[+#]?
-  { return applyIndicators({ capture: true, from: dr, piece, to: file + rank }, undefined, ind); }
+  { return applyIndicators({ capture: true, from: dr, piece: PIECE[piece], to: file + rank }, undefined, ind); }
   // File disambig, no capture: Nbd7
   / piece:$[KQBNPR] df:$[a-h] file:$[a-h] rank:$[1-8] ind:$[+#]?
-  { return applyIndicators({ from: df, piece, to: file + rank }, undefined, ind); }
+  { return applyIndicators({ from: df, piece: PIECE[piece], to: file + rank }, undefined, ind); }
   // Rank disambig, no capture: N1f3
   / piece:$[KQBNPR] dr:$[1-8] file:$[a-h] rank:$[1-8] ind:$[+#]?
-  { return applyIndicators({ from: dr, piece, to: file + rank }, undefined, ind); }
+  { return applyIndicators({ from: dr, piece: PIECE[piece], to: file + rank }, undefined, ind); }
   // Capture, no disambig: Nxf3
   / piece:$[KQBNPR] "x" file:$[a-h] rank:$[1-8] ind:$[+#]?
-  { return applyIndicators({ capture: true, piece, to: file + rank }, undefined, ind); }
+  { return applyIndicators({ capture: true, piece: PIECE[piece], to: file + rank }, undefined, ind); }
   // Simple: Nf3
   / piece:$[KQBNPR] file:$[a-h] rank:$[1-8] ind:$[+#]?
-  { return applyIndicators({ piece, to: file + rank }, undefined, ind); }
+  { return applyIndicators({ piece: PIECE[piece], to: file + rank }, undefined, ind); }
 
 PAWN_CAPTURE
   = from:$[a-h] "x" file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  { return applyIndicators({ capture: true, from, piece: 'P', to: file + rank }, promo, ind); }
+  { return applyIndicators({ capture: true, from, piece: 'pawn', to: file + rank }, promo, ind); }
 
 PAWN_PUSH
   = file:$[a-h] rank:$[1-8] promo:PROMO? ind:$[+#]?
-  { return applyIndicators({ piece: 'P', to: file + rank }, promo, ind); }
+  { return applyIndicators({ piece: 'pawn', to: file + rank }, promo, ind); }
 
 PROMO
   = "=" p:$[NBRQ] { return p; }
