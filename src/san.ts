@@ -1,4 +1,4 @@
-import type { Move } from './types.js';
+import type { Notation } from './types.js';
 
 const PIECE_TO_LETTER: Record<string, string> = {
   bishop: 'B',
@@ -16,7 +16,7 @@ const PROMOTION_TO_LETTER: Record<string, string> = {
   rook: 'R',
 };
 
-function applyIndicators(san: string, move: Move): string {
+function applyIndicators(san: string, move: Notation): string {
   if (move.checkmate) {
     return san + '#';
   }
@@ -26,7 +26,7 @@ function applyIndicators(san: string, move: Move): string {
   return san;
 }
 
-function stringifySAN(move: Move): string {
+function stringifySAN(move: Notation): string {
   if (move.castling) {
     if (move.long) {
       return applyIndicators('O-O-O', move);
