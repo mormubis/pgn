@@ -97,7 +97,7 @@ providing semantic round-trip fidelity.
 stringify(input: PGN | PGN[], options?: StringifyOptions): string
 ```
 
-Reconstructs SAN from `Move` fields, re-serializes annotation commands
+Reconstructs SAN from `Notation` fields, re-serializes annotation commands
 (`[%cal]`, `[%csl]`, `[%clk]`, `[%eval]`) back into comment blocks, and
 preserves RAVs and NAGs. Pass `onWarning` to observe recoverable issues (e.g.
 invalid castling destination, negative clock). `StringifyOptions` is a subset of
@@ -172,7 +172,7 @@ The same option is accepted by `stringify()`.
 ```typescript
 {
   meta:   Meta,      // tag pairs (Event, Site, Date, White, Black, …)
-  moves:  MoveList,  // paired move list
+  moves:  NotationList,  // paired notation list
   result: 1 | 0 | 0.5 | '?'
 }
 ```
@@ -181,10 +181,10 @@ The same option is accepted by `stringify()`.
 optional — games with no tag pairs return `meta: {}`. Use `game.result` (always
 present) as the authoritative game outcome.
 
-### Move object
+### Notation object
 
-`Move` extends `SAN` from [`@echecs/san`](https://github.com/echecsjs/san) — all
-SAN fields are always present.
+`Notation` extends `SAN` from [`@echecs/san`](https://github.com/echecsjs/san) —
+all SAN fields are always present.
 
 ```typescript
 {
@@ -206,7 +206,7 @@ SAN fields are always present.
   squares?:    SquareAnnotation[],   // from [%csl ...] command
   clock?:      number,               // from [%clk ...] — seconds remaining
   eval?:       Eval,                 // from [%eval ...] — engine evaluation
-  variants?:   MoveList[],  // recursive annotation variations
+  variants?:   NotationList[],  // recursive annotation variations
 }
 ```
 
@@ -234,7 +234,7 @@ slots can be `undefined` — `whiteMove` when a variation begins on black's turn
 
 PGN files produced by GUIs and engines embed structured commands inside move
 comments using the `[%cmd ...]` syntax. This library parses the four most common
-commands and exposes them as dedicated fields on `Move`:
+commands and exposes them as dedicated fields on `Notation`:
 
 | Field     | Type                 | PGN command   | Description                                      |
 | --------- | -------------------- | ------------- | ------------------------------------------------ |
@@ -319,9 +319,9 @@ import type {
   Eval, // { type: 'cp' | 'mate', value, depth? }
   File, // 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h'
   Meta, // { [key: string]: string | undefined }
-  Move, // single parsed move object (extends SAN)
-  MoveList, // MovePair[]
-  MovePair, // [number, Move | undefined, Move?]
+  Notation, // single parsed notation object (extends SAN)
+  NotationList, // NotationPair[]
+  NotationPair, // [number, Notation | undefined, Notation?]
   ParseError, // { message, offset, line, column }
   ParseOptions, // { onError?, onWarning? }
   ParseWarning, // { message, offset, line, column }
@@ -334,7 +334,7 @@ import type {
   Square, // `${File}${Rank}`, e.g. "e4"
   SquareAnnotation, // { color, square }
   StringifyOptions, // { onWarning? }
-  Variation, // MoveList[]
+  Variation, // NotationList[]
 } from '@echecs/pgn';
 ```
 

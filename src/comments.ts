@@ -2,8 +2,8 @@ import type {
   AnnotationColor,
   Arrow,
   Eval,
-  Move,
-  MoveList,
+  Notation,
+  NotationList,
   PGN,
   Square,
   SquareAnnotation,
@@ -111,8 +111,8 @@ function parseCommentCommands(raw: string): CommentFields {
   return result;
 }
 
-function applyCommentFields(move: Move, fields: CommentFields): Move {
-  const out: Move = {
+function applyCommentFields(move: Notation, fields: CommentFields): Notation {
+  const out: Notation = {
     capture: move.capture,
     castling: move.castling,
     check: move.check,
@@ -147,10 +147,10 @@ function applyCommentFields(move: Move, fields: CommentFields): Move {
   return out;
 }
 
-function processMoveList(moves: MoveList): void {
+function processMoveList(moves: NotationList): void {
   for (const pair of moves) {
     for (let index = 1; index <= 2; index++) {
-      const move = pair[index] as Move | undefined;
+      const move = pair[index] as Notation | undefined;
       if (move !== undefined) {
         if (move.comment !== undefined) {
           const fields = parseCommentCommands(move.comment);

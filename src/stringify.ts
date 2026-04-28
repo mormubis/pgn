@@ -2,7 +2,13 @@ import { RESULT_TO_STR } from './constants.js';
 import { stringifySAN } from './san.js';
 import { stringifyTags } from './tags.js';
 
-import type { Eval, Move, MoveList, PGN, StringifyOptions } from './types.js';
+import type {
+  Eval,
+  Notation,
+  NotationList,
+  PGN,
+  StringifyOptions,
+} from './types.js';
 
 // ─── Comment commands ─────────────────────────────────────────────────────────
 
@@ -33,7 +39,7 @@ function stringifyEval(evaluation: Eval): string {
   return `[%eval ${evaluation.value.toFixed(2)}${depth}]`;
 }
 
-function stringifyComment(move: Move, options?: StringifyOptions): string {
+function stringifyComment(move: Notation, options?: StringifyOptions): string {
   const parts: string[] = [];
 
   if (move.arrows && move.arrows.length > 0) {
@@ -77,7 +83,7 @@ function stringifyComment(move: Move, options?: StringifyOptions): string {
 
 // ─── Move list ────────────────────────────────────────────────────────────────
 
-function hasAnnotation(move: Move): boolean {
+function hasAnnotation(move: Notation): boolean {
   return (
     (move.annotations !== undefined && move.annotations.length > 0) ||
     move.comment !== undefined ||
@@ -90,7 +96,7 @@ function hasAnnotation(move: Move): boolean {
 }
 
 function stringifyMoveList(
-  moves: MoveList,
+  moves: NotationList,
   options?: StringifyOptions,
 ): string {
   const tokens: string[] = [];

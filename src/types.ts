@@ -23,7 +23,7 @@ interface Meta {
   [key: string]: string | undefined;
 }
 
-interface Move extends SAN {
+interface Notation extends SAN {
   annotations?: string[];
   arrows?: Arrow[];
   clock?: number;
@@ -33,16 +33,16 @@ interface Move extends SAN {
   variants?: Variation;
 }
 
-type MovePair = [number, Move | undefined, Move?];
-type MoveList = MovePair[];
+type NotationPair = [number, Notation | undefined, Notation?];
+type NotationList = NotationPair[];
 
 interface PGN {
   meta: Meta;
-  moves: MoveList;
+  moves: NotationList;
   result: 1 | 0 | 0.5 | '?';
 }
 
-type Variation = MoveList[];
+type Variation = NotationList[];
 
 interface ParseError {
   column: number;
@@ -71,9 +71,9 @@ export type {
   Arrow,
   Eval,
   Meta,
-  Move,
-  MoveList,
-  MovePair,
+  Notation,
+  NotationList,
+  NotationPair,
   ParseError,
   ParseOptions,
   ParseWarning,

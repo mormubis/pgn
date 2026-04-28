@@ -8,6 +8,15 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-28
+
+### Changed
+
+- renamed `Move` type to `Notation` to avoid confusion with coordinate moves
+- renamed `MovePair` to `NotationPair`
+- renamed `MoveList` to `NotationList`
+- `Variation` type definition updated to `NotationList[]` (name unchanged)
+
 ## [4.0.0] - 2026-04-27
 
 ### Changed
@@ -437,7 +446,8 @@ and this project adheres to
 - New grammar supporting the full PGN specification including RAV (recursive
   annotated variations) and NAG (numeric annotation glyphs)
 
-[unreleased]: https://github.com/echecsjs/pgn/compare/v4.0.0...HEAD
+[unreleased]: https://github.com/echecsjs/pgn/compare/v5.0.0...HEAD
+[5.0.0]: https://github.com/echecsjs/pgn/compare/v4.0.0...v5.0.0
 [4.0.0]: https://github.com/echecsjs/pgn/compare/v3.12.2...v4.0.0
 [3.12.2]: https://github.com/echecsjs/pgn/compare/v3.12.1...v3.12.2
 [3.12.1]: https://github.com/mormubis/pgn/compare/v3.12.0...v3.12.1
