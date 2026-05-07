@@ -23,7 +23,7 @@
     "peggy": "^5.1.0",
     "pgn-parser": "^2.2.1",
     "prettier": "^3.8.1",
-    "tsdown": "^0.21.4",
+    "tsdown": "^0.22.0",
     "typedoc": "^0.28.17",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.57.0",
