@@ -1,16 +1,20 @@
 # Output
 /dist/
 
-# Worktrees
-/.worktrees/
-
-# Generated
-/src/grammar.cjs
-*.tsbuildinfo
-
 # Node
 /node_modules/
 
 # Tests
 coverage/
-/test.pgn
+
+# Generated
+/src/grammar.cjs
+*.tsbuildinfo
+
+# Documentation
+docs/api/*
+!docs/api/.gitkeep
+
+# Agent planning artifacts
+.superpowers/
+docs/superpowers/
