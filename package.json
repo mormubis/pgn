@@ -98,6 +98,6 @@
     "@echecs/san": "^3.0.0"
   },
   "type": "module",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "version": "4.0.0"
 }
