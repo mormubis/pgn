@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/v/@echecs/pgn)](https://www.npmjs.com/package/@echecs/pgn)
 [![Coverage](https://codecov.io/gh/echecsjs/pgn/branch/main/graph/badge.svg)](https://codecov.io/gh/echecsjs/pgn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Spec](https://img.shields.io/badge/Spec-FIDE-green.svg)](SPEC.md)
 
 **PGN** is a fast, lightweight TypeScript parser for
 [Portable Game Notation](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm)
