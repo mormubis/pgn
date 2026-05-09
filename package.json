@@ -58,7 +58,6 @@
     "typescript"
   ],
   "license": "MIT",
-  "main": "dist/index.js",
   "name": "@echecs/pgn",
   "publishConfig": {
     "access": "public"
